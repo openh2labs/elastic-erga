@@ -14,3 +14,7 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('user/{id}', 'UserController@showProfile');
+
+Route::get('alert/home', 'AlertController@home');

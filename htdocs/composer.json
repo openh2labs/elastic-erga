@@ -7,14 +7,14 @@
     "require": {
         "php": ">=5.5.9",
         "laravel/framework": "5.1.*",
-        "fairholm/elasticquent": "1.0.*",
-        "fzaninotto/Faker": "1.4.*"
+        "fzaninotto/Faker": "1.5.*"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
         "mockery/mockery": "0.9.*",
         "phpunit/phpunit": "~4.0",
-        "phpspec/phpspec": "~2.1"
+        "phpspec/phpspec": "~2.1",
+        "fairholm/elasticquent": "dev-feature/laravel-5"
     },
     "autoload": {
         "classmap": [
@@ -49,5 +49,17 @@
     },
     "config": {
         "preferred-install": "dist"
-    }
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/elasticquent/Elasticquent.git"
+        },
+        {
+            "type": "vcs",
+            "url" : "https://github.com/fzaninotto/Faker.git"
+        }
+    ]
+
+
 }

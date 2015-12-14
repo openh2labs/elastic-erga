@@ -3,7 +3,7 @@
 namespace App;
 
 use Elasticquent\ElasticquentTrait;
-use Illuminate\Database\Eloquent\Model;
+//use Illuminate\Database\Eloquent\Model;
 
 class Post extends \Eloquent
 {
@@ -23,8 +23,7 @@ class Post extends \Eloquent
         ],
         'tags' => [
             'type' => 'string',
-            "analyzer" => "stop",
-            "stopwords" => [","]
+            "analyzer" => "stop"
         ],
     );
 }

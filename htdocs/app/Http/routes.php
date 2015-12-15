@@ -11,6 +11,11 @@
 |
 */
 
+//use App\Http\Controllers\PostController;
+use App\Post;
+
+//namespace App;
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -18,3 +23,19 @@ Route::get('/', function () {
 Route::get('user/{id}', 'UserController@showProfile');
 
 Route::get('alert/home', 'AlertController@home');
+
+Route::get('/', ['as' => 'search', 'uses' => function() {
+
+    // Check if user has sent a search query
+    if($query = Input::get('query', false)) {
+        // Use the Elasticquent search method to search ElasticSearch
+        $posts = Post::search($query);
+    } else {
+        // Show all posts if no query is set
+       // $t = new App/PostController;
+        $posts = Post::all();
+    }
+
+    return View::make('home', compact('posts'));
+
+}]);

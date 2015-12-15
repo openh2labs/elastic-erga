@@ -3,6 +3,7 @@
 namespace App;
 
 use Elasticquent\ElasticquentTrait;
+use illuminate\html;
 //use Illuminate\Database\Eloquent\Model;
 
 class Post extends \Eloquent

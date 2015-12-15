@@ -23,5 +23,5 @@ class AlertController  extends BaseController {
 
         return view ("alerts_home", $data);
     }
-
 }
+

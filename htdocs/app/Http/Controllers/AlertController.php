@@ -7,7 +7,7 @@
  */
 
 namespace App\Http\Controllers;
-
+use elasticsearch\elasticsearch;
 
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
@@ -22,6 +22,10 @@ class AlertController  extends BaseController {
         $data = array('name'=>'woohoo!!!', 'alerts'=>$alert);
 
         return view ("alerts_home", $data);
+    }
+
+    public function searchtest(){
+        $client = ClientBuilder::create()->build();
     }
 }
 

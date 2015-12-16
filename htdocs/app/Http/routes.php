@@ -14,6 +14,7 @@
 //use App\Http\Controllers\PostController;
 use App\Post;
 
+
 //namespace App;
 
 Route::get('/', function () {
@@ -23,6 +24,8 @@ Route::get('/', function () {
 Route::get('user/{id}', 'UserController@showProfile');
 
 Route::get('alert/home', 'AlertController@home');
+
+Route::get('alert/searchtest', 'AlertController@searchtest');
 
 Route::get('/', ['as' => 'search', 'uses' => function() {
 

@@ -19,7 +19,12 @@ class alertsSeeder extends seeder
         DB::table('alerts')->delete();
         for($i=0; $i<30; $i++)
         {
-            App:alerts::create(array('criteria' => 'some_search_field <> "'.$faker->sentence(3).'"'));
+            App:alerts::create(array(
+            'criteria' => 'some_search_field <> "'.$faker->sentence(3).'"',
+            'es_host' => '192.168.10.10:9200',
+            'es_index' => 'default',
+            'es_type' => 'posts'
+        ));
         }
 
 

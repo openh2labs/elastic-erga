@@ -20,7 +20,8 @@ class alertsSeeder extends seeder
         for($i=0; $i<30; $i++)
         {
             App:alerts::create(array(
-            'criteria' => 'some_search_field <> "'.$faker->sentence(3).'"',
+            //'criteria' => 'some_search_field <> "'.$faker->sentence(3).'"',
+            'criteria' => '{"bool":{"must":[{"term":{"_type":"posts"}},{"term":{"content":"'.$faker->sentence(2).'"}}]}}',
             'es_host' => '192.168.10.10:9200',
             'es_index' => 'default',
             'es_type' => 'posts'

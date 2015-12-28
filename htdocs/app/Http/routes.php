@@ -25,7 +25,11 @@ Route::get('user/{id}', 'UserController@showProfile');
 
 Route::get('alert/home', 'AlertController@home');
 
+//execute searches @todo create cron
 Route::get('alert/searchtest', 'AlertController@searchtest');
+
+//create test index
+Route::get('alert/createTestIndex', 'AlertController@createTestIndex');
 
 Route::get('/', ['as' => 'search', 'uses' => function() {
 

@@ -21,10 +21,11 @@ class alertsSeeder extends seeder
         {
             App:alerts::create(array(
             //'criteria' => 'some_search_field <> "'.$faker->sentence(3).'"',
-            'criteria' => '{"bool":{"must":[{"term":{"_type":"posts"}},{"term":{"content":"'.$faker->sentence(2).'"}}]}}',
+            'criteria' => '{"bool":{"must":[{"term":{"content":"'.$faker->sentence(1).'"}}{"updated_at":"now-%minutes%"}]}}',
             'es_host' => '192.168.10.10:9200',
             'es_index' => 'default',
-            'es_type' => 'posts'
+            'es_type' => 'posts',
+            'es_datetime_field' => 'updated_at'
         ));
         }
 

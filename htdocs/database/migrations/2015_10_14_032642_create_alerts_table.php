@@ -18,7 +18,7 @@ class CreateAlertsTable extends Migration
             $table->string('es_host',255);
             $table->string('es_index',50);
             $table->string('es_type',50);
-            $table->dateTime('es_datetime_field'); // the date time field to use
+            $table->string('es_datetime_field'); // the date time field to use
             $table->integer('minutes_back'); //how far back to check
 
           //  $table->timestamps('updated_at');

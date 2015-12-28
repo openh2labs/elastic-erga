@@ -132,12 +132,16 @@ class AlertController  extends BaseController {
       //  $data = array('name'=>'woohoo!!!', 'alerts'=>$alert);
 
         foreach($alerts as $alert){
-           // echo $alert->criteria."<br>";
+            //add time constraint
+            $alert->criteria = str_replace("%minutes%", "".$alert->minutes_back."m", $alert->criteria);
+
+            // echo $alert->criteria."<br>";
             $hits = $this->doSearch($alert);
             echo "<br>".$hits." times found ";//.$alert->criteria;
+
             //search for documents without it
             $alert->criteria = str_replace("\"must\":", "\"must_not\":", $alert->criteria);
-           // echo "<br>".$alert->criteria;die;
+            // echo "<br>".$alert->criteria;die;
             $hits = $this->doSearch($alert);
             echo "<br>".$hits." times not found<hr> ";//.$alert->criteria;echo "<hr>";
         }
@@ -145,6 +149,11 @@ class AlertController  extends BaseController {
 
     }
 
+    /**
+     * search for a particular alert condition
+     * @param $alert, $alert eloquent object
+     * @return int total hits
+     */
     function doSearch($alert){
         $filter2 = json_decode($alert->criteria);
         /*
@@ -173,6 +182,9 @@ class AlertController  extends BaseController {
         return $result['hits']['total'];
     }
 
+    /**
+     * deprecated
+     */
     function getResultOld(){
         try{
             // $elasticsearch = new elasticsearch/elasticsearch();
@@ -228,6 +240,11 @@ class AlertController  extends BaseController {
         //print_r($response);
     }
 
+    /**
+     * returns elastic search exception
+     * @param $error
+     * @return mixed
+     */
     function getESException($error){
         $result['result_hits'] = 0;
         $result['result_code'] = $error['status'];
@@ -235,5 +252,130 @@ class AlertController  extends BaseController {
         $result['result_body'] = $error;
         return $result;
     }
+
+    /**
+     * create the test index
+     * @param $host, the ES host
+     */
+    function createTestIndex(){
+        try{
+            // $client = ClientBuilder::create()->build();
+            $client = ClientBuilder::create()->setHosts(["192.168.10.10"])->build();
+            $params = [
+                'index' => 'default_v2',
+                'body' => [
+                    'settings' => [
+                        'number_of_shards' => 3,
+                        'number_of_replicas' => 2
+                    ]
+                ]
+            ];
+
+            //add the mappings 
+            $this->addTestMappings();
+            // Create the index with mappings and settings now
+            $response = $client->indices()->create($params);
+        }catch(\Exception $e){
+            echo"<pre>";
+            echo "<h1>createTestIndex error</h1>";
+            print_r($e->getMessage());
+            //if index exists lets add the mappings
+            $this->addTestMappings();
+
+        }
+
+
+    }
+
+    /**
+     * creates the test mappings
+     */
+    function addTestMappings(){
+        try{
+            $client = ClientBuilder::create()->setHosts(["192.168.10.10"])->build();
+
+            /*
+            $params = [
+                'index' => 'default',
+                'body' => [
+                    'settings' => [
+                        'number_of_shards' => 3,
+                        'number_of_replicas' => 2
+                    ],
+                    'mappings' => [
+                        'posts_v2' => [
+                            '_source' => [
+                                'enabled' => true,
+                                'properties' => [
+                                    'content' => [
+                                        'type' => 'string',
+                                        'analyzer' => 'standard'
+                                    ],
+                                    'created_at' => [
+                                        'type' => 'date'
+                                    ],
+                                    'id' => [
+                                        'type' => 'long'
+                                    ],
+                                    'tags' => [
+                                        'type' => 'string'
+                                    ],
+                                    'title' => [
+                                        'type' => 'string'
+                                    ],
+                                    'update_at' => [
+                                        'type' => 'date'
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ];
+            */
+            $params = [
+                'index' => 'default_v2',
+                'type' => 'posts_v2',
+                'body' => [
+                    'posts_v2' => [
+                        '_source' => [
+                            'enabled' => true
+                        ],
+                        'properties' => [
+                            'content' => [
+                                'type' => 'string',
+                                'analyzer' => 'standard'
+                            ],
+                            'created_at' => [
+                                'type' => 'date'
+                            ],
+                            'id' => [
+                                'type' => 'long'
+                            ],
+                            'tags' => [
+                                'type' => 'string'
+                            ],
+                            'title' => [
+                                'type' => 'string'
+                            ],
+                            'update_at' => [
+                                'type' => 'date'
+                            ]
+                        ]
+                    ]
+                ]
+            ];
+
+            // Update the index mapping
+            $client->indices()->putMapping($params);
+        }catch(\Exception $e){
+            echo "<pre>";
+            echo "<h1>addTestMappings error</h1>";
+            print_r($e->getMessage());
+        }
+
+    }
+
+
 }
 

@@ -133,20 +133,26 @@ class AlertController  extends BaseController {
 
         foreach($alerts as $alert){
            // echo $alert->criteria."<br>";
-            $this->doSearch($alert->criteria);
+            $hits = $this->doSearch($alert);
+            echo "<br>".$hits." times found ";//.$alert->criteria;
+            //search for documents without it
+            $alert->criteria = str_replace("\"must\":", "\"must_not\":", $alert->criteria);
+           // echo "<br>".$alert->criteria;die;
+            $hits = $this->doSearch($alert);
+            echo "<br>".$hits." times not found<hr> ";//.$alert->criteria;echo "<hr>";
         }
 
 
     }
 
-    function doSearch($criteria){
-        $filter2 = json_decode($criteria);
-       // print_r($filter2);
-        //die;
+    function doSearch($alert){
+        $filter2 = json_decode($alert->criteria);
+        /*
         $filter ['bool']['must'][]['term']['_type'] = 'posts';
         $filter ['bool']['must'][]['term']['content'] = 'facere';
         //   $filter ['bool']['must'][]['range']['game_date']['gt'] = $start_dt;
         //   $filter ['bool']['must'][]['range']['game_date']['lte'] = $end_dt;
+        */
         $query = array();
         $query['match']['_type'] = 'posts';
 
@@ -160,9 +166,11 @@ class AlertController  extends BaseController {
 
 
         // var_dump($data);
-        echo ($criteria);
-        echo "<hr>";
-        print_r($this->searchELK('default', 'posts', array('192.168.10.10'), $params, array(), 'count'));
+        echo "<br> ".($alert->criteria);
+        $result = $this->searchELK($alert->es_index, $alert->es_type, array($alert->es_host), $params, array(), 'count');
+       // print_r($result);
+        //echo "<hr>";
+        return $result['hits']['total'];
     }
 
     function getResultOld(){

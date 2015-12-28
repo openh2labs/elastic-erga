@@ -2,14 +2,17 @@
 
 namespace App;
 
-use Elasticquent\ElasticquentTrait;
+use Illuminate\Database\Eloquent\Model;
+use Elasticsearch\ClientBuilder;
+//use Elasticquent\ElasticquentTrait;
 //use illuminate\html;
 //use Illuminate\Database\Eloquent\Model;
 
 //this is based on tutorial here: http://www.fullstackstanley.com/read/simple-search-with-laravel-and-elasticsearch
 
-class Post extends \Eloquent
+class Post extends Model
 {
+    /*
     use ElasticquentTrait;
 
     //
@@ -32,4 +35,9 @@ class Post extends \Eloquent
             'type' => 'date'
         ]
     );
+    */
+
+
 }
+
+

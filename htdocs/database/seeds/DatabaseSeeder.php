@@ -16,8 +16,10 @@ class DatabaseSeeder extends Seeder
 
         // $this->call(UserTableSeeder::class);
         $this->call('alertsSeeder');
-
         $this->command->info('alerts table seeded!');
+
+        $this->call('PostsTableSeeder');
+        $this->command->info('posts table seeded!');
 
         Model::reguard();
     }

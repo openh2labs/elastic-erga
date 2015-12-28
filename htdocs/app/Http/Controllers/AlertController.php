@@ -14,6 +14,7 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use App\alerts;
+use App\Post;
 
 
 
@@ -116,7 +117,7 @@ class AlertController  extends BaseController {
             if($search_type != ""){
                 $params2['search_type'] = $search_type;
             }
-            //   echo "<pre>"; print_r($params2); die;
+         //  echo "<pre>"; print_r($params2); die;
             return $client->search($params2);
 
         }catch (Exception $e){
@@ -132,6 +133,7 @@ class AlertController  extends BaseController {
       //  $data = array('name'=>'woohoo!!!', 'alerts'=>$alert);
 
         foreach($alerts as $alert){
+
             //add time constraint
             $alert->criteria = str_replace("%minutes%", "".$alert->minutes_back."m", $alert->criteria);
 
@@ -145,8 +147,6 @@ class AlertController  extends BaseController {
             $hits = $this->doSearch($alert);
             echo "<br>".$hits." times not found<hr> ";//.$alert->criteria;echo "<hr>";
         }
-
-
     }
 
     /**
@@ -163,7 +163,7 @@ class AlertController  extends BaseController {
         //   $filter ['bool']['must'][]['range']['game_date']['lte'] = $end_dt;
         */
         $query = array();
-        $query['match']['_type'] = 'posts';
+        $query['match']['_type'] = $alert->es_type;
 
         $params['query']['filtered'] = array(
             "filter" => $filter2,
@@ -175,7 +175,7 @@ class AlertController  extends BaseController {
 
 
         // var_dump($data);
-        echo "<br> ".($alert->criteria);
+        echo "<br> ".($alert->criteria);//echo"filter:";print_r($filter2);echo"<hr>";
         $result = $this->searchELK($alert->es_index, $alert->es_type, array($alert->es_host), $params, array(), 'count');
        // print_r($result);
         //echo "<hr>";
@@ -265,13 +265,13 @@ class AlertController  extends BaseController {
                 'index' => 'default_v2',
                 'body' => [
                     'settings' => [
-                        'number_of_shards' => 3,
-                        'number_of_replicas' => 2
+                        'number_of_shards' => 5,
+                        'number_of_replicas' => 1
                     ]
                 ]
             ];
 
-            //add the mappings 
+            //add the mappings
             $this->addTestMappings();
             // Create the index with mappings and settings now
             $response = $client->indices()->create($params);
@@ -291,48 +291,9 @@ class AlertController  extends BaseController {
      * creates the test mappings
      */
     function addTestMappings(){
+        echo "<br>adding mappings";
         try{
             $client = ClientBuilder::create()->setHosts(["192.168.10.10"])->build();
-
-            /*
-            $params = [
-                'index' => 'default',
-                'body' => [
-                    'settings' => [
-                        'number_of_shards' => 3,
-                        'number_of_replicas' => 2
-                    ],
-                    'mappings' => [
-                        'posts_v2' => [
-                            '_source' => [
-                                'enabled' => true,
-                                'properties' => [
-                                    'content' => [
-                                        'type' => 'string',
-                                        'analyzer' => 'standard'
-                                    ],
-                                    'created_at' => [
-                                        'type' => 'date'
-                                    ],
-                                    'id' => [
-                                        'type' => 'long'
-                                    ],
-                                    'tags' => [
-                                        'type' => 'string'
-                                    ],
-                                    'title' => [
-                                        'type' => 'string'
-                                    ],
-                                    'update_at' => [
-                                        'type' => 'date'
-                                    ]
-                                ]
-                            ]
-                        ]
-                    ]
-                ]
-            ];
-            */
             $params = [
                 'index' => 'default_v2',
                 'type' => 'posts_v2',
@@ -347,7 +308,8 @@ class AlertController  extends BaseController {
                                 'analyzer' => 'standard'
                             ],
                             'created_at' => [
-                                'type' => 'date'
+                                'type' => 'date',
+                                'format' => 'yyyy-MM-DD HH:mm:ss'
                             ],
                             'id' => [
                                 'type' => 'long'
@@ -359,7 +321,8 @@ class AlertController  extends BaseController {
                                 'type' => 'string'
                             ],
                             'update_at' => [
-                                'type' => 'date'
+                                'type' => 'date',
+                                'format' => 'yyyy-MM-DD HH:mm:ss'
                             ]
                         ]
                     ]
@@ -374,7 +337,40 @@ class AlertController  extends BaseController {
             print_r($e->getMessage());
         }
 
+        //add test data
+       $this->populateELKtestData();
     }
+
+    /**
+     * populate test data to ELK
+     */
+    function populateELKtestData(){
+        $posts = Post::all();
+        foreach($posts as $post){
+            $this->addELKTestDoc($post);
+        }
+    }
+
+    function addELKTestDoc($post){
+        $client = ClientBuilder::create()->setHosts(['192.168.10.10'])->build();
+        $params = [
+            'index' => 'default_v2',
+            'type' => 'posts_v2',
+            'id' => $post->id,
+            'body' => [
+                'id' => $post->id,
+                'title' => $post->title,
+                'content' => $post->content,
+                'tags' => $post->tags,
+                'created_at' => $post->created_at,
+                'updated_at' => $post->update_at
+            ]
+        ];
+
+        $response = $client->index($params);
+        print_r($response);
+    }
+
 
 
 }

@@ -30,8 +30,14 @@ class AlertController  extends BaseController {
         return view ("alerts_home", $data);
     }
 
+    /**
+     * display a list of all the search results that the system currently checks for
+     */
     public function searchtest(){
+        $query = $this->getArrayFromTestJson();
 
+        echo"<pre>";print_r($query['query']['filtered']);
+        echo "\nNew query: \n";echo json_encode($query['query']['filtered']);echo"\n<hr>";
         // get alert checks
 
 
@@ -118,10 +124,11 @@ class AlertController  extends BaseController {
             if($search_type != ""){
                 $params2['search_type'] = $search_type;
             }
-         //  echo "<pre>"; print_r($params2); die;
+          // echo "<pre>"; print_r($params2);// die;
             return $client->search($params2);
 
-        }catch (Exception $e){
+        }catch (\Exception $e){
+            echo "<pre>error(1)";print_r($e->getMessage());echo"</pre>";
             $result['hits']['total'] = 0;
             return $result;
         }
@@ -136,17 +143,21 @@ class AlertController  extends BaseController {
         foreach($alerts as $alert){
 
             //add time constraint
-            $alert->criteria = str_replace("%minutes%", "".$alert->minutes_back."m", $alert->criteria);
+            $start_date = "".(date('U', strtotime('-'.$alert->minutes_back.' minutes'))*1000);
+            $end_date = "".(date('U')*1000);
+            $alert->criteria = str_replace("%start_date%", $start_date, $alert->criteria);
+            $alert->criteria = str_replace("%end_date%", $end_date, $alert->criteria);
 
             // echo $alert->criteria."<br>";
             $hits = $this->doSearch($alert);
             echo "<br>".$hits." times found ";//.$alert->criteria;
 
             //search for documents without it
+            /*
             $alert->criteria = str_replace("\"must\":", "\"must_not\":", $alert->criteria);
-            // echo "<br>".$alert->criteria;die;
             $hits = $this->doSearch($alert);
             echo "<br>".$hits." times not found<hr> ";//.$alert->criteria;echo "<hr>";
+            */
         }
     }
 
@@ -158,24 +169,17 @@ class AlertController  extends BaseController {
     function doSearch($alert){
         $filter2 = json_decode($alert->criteria);
         /*
-        $filter ['bool']['must'][]['term']['_type'] = 'posts';
-        $filter ['bool']['must'][]['term']['content'] = 'facere';
-        //   $filter ['bool']['must'][]['range']['game_date']['gt'] = $start_dt;
-        //   $filter ['bool']['must'][]['range']['game_date']['lte'] = $end_dt;
-        */
-        $query = array();
-        $query['match']['_type'] = $alert->es_type;
+       $query = array();
+       $query['match']['_type'] = $alert->es_type;
+       $params['query']['filtered'] = array(
+           "filter" => $filter2,
+           "query"  => $query
+       );
+       */
+        $params = json_decode($alert->criteria,true);
 
-        $params['query']['filtered'] = array(
-            "filter" => $filter2,
-            "query"  => $query
-        );
         //$params['aggs']['field_name_2']['terms']['field'] = 'id';
 
-
-
-
-        // var_dump($data);
         echo "<br> ".($alert->criteria);//echo"filter:";print_r($filter2);echo"<hr>";
         $result = $this->searchELK($alert->es_index, $alert->es_type, array($alert->es_host), $params, array(), 'count');
        // print_r($result);
@@ -348,12 +352,17 @@ class AlertController  extends BaseController {
      * populate test data to ELK
      */
     function populateELKtestData(){
+
         $posts = Post::all();
         foreach($posts as $post){
             $this->addELKTestDoc($post);
         }
     }
 
+    /**
+     * adds a single test doc to the test index
+     * @param $post
+     */
     function addELKTestDoc($post){
         try{
             $client = ClientBuilder::create()->setHosts(['192.168.10.10'])->build();
@@ -381,6 +390,57 @@ class AlertController  extends BaseController {
             echo $e->getMessage();
         }
 
+    }
+
+    /**
+     * returns a php array from a test json obtained from Kibana
+     */
+    function getArrayFromTestJson(){
+        $json = '{
+  "size": 0,
+  "query": {
+    "filtered": {
+      "query": {
+        "query_string": {
+          "analyze_wildcard": true,
+          "query": "content: temporibus"
+        }
+      },
+      "filter": {
+        "bool": {
+          "must": [
+            {
+              "range": {
+                "updated_at": {
+                  "gte": 1450955172163,
+                  "lte": 1451559972163,
+                  "format": "epoch_millis"
+                }
+              }
+            }
+          ],
+          "must_not": []
+        }
+      }
+    }
+  },
+  "aggs": {
+    "2": {
+      "date_histogram": {
+        "field": "updated_at",
+        "interval": "3h",
+        "time_zone": "Europe/London",
+        "min_doc_count": 1,
+        "extended_bounds": {
+          "min": 1450955172162,
+          "max": 1451559972162
+        }
+      }
+    }
+  }
+}';
+
+        return json_decode($json,true);
     }
 
 

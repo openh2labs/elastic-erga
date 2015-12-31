@@ -25,22 +25,21 @@ class alertsSeeder extends seeder
         DB::table('alerts')->delete();
         for($i=0; $i<30; $i++)
         {
+          /*
             $filter = array();
-            $filter ['bool']['must'][]['term']['content'] = $faker->sentence(1);
-         //   $filter ['range']['update_at']['gt'] = "now-%minutes%";
-            $filter ['bool']['must'][]['range']['update_at']['gte'] = "now-%minutes%";
-          //  $filter ['bool']['must'][]['range']['update_at']['lte'] = "now";
+            $filter ['bool']['must'][]['term']['content'] = $faker->word();
+            $filter ['bool']['must'][]['range']['updated_at'][]['lte'] = "now-%minutes%"; //*
+            */
 
             App:alerts::create(array(
             //'criteria' => 'some_search_field <> "'.$faker->sentence(3).'"',
-
-            //'criteria' => '{"bool":{"must":[{"term":{"content":"'.$faker->sentence(1).'"}}{"updated_at":"now-%minutes%"}]}}',
-            'criteria' => json_encode($filter),
+            'criteria' => '{"query":{"query_string":{"analyze_wildcard":true,"query":"content: '.$faker->word().'"}},"filter":{"bool":{"must":[{"range":{"updated_at":{"gte":%start_date%,"lte":%end_date%,"format":"epoch_millis"}}}],"must_not":[]}}}',
+            //'criteria' => json_encode($filter),
             'es_host' => '192.168.10.10:9200',
-            'es_index' => 'default_v2',
-            'es_type' => 'posts_v2',
+            'es_index' => 'default_v5',
+            'es_type' => 'posts_v5',
             'es_datetime_field' => 'updated_at',
-            'minutes_back' => 1440
+            'minutes_back' => 141440
 
         ));
         }

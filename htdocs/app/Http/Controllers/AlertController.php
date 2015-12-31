@@ -21,6 +21,7 @@ use App\Post;
 
 
 class AlertController  extends BaseController {
+    
 
     public function home(){
         $alert = alerts::all();
@@ -262,7 +263,7 @@ class AlertController  extends BaseController {
             // $client = ClientBuilder::create()->build();
             $client = ClientBuilder::create()->setHosts(["192.168.10.10"])->build();
             $params = [
-                'index' => 'default_v2',
+                'index' => 'default_v5',
                 'body' => [
                     'settings' => [
                         'number_of_shards' => 5,
@@ -295,21 +296,24 @@ class AlertController  extends BaseController {
         try{
             $client = ClientBuilder::create()->setHosts(["192.168.10.10"])->build();
             $params = [
-                'index' => 'default_v2',
-                'type' => 'posts_v2',
+                'index' => 'default_v5',
+                'type' => 'posts_v5',
                 'body' => [
-                    'posts_v2' => [
+                    'posts_v5' => [
                         '_source' => [
                             'enabled' => true
                         ],
                         'properties' => [
                             'content' => [
-                                'type' => 'string',
-                                'analyzer' => 'standard'
+                                'type' => 'string'
                             ],
                             'created_at' => [
                                 'type' => 'date',
-                                'format' => 'yyyy-MM-DD HH:mm:ss'
+                                'format' => 'yyyy-MM-dd HH:mm:ss' // yyyy/MM/dd HH:mm:ss //yyyy-MM-dd HH:mm:ss
+                            ],
+                            'updated_at' => [
+                                'type' => 'date',
+                                'format' => 'yyyy-MM-dd HH:mm:ss' //yyyy-MM-dd HH:mm:ss
                             ],
                             'id' => [
                                 'type' => 'long'
@@ -320,10 +324,9 @@ class AlertController  extends BaseController {
                             'title' => [
                                 'type' => 'string'
                             ],
-                            'update_at' => [
-                                'type' => 'date',
-                                'format' => 'yyyy-MM-DD HH:mm:ss'
-                            ]
+                         /*
+
+                         */
                         ]
                     ]
                 ]
@@ -352,23 +355,32 @@ class AlertController  extends BaseController {
     }
 
     function addELKTestDoc($post){
-        $client = ClientBuilder::create()->setHosts(['192.168.10.10'])->build();
-        $params = [
-            'index' => 'default_v2',
-            'type' => 'posts_v2',
-            'id' => $post->id,
-            'body' => [
+        try{
+            $client = ClientBuilder::create()->setHosts(['192.168.10.10'])->build();
+            $params = [
+                'index' => 'default_v5',
+                'type' => 'posts_v5',
                 'id' => $post->id,
-                'title' => $post->title,
-                'content' => $post->content,
-                'tags' => $post->tags,
-                'created_at' => $post->created_at,
-                'updated_at' => $post->update_at
-            ]
-        ];
+                //  'timestamp' => strtotime("".$post->updated_at)*1000,
+                'body' => [
+                    'id' => $post->id,
+                    'title' => $post->title,
+                    'content' => $post->content,
+                    'tags' => $post->tags,
+                    'created_at' => "".$post->created_at,
+                    'updated_at' => "".$post->updated_at,
+                    //   '_timestamp' => strtotime("".$post->updated_at)
+                ]
+            ];
 
-        $response = $client->index($params);
-        print_r($response);
+            $response = $client->index($params);
+            print_r($response);
+        }catch(\Exception $e){
+            echo "<pre>";
+            print_r($post);
+            echo $e->getMessage();
+        }
+
     }
 
 

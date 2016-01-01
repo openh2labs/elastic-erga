@@ -27,6 +27,6 @@ class Kernel extends ConsoleKernel
         $schedule->command('inspire')
                  ->hourly();
 
-        $schedule->call('\App\Http\Controllers\AlertController@searchtest')->everyMinute();
+        $schedule->call('\App\Http\Controllers\AlertController@searchtest')->everyFiveMinutes();
     }
 }

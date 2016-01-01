@@ -22,6 +22,8 @@ use App\AlertExecution;
 
 
 class AlertController  extends BaseController {
+
+    public $alert_run;
     
 
     public function home(){
@@ -38,6 +40,10 @@ class AlertController  extends BaseController {
      */
     public function searchtest(){
         $start_time = date('U');
+        $this->alert_run = new AlertExecution();
+        $this->alert_run->description = "check for alerts";
+        $this->alert_run->save();
+
         //check test json from kibana
         /*
         $query = $this->getArrayFromTestJson();
@@ -49,10 +55,9 @@ class AlertController  extends BaseController {
         $this->getResult();
 
         //save the job run
-        $as = new AlertExecution();
-        $as->description = "check for alerts";
-        $as->duration = date('U') - $start_time;
-        $as->save();
+        $this->alert_run->description = "check for alerts";
+        $this->alert_run->duration = date('U') - $start_time;
+        $this->alert_run->save();
     }
 
     /**
@@ -179,9 +184,30 @@ class AlertController  extends BaseController {
 
             //search for total documents so that percentages can be calculated
             $hits_total = $this->doSearch($alert, "total");
+
+            //check if we should be alerted
+            $this->chechAlertCondition($alert, $hits, $hits_total);
+
+            //screen output
             echo "<br>".$hits_total." total documents";//.$alert->criteria;echo "<hr>";
             echo "<br>".number_format((($hits/$hits_total)*100),2)."% alert rate";
             echo "<hr>";
+        }
+    }
+
+    /**
+     * check if the alert confitions have been met and record the failure
+     * @param $alert
+     */
+    function chechAlertCondition($alert, $failures, $total_requests){
+        if($alert->number_of_hits > 0 && $alert->number_of_hits < $failures){
+            $this->alert_run->total_alerts_absolute = $this->alert_run->total_alerts_absolute + 1;
+                echo "<br>absolute hit threshold met";
+        }
+        $alert_pct = (($failures/$total_requests)*100);
+        if($alert->pct_of_total_threshold > 0 && $alert->pct_of_total_threshold < $alert_pct){
+            $this->alert_run->total_alerts_pct = $this->alert_run->total_alerts_pct + 1;
+            echo "<br>hit pct threshold met";
         }
     }
 

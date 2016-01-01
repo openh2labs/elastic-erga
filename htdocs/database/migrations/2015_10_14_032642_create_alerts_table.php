@@ -22,8 +22,8 @@ class CreateAlertsTable extends Migration
             $table->string('es_type',50); //elastic search type
             $table->string('es_datetime_field'); // the date time field to use
             $table->integer('minutes_back'); //how far back to check
-            $table->float('pct_of_total_threshold'); //alerts will fire if the percentage of failures exceeds this value
-            $table->integer('number_of_failures'); //alerts will fire if the absolute number of failures exceeds this value
+            $table->float('pct_of_total_threshold'); //alerts will fire if the percentage of hits exceeds this value
+            $table->integer('number_of_hits'); //alerts will fire if the absolute number of hits exceeds this value
           //  $table->timestamps('updated_at');
             $table->timestamps();
         });

@@ -36,7 +36,7 @@ class alertsSeeder extends seeder
             'es_datetime_field' => 'updated_at',
             'minutes_back' => 141440,
             'pct_of_total_threshold' => rand(0,5),
-            'number_of_failures' => rand(0,20)
+            'number_of_hits' => rand(0,20)
         ));
         }
 

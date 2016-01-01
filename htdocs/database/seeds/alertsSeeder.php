@@ -25,16 +25,11 @@ class alertsSeeder extends seeder
         DB::table('alerts')->delete();
         for($i=0; $i<30; $i++)
         {
-          /*
-            $filter = array();
-            $filter ['bool']['must'][]['term']['content'] = $faker->word();
-            $filter ['bool']['must'][]['range']['updated_at'][]['lte'] = "now-%minutes%"; //*
-            */
 
             App:alerts::create(array(
-            //'criteria' => 'some_search_field <> "'.$faker->sentence(3).'"',
+            'description' => $faker->sentence(3),
             'criteria' => '{"query":{"query_string":{"analyze_wildcard":true,"query":"content: '.$faker->word().'"}},"filter":{"bool":{"must":[{"range":{"updated_at":{"gte":%start_date%,"lte":%end_date%,"format":"epoch_millis"}}}],"must_not":[]}}}',
-            //'criteria' => json_encode($filter),
+            'criteria_total' => '{"query":{"query_string":{"query":"*","analyze_wildcard":true}},"filter":{"bool":{"must":[{"range":{"updated_at":{"gte":%start_date%,"lte":%end_date%,"format":"epoch_millis"}}}],"must_not":[]}}}',
             'es_host' => '192.168.10.10:9200',
             'es_index' => 'default_v5',
             'es_type' => 'posts_v5',

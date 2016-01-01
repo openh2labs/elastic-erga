@@ -14,7 +14,9 @@ class CreateAlertsTable extends Migration
     {
         Schema::create('alerts', function (Blueprint $table) {
             $table->increments('id');
-            $table->text('criteria');
+            $table->string('description',255); //the name of the alert condition
+            $table->text('criteria'); //the json encoded elastic search query
+            $table->text('criteria_total'); //the josn encoded elastic search query to get the total documents
             $table->string('es_host',255);
             $table->string('es_index',50);
             $table->string('es_type',50);

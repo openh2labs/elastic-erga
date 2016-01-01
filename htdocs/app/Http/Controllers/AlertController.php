@@ -34,13 +34,14 @@ class AlertController  extends BaseController {
      * display a list of all the search results that the system currently checks for
      */
     public function searchtest(){
-        $query = $this->getArrayFromTestJson();
 
+        //check test json from kibana
+        /*
+        $query = $this->getArrayFromTestJson();
         echo"<pre>";print_r($query['query']['filtered']);
         echo "\nNew query: \n";echo json_encode($query['query']['filtered']);echo"\n<hr>";
+        */
         // get alert checks
-
-
         $this->getResult();
 
     }
@@ -134,56 +135,65 @@ class AlertController  extends BaseController {
         }
     }
 
+
+    /**
+     * get the time period we are checking for alerts
+     * @param $alert
+     * @return mixed
+     */
+    private function getTimePeriod($alert){
+        $start_date = "".(date('U', strtotime('-'.$alert->minutes_back.' minutes'))*1000);
+        $end_date = "".(date('U')*1000);
+        $alert->criteria = str_replace("%start_date%", $start_date, $alert->criteria);
+        $alert->criteria = str_replace("%end_date%", $end_date, $alert->criteria);
+        $alert->criteria_total = str_replace("%start_date%", $start_date, $alert->criteria_total);
+        $alert->criteria_total = str_replace("%end_date%", $end_date, $alert->criteria_total);
+        return $alert;
+    }
+
+    /**
+     * check all alerts
+     */
     function getResult(){
         echo"<pre>";
         //get data
         $alerts = alerts::all();
-      //  $data = array('name'=>'woohoo!!!', 'alerts'=>$alert);
-
         foreach($alerts as $alert){
+            echo "<h2>".$alert->description."</h2>";
 
             //add time constraint
-            $start_date = "".(date('U', strtotime('-'.$alert->minutes_back.' minutes'))*1000);
-            $end_date = "".(date('U')*1000);
-            $alert->criteria = str_replace("%start_date%", $start_date, $alert->criteria);
-            $alert->criteria = str_replace("%end_date%", $end_date, $alert->criteria);
+            $alert = $this->getTimePeriod($alert);
 
             // echo $alert->criteria."<br>";
-            $hits = $this->doSearch($alert);
+            $hits = $this->doSearch($alert, "alert");
             echo "<br>".$hits." times found ";//.$alert->criteria;
 
-            //search for documents without it
-            /*
-            $alert->criteria = str_replace("\"must\":", "\"must_not\":", $alert->criteria);
-            $hits = $this->doSearch($alert);
-            echo "<br>".$hits." times not found<hr> ";//.$alert->criteria;echo "<hr>";
-            */
+            //search for total documents so that percentages can be calculated
+            $hits_total = $this->doSearch($alert, "total");
+            echo "<br>".$hits_total." total documents";//.$alert->criteria;echo "<hr>";
+            echo "<br>".number_format((($hits/$hits_total)*100),2)."% alert rate";
+            echo "<hr>";
         }
     }
 
     /**
      * search for a particular alert condition
      * @param $alert, $alert eloquent object
+     * @param $query_type, alert query, or total query
      * @return int total hits
+     * @todo remove es_type from db as it doesn't get used anymore, the search json can apply a type filter
      */
-    function doSearch($alert){
-        $filter2 = json_decode($alert->criteria);
-        /*
-       $query = array();
-       $query['match']['_type'] = $alert->es_type;
-       $params['query']['filtered'] = array(
-           "filter" => $filter2,
-           "query"  => $query
-       );
-       */
-        $params = json_decode($alert->criteria,true);
+    function doSearch($alert, $query_type){
+        if($query_type == "alert"){
+            $params = json_decode($alert->criteria,true);
+         //   echo "<br>($query_type type) ".($alert->criteria);//echo"filter:";print_r($filter2);echo"<hr>";
+        }elseif($query_type == "total"){
+            $params = json_decode($alert->criteria_total,true);
+         //   echo "<br>($query_type type) ".($alert->criteria_total);//echo"filter:";print_r($filter2);echo"<hr>";
+        }
 
-        //$params['aggs']['field_name_2']['terms']['field'] = 'id';
 
-        echo "<br> ".($alert->criteria);//echo"filter:";print_r($filter2);echo"<hr>";
         $result = $this->searchELK($alert->es_index, $alert->es_type, array($alert->es_host), $params, array(), 'count');
-       // print_r($result);
-        //echo "<hr>";
         return $result['hits']['total'];
     }
 
@@ -402,8 +412,8 @@ class AlertController  extends BaseController {
     "filtered": {
       "query": {
         "query_string": {
-          "analyze_wildcard": true,
-          "query": "content: temporibus"
+          "query": "*",
+          "analyze_wildcard": true
         }
       },
       "filter": {
@@ -412,8 +422,8 @@ class AlertController  extends BaseController {
             {
               "range": {
                 "updated_at": {
-                  "gte": 1450955172163,
-                  "lte": 1451559972163,
+                  "gte": 1450977400867,
+                  "lte": 1451582200867,
                   "format": "epoch_millis"
                 }
               }
@@ -432,8 +442,8 @@ class AlertController  extends BaseController {
         "time_zone": "Europe/London",
         "min_doc_count": 1,
         "extended_bounds": {
-          "min": 1450955172162,
-          "max": 1451559972162
+          "min": 1450977400867,
+          "max": 1451582200867
         }
       }
     }

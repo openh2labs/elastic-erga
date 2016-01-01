@@ -15,6 +15,7 @@ use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use App\alerts;
 use App\Post;
+use App\AlertExecution;
 
 
 
@@ -32,18 +33,26 @@ class AlertController  extends BaseController {
 
     /**
      * display a list of all the search results that the system currently checks for
+     * currently also runs the cron
+     * @todo separate the cron out
      */
     public function searchtest(){
-
+        $start_time = date('U');
         //check test json from kibana
         /*
         $query = $this->getArrayFromTestJson();
         echo"<pre>";print_r($query['query']['filtered']);
         echo "\nNew query: \n";echo json_encode($query['query']['filtered']);echo"\n<hr>";
         */
+
         // get alert checks
         $this->getResult();
 
+        //save the job run
+        $as = new AlertExecution();
+        $as->description = "check for alerts";
+        $as->duration = date('U') - $start_time;
+        $as->save();
     }
 
     /**

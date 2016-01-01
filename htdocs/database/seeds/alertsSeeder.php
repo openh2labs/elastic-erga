@@ -34,8 +34,9 @@ class alertsSeeder extends seeder
             'es_index' => 'default_v5',
             'es_type' => 'posts_v5',
             'es_datetime_field' => 'updated_at',
-            'minutes_back' => 141440
-
+            'minutes_back' => 141440,
+            'pct_of_total_threshold' => rand(0,5),
+            'number_of_failures' => rand(0,20)
         ));
         }
 

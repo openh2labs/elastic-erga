@@ -23,7 +23,9 @@ class CreateAlertsTable extends Migration
             $table->string('es_datetime_field'); // the date time field to use
             $table->integer('minutes_back'); //how far back to check
             $table->float('pct_of_total_threshold'); //alerts will fire if the percentage of hits exceeds this value
+            $table->boolean('pct_alert_state'); //whether or not the percentage hit check is in alert
             $table->integer('number_of_hits'); //alerts will fire if the absolute number of hits exceeds this value
+            $table->boolean('number_hit_alert_state'); //whether or not the absolute hit check is in alert
           //  $table->timestamps('updated_at');
             $table->timestamps();
         });

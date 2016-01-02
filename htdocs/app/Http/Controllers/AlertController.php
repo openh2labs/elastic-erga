@@ -61,58 +61,6 @@ class AlertController  extends BaseController {
     }
 
     /**
-     * @param string $start_dt, mysql start date
-     * @param string $end_dt, mysql end date
-     * @return mixed
-     */
-    function getFieldList($start_dt, $end_dt){
-        $fieldsArr = array("field_name_1", "field_name_3", "field_name_4");
-        $filter = array();
-        // $filter ['bool']['must'][]['term']['game_id'] = $game_id;
-        $filter ['bool']['must'][]['term']['_type'] = $this->index_type;
-        $filter ['bool']['must'][]['range']['game_date']['gt'] = $start_dt;
-        $filter ['bool']['must'][]['range']['game_date']['lte'] = $end_dt;
-        /*
-
-        $filter ['bool']['must'][]['term']['reported'] = "0";
-        $filter ['bool']['must'][]['term']['publishable'] = "1";
-        $filter ['bool']['must'][]['term']['completed'] = "1";
-        $filter ['bool']['must'][]['term']['enabled'] = "1";
-        $filter ['bool']['must'][]['range']['created_at']['gt'] = "$year-$month-01 00:00:00";
-        $filter ['bool']['must'][]['range']['created_at']['lte'] = "$eom 23:59:59";
-        */
-        $query = array();
-        $query['match']['_type'] = $this->index_type;
-
-        $params['query']['filtered'] = array(
-            "filter" => $filter,
-            "query"  => $query
-        );
-
-        //aggregate the results
-        $params['aggs']['field_name_2']['terms']['field'] = 'field_name_3';
-        $params['aggs']['field_name_2']['terms']['size'] = 50000;
-        $params['aggs']['field_name_2']['aggs']['field_name_4']['terms']['field'] = 'field_name_1';
-        $params['aggs']['field_name_2']['aggs']['field_name_4']['terms']['size'] =  50000;
-        $params['aggs']['field_name_2']['aggs']['field_name_4']['aggs']['game_id']['terms']['field'] = 'game_id';
-        $params['aggs']['field_name_2']['aggs']['field_name_4']['aggs']['game_id']['terms']['size'] = 50000;
-
-        $elkdoc = searchELK($this->index, $this->index_type, $this->host, $params, $fieldsArr, "_count");
-
-        $result = array();
-        if($elkdoc['hits']['total'] > 0){
-            $result['response'] = "200 OK";
-            $result['status'] = "200";
-        }else{
-            $result['response'] = "404 not found";
-            $result['status'] = "404";
-        }
-        $result['body'] = $elkdoc['aggregations']['field_name_2']['buckets'];
-        return $result;
-    }
-
-
-    /**
      * searches ELK for a doc
      * if search_type = count then it will only return aggregation results
      * if fields array is empty it will return all fields
@@ -200,15 +148,25 @@ class AlertController  extends BaseController {
      * @param $alert
      */
     function chechAlertCondition($alert, $failures, $total_requests){
+        //absolute hit number check
         if($alert->number_of_hits > 0 && $alert->number_of_hits < $failures){
             $this->alert_run->total_alerts_absolute = $this->alert_run->total_alerts_absolute + 1;
+            $alert->number_hit_alert_state = true;
                 echo "<br>absolute hit threshold met";
+        }else{
+            $alert->number_hit_alert_state = false;
         }
+
+        //percentage hit check
         $alert_pct = (($failures/$total_requests)*100);
         if($alert->pct_of_total_threshold > 0 && $alert->pct_of_total_threshold < $alert_pct){
             $this->alert_run->total_alerts_pct = $this->alert_run->total_alerts_pct + 1;
+            $alert->pct_alert_state = true;
             echo "<br>hit pct threshold met";
+        }else{
+            $alert->pct_alert_state = false;
         }
+        $alert->save();
     }
 
     /**

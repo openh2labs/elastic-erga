@@ -54,7 +54,7 @@ return [
     |
     */
 
-    'from' => ['address' => null, 'name' => null],
+    'from' => ['address' => "mp@h2labs.co.uk", 'name' => "test account"],
 
     /*
     |--------------------------------------------------------------------------

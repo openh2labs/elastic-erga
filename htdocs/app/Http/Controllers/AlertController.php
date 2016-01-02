@@ -16,12 +16,17 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use App\alerts;
 use App\Post;
 use App\AlertExecution;
+use Mail;
+use Log;
 
 
 
 
 
 class AlertController  extends BaseController {
+    /*
+     * @todo make echo statements displayed when in debug
+     */
 
     public $alert_run;
     
@@ -33,23 +38,19 @@ class AlertController  extends BaseController {
         return view ("alerts_home", $data);
     }
 
+
     /**
      * display a list of all the search results that the system currently checks for
      * currently also runs the cron
      * @todo separate the cron out
      */
     public function searchtest(){
+        Log::info('Starting Alert checks');
+
         $start_time = date('U');
         $this->alert_run = new AlertExecution();
-        $this->alert_run->description = "check for alerts";
+        $this->alert_run->description = "check for alerts (searchtest)";
         $this->alert_run->save();
-
-        //check test json from kibana
-        /*
-        $query = $this->getArrayFromTestJson();
-        echo"<pre>";print_r($query['query']['filtered']);
-        echo "\nNew query: \n";echo json_encode($query['query']['filtered']);echo"\n<hr>";
-        */
 
         // get alert checks
         $this->getResult();
@@ -58,7 +59,9 @@ class AlertController  extends BaseController {
         $this->alert_run->description = "check for alerts";
         $this->alert_run->duration = date('U') - $start_time;
         $this->alert_run->save();
+        Log::info('completed Alert checks (searchtest)');
     }
+
 
     /**
      * searches ELK for a doc
@@ -113,6 +116,7 @@ class AlertController  extends BaseController {
         return $alert;
     }
 
+
     /**
      * check all alerts
      */
@@ -134,7 +138,7 @@ class AlertController  extends BaseController {
             $hits_total = $this->doSearch($alert, "total");
 
             //check if we should be alerted
-            $this->chechAlertCondition($alert, $hits, $hits_total);
+            $this->checkAlertCondition($alert, $hits, $hits_total);
 
             //screen output
             echo "<br>".$hits_total." total documents";//.$alert->criteria;echo "<hr>";
@@ -143,31 +147,51 @@ class AlertController  extends BaseController {
         }
     }
 
+
     /**
-     * check if the alert confitions have been met and record the failure
-     * @param $alert
+     * check if the alert conditions have been met and record the hits
+     * @param $alert, the alert object
+     * @param $hits, the absolute number of search hits
+     * @param $total_hits, the total number of hits
      */
-    function chechAlertCondition($alert, $failures, $total_requests){
+    function checkAlertCondition($alert, $hits, $total_hits){
         //absolute hit number check
-        if($alert->number_of_hits > 0 && $alert->number_of_hits < $failures){
+        if($alert->number_of_hits > 0 && $alert->number_of_hits < $hits){
             $this->alert_run->total_alerts_absolute = $this->alert_run->total_alerts_absolute + 1;
             $alert->number_hit_alert_state = true;
-                echo "<br>absolute hit threshold met";
+            $this->sendMail($alert, $alert->description." exceeded ".$alert->number_of_hits." hits.");
+            echo "<br>absolute hit threshold met";
         }else{
             $alert->number_hit_alert_state = false;
         }
 
         //percentage hit check
-        $alert_pct = (($failures/$total_requests)*100);
+        $alert_pct = (($hits/$total_hits)*100);
         if($alert->pct_of_total_threshold > 0 && $alert->pct_of_total_threshold < $alert_pct){
             $this->alert_run->total_alerts_pct = $this->alert_run->total_alerts_pct + 1;
             $alert->pct_alert_state = true;
+            $this->sendMail($alert, $alert->description." exceeded ".$alert->pct_alert_state."%.");
             echo "<br>hit pct threshold met";
         }else{
             $alert->pct_alert_state = false;
         }
+
         $alert->save();
     }
+
+
+    /**
+     * sends an email notification for a particular alert
+     * @param $alert
+     */
+    function sendMail($alert, $alert_description){
+        Mail::send('email_alert', ['recipient' => $alert->alert_email_recipient, 'description' => $alert_description], function($message) use ($alert)
+        {
+            $message->from('mp@h2labs.co.uk', 'Laravel');
+            $message->to($alert->alert_email_recipient, $alert->alert_email_recipient)->subject('elastic-erga alert:'.$alert->description);
+        });
+    }
+
 
     /**
      * search for a particular alert condition
@@ -185,68 +209,10 @@ class AlertController  extends BaseController {
          //   echo "<br>($query_type type) ".($alert->criteria_total);//echo"filter:";print_r($filter2);echo"<hr>";
         }
 
-
         $result = $this->searchELK($alert->es_index, $alert->es_type, array($alert->es_host), $params, array(), 'count');
         return $result['hits']['total'];
     }
 
-    /**
-     * deprecated
-     */
-    function getResultOld(){
-        try{
-            // $elasticsearch = new elasticsearch/elasticsearch();
-            //'10.0.2.15'
-            //http://192.168.0.250:9200
-
-            $client = ClientBuilder::create()->setHosts(['192.168.10.10'])->build();
-            $params['index'] = 'default';
-            $params['type'] = 'posts';
-            $params['body']['aggs'] = array();
-
-
-            $filters = array();
-            $filters['bool']['should'][]['term']['content'] = 'facere';
-            $params['body']['query']['filtered'] = array('filters'=>$filters);
-
-            /*
-            $params = [
-                'index' => 'default',
-                'type' => 'posts',
-                'body' => [
-                    'query' => [
-                        'match' => [
-                            'content' => 'facere'
-                        ]
-                    ]
-
-                ],
-                    'fields' => ''
-
-            ];
-            */
-
-            $result = $client->search($params);
-
-            $response['result'] = "ok";
-            $response['result_code'] = 200;
-            $response['result_hits'] = $result['hits']['total'];
-            $response['result_body'] = $result;
-
-            echo "<pre>";
-            print_r($response);
-            echo "</pre>";
-
-        }catch(\Exception $e){
-            echo "<pre>";
-            $var = json_decode($e->getMessage(),true);
-            print_r($this->getESException($var));
-            echo "</pre>";
-        }
-
-        //echo "<pre>";
-        //print_r($response);
-    }
 
     /**
      * returns elastic search exception
@@ -260,6 +226,7 @@ class AlertController  extends BaseController {
         $result['result_body'] = $error;
         return $result;
     }
+
 
     /**
      * create the test index
@@ -291,9 +258,8 @@ class AlertController  extends BaseController {
             $this->addTestMappings();
 
         }
-
-
     }
+
 
     /**
      * creates the test mappings
@@ -394,58 +360,6 @@ class AlertController  extends BaseController {
         }
 
     }
-
-    /**
-     * returns a php array from a test json obtained from Kibana
-     */
-    function getArrayFromTestJson(){
-        $json = '{
-  "size": 0,
-  "query": {
-    "filtered": {
-      "query": {
-        "query_string": {
-          "query": "*",
-          "analyze_wildcard": true
-        }
-      },
-      "filter": {
-        "bool": {
-          "must": [
-            {
-              "range": {
-                "updated_at": {
-                  "gte": 1450977400867,
-                  "lte": 1451582200867,
-                  "format": "epoch_millis"
-                }
-              }
-            }
-          ],
-          "must_not": []
-        }
-      }
-    }
-  },
-  "aggs": {
-    "2": {
-      "date_histogram": {
-        "field": "updated_at",
-        "interval": "3h",
-        "time_zone": "Europe/London",
-        "min_doc_count": 1,
-        "extended_bounds": {
-          "min": 1450977400867,
-          "max": 1451582200867
-        }
-      }
-    }
-  }
-}';
-
-        return json_decode($json,true);
-    }
-
 
 
 }

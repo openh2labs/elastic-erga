@@ -32,13 +32,12 @@ $server_host = $_SERVER['HTTP_HOST'];
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">Project name</a>
+            <a class="navbar-brand" href="#">elastic-erga</a>
         </div>
         <div id="navbar" class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
-                <li class="active"><a href="#">Home</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#contact">Contact</a></li>
+                <li @yield('active_tab_alert_list')><a href="../alert/home">Alerts</a></li>
+                <li @yield('active_tab_system_log')><a href="../alert/systemlog">System log</a></li>
             </ul>
         </div><!--/.nav-collapse -->
     </div>
@@ -54,6 +53,9 @@ $server_host = $_SERVER['HTTP_HOST'];
     </div>
 
 </div><!-- /.container -->
+<div class="container">
+    <p>Powered by elastic-erga.</p><p>https://github.com/openh2labs/elastic-erga/wiki</p>
+</div>
 
 
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->

@@ -29,3 +29,5 @@ $b = $_SERVER['HTTP_HOST'];
     {{ $b }}.
 
 @endsection
+
+@section('active_tab_alert_list') class="active"@endsection

@@ -56,7 +56,7 @@ class AlertController  extends BaseController {
         $this->getResult();
 
         //save the job run
-        $this->alert_run->description = "check for alerts";
+        //$this->alert_run->description = "check for alerts";
         $this->alert_run->duration = date('U') - $start_time;
         $this->alert_run->save();
         Log::info('completed Alert checks (searchtest)');

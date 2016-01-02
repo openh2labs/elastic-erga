@@ -8,8 +8,10 @@
 
 namespace App\Http\Controllers;
 
-use App\User;
-use App\Http\Controllers\Controller;
+//use App\User;
+//use App\Http\Controllers\Controller;
+
+use App\AlertExecution;
 
 class SystemLogController extends Controller
 {
@@ -22,7 +24,8 @@ class SystemLogController extends Controller
     public function home()
     {
         //$alert = alerts::all();
-        $data = array('name'=>'woohoo!!!', 'alerts'=>'');
+        $ae = AlertExecution::all();
+        $data = array('name'=>'woohoo!!!', 'ae'=>$ae);
 
         return view ("system_log", $data);
        // echo "system log";

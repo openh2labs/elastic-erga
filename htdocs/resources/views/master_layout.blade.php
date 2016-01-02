@@ -54,7 +54,7 @@ $server_host = $_SERVER['HTTP_HOST'];
 
 </div><!-- /.container -->
 <div class="container">
-    <p>Powered by elastic-erga.</p><p>https://github.com/openh2labs/elastic-erga/wiki</p>
+    <p>Powered by <a href="https://github.com/openh2labs/elastic-erga/wiki">elastic-erga</a>.</p>
 </div>
 
 

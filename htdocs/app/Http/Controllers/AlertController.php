@@ -132,7 +132,7 @@ class AlertController  extends BaseController {
 
             // echo $alert->criteria."<br>";
             $hits = $this->doSearch($alert, "alert");
-            echo "<br>".$hits." times found ";//.$alert->criteria;
+            echo "<br>".$hits." hits found ";//.$alert->criteria;
 
             //search for total documents so that percentages can be calculated
             $hits_total = $this->doSearch($alert, "total");
@@ -141,8 +141,9 @@ class AlertController  extends BaseController {
             $this->checkAlertCondition($alert, $hits, $hits_total);
 
             //screen output
-            echo "<br>".$hits_total." total documents";//.$alert->criteria;echo "<hr>";
-            echo "<br>".number_format((($hits/$hits_total)*100),2)."% alert rate";
+            echo "<br>".$hits_total." total hits";
+            echo "<br>".number_format((($hits/$hits_total)*100),2)."% hits";
+            echo "<br>".number_format((($hits/$hits_total)*100),2)."% hits";
             echo "<hr>";
         }
     }
@@ -155,8 +156,8 @@ class AlertController  extends BaseController {
      * @param $total_hits, the total number of hits
      */
     function checkAlertCondition($alert, $hits, $total_hits){
-        //absolute hit number check
-        if($alert->number_of_hits > 0 && $alert->number_of_hits < $hits){
+        //absolute hit number check (greater than zero check)
+        if($alert->number_of_hits > 0 && $alert->number_of_hits < $hits && $alert->alert_type == 'gt0'){
             $this->alert_run->total_alerts_absolute = $this->alert_run->total_alerts_absolute + 1;
             $alert->number_hit_alert_state = true;
             $this->sendMail($alert, $alert->description." exceeded ".$alert->number_of_hits." hits.");
@@ -165,15 +166,25 @@ class AlertController  extends BaseController {
             $alert->number_hit_alert_state = false;
         }
 
-        //percentage hit check
+        //percentage hit check (greater than zero check)
         $alert_pct = (($hits/$total_hits)*100);
-        if($alert->pct_of_total_threshold > 0 && $alert->pct_of_total_threshold < $alert_pct){
+        if($alert->pct_of_total_threshold > 0 && $alert->pct_of_total_threshold < $alert_pct && $alert->alert_type == 'gt0'){
             $this->alert_run->total_alerts_pct = $this->alert_run->total_alerts_pct + 1;
             $alert->pct_alert_state = true;
             $this->sendMail($alert, $alert->description." exceeded ".$alert->pct_alert_state."%.");
             echo "<br>hit pct threshold met";
         }else{
             $alert->pct_alert_state = false;
+        }
+
+        //alert hits equal zero
+        if($hits == 0 && $alert->alert_type == 'e0'){
+            $this->alert_run->total_alerts_equal_zero = $this->alert_run->total_alerts_equal_zero + 1;
+            $alert->zero_hit_alert_state = true;
+            $this->sendMail($alert, $alert->description." has $hits hits");
+            echo "<br>zero hits alert threshold met";
+        }else{
+            $alert->zero_hit_alert_state = false;
         }
 
         $alert->save();

@@ -37,7 +37,8 @@ class alertsSeeder extends seeder
             'minutes_back' => 141440,
             'pct_of_total_threshold' => rand(0,5),
             'number_of_hits' => rand(0,20),
-            'alert_email_recipient' => $faker->email()
+            'alert_email_recipient' => $faker->email(),
+            'alert_type' => 'gt0'
         ));
         }
 

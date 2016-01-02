@@ -18,6 +18,7 @@ class CreateAlertExecutionTable extends Migration
             $table->integer('duration');
             $table->integer('total_alerts_absolute'); //number of alerts that got activated based on absolute number of hits
             $table->integer('total_alerts_pct'); //number of alerts that got activated based on percentages of hits
+            $table->integer('total_alerts_equal_zero'); //number of alerts that got activated based on zero hits
             $table->timestamps();
         });
     }

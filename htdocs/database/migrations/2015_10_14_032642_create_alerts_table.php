@@ -26,7 +26,9 @@ class CreateAlertsTable extends Migration
             $table->boolean('pct_alert_state'); //whether or not the percentage hit check is in alert
             $table->integer('number_of_hits'); //alerts will fire if the absolute number of hits exceeds this value
             $table->boolean('number_hit_alert_state'); //whether or not the absolute hit check is in alert
+            $table->boolean('zero_hit_alert_state'); //whether or not the zero hits check is in alert
             $table->string('alert_email_recipient'); //the email address to receive the alert
+            $table->string('alert_type',10); //greater than zero (gt0), equals 0 (eq0)
            // $table->timestamps('updated_at');
             $table->timestamps();
         });

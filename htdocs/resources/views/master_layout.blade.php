@@ -36,8 +36,23 @@ $server_host = $_SERVER['HTTP_HOST'];
         </div>
         <div id="navbar" class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
-                <li @yield('active_tab_alert_list')><a href="../alert/home">Alerts</a></li>
-                <li @yield('active_tab_system_log')><a href="../alert/systemlog">System log</a></li>
+                <li class="dropdown <@yield('active_tab_alert_list')">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dashboard<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/alert/home/all">All alerts setup</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="/alert/home/pct_state">Active percentage alerts</a></li>
+                        <li><a href="/alert/home/hit_state">Active hit alerts</a></li>
+                        <li><a href="/alert/home/zero_hit_state">Active zero hit alerts</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="#">Create new alert</a></li>
+                    </ul>
+                </li>
+
+                <li @yield('active_tab_system_log')><a href="/alertrun/systemlog">System log</a></li>
+
+
+
             </ul>
         </div><!--/.nav-collapse -->
     </div>

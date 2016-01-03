@@ -16,7 +16,7 @@ $b = $_SERVER['HTTP_HOST'];
 @extends('master_layout')
 
 @section('main')
-    <h1>Alerts dashboard</h1>
+    <h1>Alerts dashboard : {{ $title }} </h1>
     <table class="table table-striped table-hover table-condensed">
         <tr>
             <th>id</th>
@@ -78,4 +78,4 @@ $b = $_SERVER['HTTP_HOST'];
 
 @endsection
 
-@section('active_tab_alert_list') class="active"@endsection
+@section('active_tab_alert_list') active @endsection

@@ -31,13 +31,34 @@ class AlertController  extends BaseController {
     public $alert_run;
     
 
-    public function home(){
-        $alert = alerts::all();
-        $data = array('name'=>'woohoo!!!', 'alerts'=>$alert);
-
+    /**
+     * displays the alerts dashboard
+     *
+     */
+    public function home($state="all"){
+        $data = array();
+        if($state == "all"){
+            $alert = alerts::all();
+            $data['title'] = "all setup";
+        }elseif($state == "all_state"){ //all types in alert state
+            $alert = alerts::AllState()->get();
+            $data['title'] = "all active";
+        }elseif($state == "pct_state"){ //all in pct alert state
+            $alert = alerts::AllPct()->orderBy('created_at')->get();
+            $data['title'] = "percentage active";
+        }elseif($state == "hit_state"){ //in hit alert state
+            $alert = alerts::AllHit()->orderBy('created_at')->get();
+            $data['title'] = "hit active";
+        }elseif($state == "zero_hit_state"){
+            $data['title'] = "zero hit active";
+            $alert = alerts::AllZeroHit()->orderBy('created_at')->get();
+        }
+        else{
+            echo "error(1)";die;
+        }
+        $data['alerts'] = $alert;
         return view ("alerts_home", $data);
     }
-
 
     /**
      * display a list of all the search results that the system currently checks for

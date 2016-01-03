@@ -23,9 +23,11 @@ Route::get('/', function () {
 
 Route::get('user/{id}', 'UserController@showProfile');
 
-Route::get('alert/home', 'AlertController@home');
+Route::get('alert/home/{state}', 'AlertController@home');
 
-Route::get('alert/systemlog', 'SystemLogController@home');
+Route::get('alert/home/', 'AlertController@home');
+
+Route::get('alertrun/systemlog', 'SystemLogController@home');
 
 //execute searches @todo create cron
 Route::get('alert/searchtest', 'AlertController@searchtest');

@@ -139,6 +139,19 @@ class AlertController  extends BaseController {
 
 
     /**
+     * returns a string where the current year, month, day replace some holders
+     * @param $string
+     * @return mixed
+     */
+    private function getDateParams($string){
+        $string = str_replace("%Y%", date('Y'), $string);
+        $string = str_replace("%m%", date('m'), $string);
+        $string = str_replace("%d%", date('d'), $string);
+        return $string;
+    }
+
+
+    /**
      * check all alerts
      */
     function getResult(){
@@ -241,7 +254,7 @@ class AlertController  extends BaseController {
          //   echo "<br>($query_type type) ".($alert->criteria_total);//echo"filter:";print_r($filter2);echo"<hr>";
         }
 
-        $result = $this->searchELK($alert->es_index, $alert->es_type, array($alert->es_host), $params, array(), 'count');
+        $result = $this->searchELK($this->getDateParams($alert->es_index), $alert->es_type, array($alert->es_host), $params, array(), 'count');
         return $result['hits']['total'];
     }
 

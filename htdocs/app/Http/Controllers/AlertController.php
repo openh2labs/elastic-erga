@@ -93,11 +93,13 @@ class AlertController  extends BaseController {
         try{
            // $client = ClientBuilder::create()->setHosts(['192.168.10.10'])->build();
             $params = array();
+
             $params['hosts'] = array (
                 $host         // IP + Port
             );
+
            // $client = new \Elasticsearch\Client($params);
-            $client = ClientBuilder::create()->setHosts($host)->build();
+            $client = ClientBuilder::create($params)->setHosts($host)->build();
             $params2['index'] = $index;
             if($index_type != ""){
                 $params2['type'] = $index_type;

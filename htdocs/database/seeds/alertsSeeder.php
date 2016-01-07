@@ -38,6 +38,7 @@ class alertsSeeder extends seeder
             'pct_of_total_threshold' => rand(0,5),
             'number_of_hits' => rand(0,20),
             'alert_email_recipient' => $faker->email(),
+            'alert_email_sender' => $faker->email(),
             'alert_type' => 'gt0'
         ));
         }

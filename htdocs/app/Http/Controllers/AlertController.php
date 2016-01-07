@@ -108,10 +108,13 @@ class AlertController  extends BaseController {
             if($search_type != ""){
                 $params2['search_type'] = $search_type;
             }
-
+            $this->current_alert->es_config_error_state = false;
+            $this->current_alert->save();
             return $client->search($params2);
 
         }catch (\Exception $e){
+            $this->current_alert->es_config_error_state = true;
+            $this->current_alert->save();
             echo "<pre>error(1)";print_r($e->getMessage());echo"</pre>";
             $result['hits']['total'] = 0;
             return $result;
@@ -266,6 +269,7 @@ class AlertController  extends BaseController {
             echo "<br>index: ".$this->getDateParams($alert->es_index);
             echo "<br>index type: ".$alert->es_type;
             echo "<br>index host: ".$alert->es_host;
+            $this->current_alert = $alert;
             $result = $this->searchELK($this->getDateParams($alert->es_index), $alert->es_type, array($alert->es_host), $params, array(), 'count');
             return $result['hits']['total'];
         }catch(\Exception $e){

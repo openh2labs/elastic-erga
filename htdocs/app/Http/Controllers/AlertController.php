@@ -111,7 +111,6 @@ class AlertController  extends BaseController {
             if($search_type != ""){
                 $params2['search_type'] = $search_type;
             }
-          // echo "<pre>"; print_r($params2);// die;
             return $client->search($params2);
 
         }catch (\Exception $e){
@@ -128,6 +127,8 @@ class AlertController  extends BaseController {
      * @return mixed
      */
     private function getTimePeriod($alert){
+        echo "<br>From: ".date("Y-m-d H:i:s", strtotime('-'.$alert->minutes_back.' minutes'));
+        echo "<br>To: ".date("Y-m-d H:i:s");
         $start_date = "".(date('U', strtotime('-'.$alert->minutes_back.' minutes'))*1000);
         $end_date = "".(date('U')*1000);
         $alert->criteria = str_replace("%start_date%", $start_date, $alert->criteria);
@@ -264,16 +265,16 @@ class AlertController  extends BaseController {
                 $params = json_decode($alert->criteria_total,true);
                 //   echo "<br>($query_type type) ".($alert->criteria_total);//echo"filter:";print_r($filter2);echo"<hr>";
             }
-            echo "<br>index:".$this->getDateParams($alert->es_index);
+            echo "<br>index: ".$this->getDateParams($alert->es_index);
+            echo "<br>index type: ".$alert->es_type;
+            echo "<br>index host: ".$alert->es_host;
             $result = $this->searchELK($this->getDateParams($alert->es_index), $alert->es_type, array($alert->es_host), $params, array(), 'count');
             return $result['hits']['total'];
         }catch(\Exception $e){
             echo $e->getMessage();
             return 0;
         }
-
     }
-
 
     /**
      * returns elastic search exception

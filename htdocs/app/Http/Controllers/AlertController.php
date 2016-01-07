@@ -216,7 +216,7 @@ class AlertController  extends BaseController {
         if($alert->pct_of_total_threshold > 0 && $alert->pct_of_total_threshold < $alert_pct && $alert->alert_type == 'gt0'){
             $this->alert_run->total_alerts_pct = $this->alert_run->total_alerts_pct + 1;
             $alert->pct_alert_state = true;
-            $this->sendMail($alert, $alert->description." exceeded ".$alert->pct_alert_state."%.");
+            $this->sendMail($alert, $alert->description." exceeded ".$alert->pct_of_total_threshold."%.");
             echo "<br>hit pct threshold met";
         }else{
             $alert->pct_alert_state = false;

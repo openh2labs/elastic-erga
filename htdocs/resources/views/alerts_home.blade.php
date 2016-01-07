@@ -25,6 +25,7 @@ $b = $_SERVER['HTTP_HOST'];
             <th class="text-center">greater<br>than<br>percentage</th>
             <th class="text-center">greater<br>than hit<br>count</th>
             <th class="text-center">zero results</th>
+            <th class="text-center">ES connection<br>configuration</th>
         </tr>
         @foreach($alerts as $alert)
         <tr>
@@ -56,13 +57,37 @@ $b = $_SERVER['HTTP_HOST'];
                     @else
                         <span class="label label-success">OK</span>
                     @endif
+
+                    @else
+                    N/A
                 @endif
+            </td>
+            <td class="text-center">
+                    @if($alert->es_config_error_state === 1)
+                        <span class="label label-danger">error</span>
+                    @else
+                        <span class="label label-success">OK</span>
+                    @endif
             </td>
         </tr>
         @endforeach
     </table>
 
+
+
     <hr>
+    <ul>
+        <li>
+            alert type
+            <ul>
+            <li>gt0: greater than zero alert; check and alert if the document count exceeds a threshold (either as percentage, or absolute hit count)</li>
+            <li>e0: equals zero alert; check and alert if the document count is zero</li>
+            </ul>
+        </li>
+    </ul>
+
+
+
     {{
      url('', $parameters = [], $secure = null)
     }}

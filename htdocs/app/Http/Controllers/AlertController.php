@@ -101,6 +101,7 @@ class AlertController  extends BaseController {
            // $client = new \Elasticsearch\Client($params);
             $client = ClientBuilder::create($params)->setHosts($host)->build();
             $params2['index'] = $index;
+            $params2['client'] = ['timeout'=>5, 'connect_timeout'=>1];
             if($index_type != ""){
                 $params2['type'] = $index_type;
             }

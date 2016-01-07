@@ -51,8 +51,13 @@ $server_host = $_SERVER['HTTP_HOST'];
 
                 <li @yield('active_tab_system_log')><a href="/alertrun/systemlog">System log</a></li>
 
-
-
+                <ul class="nav navbar-nav">
+                    <li class="dropdown <@yield('active_tab_misc_list')">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Misc.<span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/alert/searchtest">Check all now</a></li>
+                        </ul>
+                    </li>
             </ul>
         </div><!--/.nav-collapse -->
     </div>

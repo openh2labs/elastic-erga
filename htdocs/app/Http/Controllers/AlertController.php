@@ -176,8 +176,13 @@ class AlertController  extends BaseController {
 
             //screen output
             echo "<br>".$hits_total." total hits";
-            echo "<br>".number_format((($hits/$hits_total)*100),2)."% hits";
-            echo "<br>".number_format((($hits/$hits_total)*100),2)."% hits";
+            if($hits_total>0){
+                echo "<br>".number_format((($hits/$hits_total)*100),2)."% hits";
+                echo "<br>".number_format((($hits/$hits_total)*100),2)."% hits";
+            }else{
+                echo "<br>total hits are 0";
+            }
+
             echo "<hr>";
         }
     }
@@ -201,7 +206,12 @@ class AlertController  extends BaseController {
         }
 
         //percentage hit check (greater than zero check)
-        $alert_pct = (($hits/$total_hits)*100);
+        if($total_hits>0){
+            $alert_pct = (($hits/$total_hits)*100);
+        }else{
+            $alert_pct=0;
+        }
+
         if($alert->pct_of_total_threshold > 0 && $alert->pct_of_total_threshold < $alert_pct && $alert->alert_type == 'gt0'){
             $this->alert_run->total_alerts_pct = $this->alert_run->total_alerts_pct + 1;
             $alert->pct_alert_state = true;
@@ -232,7 +242,7 @@ class AlertController  extends BaseController {
     function sendMail($alert, $alert_description){
         Mail::send('email_alert', ['recipient' => $alert->alert_email_recipient, 'description' => $alert_description], function($message) use ($alert)
         {
-            $message->from('mp@h2labs.co.uk', 'Laravel');
+            $message->from('test@elasticerga.cashbacksrv.com', 'Laravel');
             $message->to($alert->alert_email_recipient, $alert->alert_email_recipient)->subject('elastic-erga alert:'.$alert->description);
         });
     }
@@ -246,16 +256,22 @@ class AlertController  extends BaseController {
      * @todo remove es_type from db as it doesn't get used anymore, the search json can apply a type filter
      */
     function doSearch($alert, $query_type){
-        if($query_type == "alert"){
-            $params = json_decode($alert->criteria,true);
-         //   echo "<br>($query_type type) ".($alert->criteria);//echo"filter:";print_r($filter2);echo"<hr>";
-        }elseif($query_type == "total"){
-            $params = json_decode($alert->criteria_total,true);
-         //   echo "<br>($query_type type) ".($alert->criteria_total);//echo"filter:";print_r($filter2);echo"<hr>";
+        try{
+            if($query_type == "alert"){
+                $params = json_decode($alert->criteria,true);
+                //   echo "<br>($query_type type) ".($alert->criteria);//echo"filter:";print_r($filter2);echo"<hr>";
+            }elseif($query_type == "total"){
+                $params = json_decode($alert->criteria_total,true);
+                //   echo "<br>($query_type type) ".($alert->criteria_total);//echo"filter:";print_r($filter2);echo"<hr>";
+            }
+            echo "<br>index:".$this->getDateParams($alert->es_index);
+            $result = $this->searchELK($this->getDateParams($alert->es_index), $alert->es_type, array($alert->es_host), $params, array(), 'count');
+            return $result['hits']['total'];
+        }catch(\Exception $e){
+            echo $e->getMessage();
+            return 0;
         }
 
-        $result = $this->searchELK($this->getDateParams($alert->es_index), $alert->es_type, array($alert->es_host), $params, array(), 'count');
-        return $result['hits']['total'];
     }
 
 

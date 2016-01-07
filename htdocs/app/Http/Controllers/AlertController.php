@@ -28,7 +28,8 @@ class AlertController  extends BaseController {
      * @todo make echo statements displayed when in debug
      */
 
-    public $alert_run;
+    private $alert_run;
+    private $current_alert;
     
 
     /**
@@ -91,29 +92,23 @@ class AlertController  extends BaseController {
      */
     private function searchELK($index, $index_type, $host, $query, $fields, $search_type){
         try{
-           // $client = ClientBuilder::create()->setHosts(['192.168.10.10'])->build();
-            $params = array();
 
-            $params['hosts'] = array (
-                $host         // IP + Port
-            );
-
-           // $client = new \Elasticsearch\Client($params);
-            $client = ClientBuilder::create($params)->setHosts($host)->build();
+            $client = ClientBuilder::create()->setRetries(0)->setHosts($host)->build();
             $params2['index'] = $index;
             $params2['client'] = ['timeout'=>5, 'connect_timeout'=>1];
+            $params2['body'] = $query;
+
             if($index_type != ""){
                 $params2['type'] = $index_type;
             }
 
-
-            $params2['body'] = $query;
             if(count($fields)>0){
                 $params2['body']['fields'] = $fields;
             }
             if($search_type != ""){
                 $params2['search_type'] = $search_type;
             }
+
             return $client->search($params2);
 
         }catch (\Exception $e){

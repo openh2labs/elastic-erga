@@ -29,3 +29,8 @@ Route::get('alert/searchtest', 'AlertController@searchtest');
 //create test index
 Route::get('alert/createTestIndex', 'AlertController@createTestIndex');
 
+//create an alert
+Route::get('alert/createnew', 'AlertMgtController@create');
+
+//store an alert
+Route::post('alert/store', 'AlertMgtController@store');

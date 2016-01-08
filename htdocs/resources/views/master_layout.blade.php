@@ -45,7 +45,7 @@ $server_host = $_SERVER['HTTP_HOST'];
                         <li><a href="/alert/home/hit_state">Active hit alerts</a></li>
                         <li><a href="/alert/home/zero_hit_state">Active zero hit alerts</a></li>
                         <li role="separator" class="divider"></li>
-                        <li><a href="#">Create new alert</a></li>
+                        <li><a href="/alert/createnew">Create new alert</a></li>
                     </ul>
                 </li>
 

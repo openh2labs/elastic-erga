@@ -56,14 +56,19 @@ class AlertMgtController extends Controller
         $alert->es_datetime_field = $request->input('es_datetime_field');
         $alert->minutes_back = $request->input('minutes_back');
         $alert->pct_of_total_threshold = $request->input('pct_of_total_threshold');
-        $alert->pct_alert_state = false;
         $alert->number_of_hits = $request->input('number_of_hits');
-        $alert->number_hit_alert_state = false;
-        $alert->zero_hit_alert_state = false;
         $alert->alert_email_sender = $request->input('alert_email_sender');
         $alert->alert_email_recipient = $request->input('alert_email_recipient');
         $alert->alert_type = $request->input('alert_type');
-        $alert->es_config_error_state = false;
+
+        //only set alert states to false when a new alert is setup
+        if($request->input('id') == ""){
+            $alert->pct_alert_state = false;
+            $alert->number_hit_alert_state = false;
+            $alert->zero_hit_alert_state = false;
+            $alert->es_config_error_state = false;
+        }
+
         $alert->save();
 
         return redirect()->action('AlertController@home');

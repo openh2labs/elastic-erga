@@ -71,6 +71,8 @@ class AlertMgtController extends Controller
 
     public function storeedit($id, Request $request){
         $this->store($request);
+
+        return redirect()->action('AlertController@home');
     }
 
 

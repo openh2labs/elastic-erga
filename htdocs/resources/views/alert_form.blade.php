@@ -12,12 +12,14 @@
 @extends('master_layout')
 
 @section('main')
-    <h1>create a new alert</h1>
+
 
     @if ($type === "create")
+        <h1>create a new alert</h1>
         {!!   Form::open(array('url' => 'alert/store')) !!}
     @endif
     @if ($type === "edit")
+        <h1>edit alert : {{ $alert->description }}</h1>
         {!!  Form::model($alert, array('url' => array('alert/storeedit', $alert->id))) !!}
         {!! Form::hidden('id', $alert->id) !!}
     @endif
@@ -74,9 +76,16 @@
         {!! Form::label('alert_type', 'alert_type') !!}
         {!! Form::input('alert_type', 'alert_type', null, ['size' => '50'])  !!} e0 or gt0
     </p>
-    <p>
-        {!! Form::submit('create new alert monitor!') !!}
-    </p>
+
+    @if ($type === "create")
+        <p>
+            {!! Form::submit('create new alert monitor!') !!}
+        </p>
+    @elseif ($type === "edit")
+        <p>
+            {!! Form::submit('save changes') !!}
+        </p>
+    @endif
     {!!  Form::close() !!}
 
 @endsection

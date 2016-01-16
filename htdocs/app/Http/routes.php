@@ -13,6 +13,7 @@
 
 use App\Post;
 
+//show the overall dashboard
 Route::get('/', 'AlertController@home');
 
 Route::get('user/{id}', 'UserController@showProfile');
@@ -23,14 +24,24 @@ Route::get('alert/home/', 'AlertController@home');
 
 Route::get('alertrun/systemlog', 'SystemLogController@home');
 
-//execute searches @todo create cron
+//execute searches
 Route::get('alert/searchtest', 'AlertController@searchtest');
 
 //create test index
 Route::get('alert/createTestIndex', 'AlertController@createTestIndex');
 
+/*
+ * alert management
+ */
+
 //create an alert
 Route::get('alert/createnew', 'AlertMgtController@create');
 
-//store an alert
+//store a new alert
 Route::post('alert/store', 'AlertMgtController@store');
+
+//edit an alert
+Route::get('alert/edit/{id}', 'AlertMgtController@edit');
+
+//store an alert edit
+Route::post('alert/storeedit/{id}', 'AlertMgtController@storeedit');

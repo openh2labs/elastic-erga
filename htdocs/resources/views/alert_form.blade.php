@@ -5,6 +5,8 @@
  * Date: 08/01/16
  * Time: 08:59
  */
+
+//var_dump($alert);die;
 ?>
 
 @extends('master_layout')
@@ -12,10 +14,16 @@
 @section('main')
     <h1>create a new alert</h1>
 
-    {!!   Form::open(array('url' => 'alert/store')) !!}
+    @if ($type === "create")
+        {!!   Form::open(array('url' => 'alert/store')) !!}
+    @endif
+    @if ($type === "edit")
+        {!!  Form::model($alert, array('url' => array('alert/storeedit', $alert->id))) !!}
+        {!! Form::hidden('id', $alert->id) !!}
+    @endif
 
-    <p>
-    {!! Form::label('description', 'alert description') !!}
+<p>
+{!! Form::label('description', 'alert description') !!}
     {!! Form::input('text', 'description', null, ['size' => '75'])  !!}
     </p>
     <p>
@@ -55,10 +63,6 @@
         {!! Form::input('number_of_hits', 'number_of_hits', null, ['size' => '10'])  !!}
     </p>
     <p>
-        {!! Form::label('number_of_hits', 'number_of_hits') !!}
-        {!! Form::input('number_of_hits', 'number_of_hits', null, ['size' => '10'])  !!}
-    </p>
-    <p>
         {!! Form::label('alert_email_sender', 'alert_email_sender') !!}
         {!! Form::input('alert_email_sender', 'alert_email_sender', null, ['size' => '50'])  !!} (if smtp make sure its a permitted sender)
     </p>
@@ -69,6 +73,9 @@
     <p>
         {!! Form::label('alert_type', 'alert_type') !!}
         {!! Form::input('alert_type', 'alert_type', null, ['size' => '50'])  !!} e0 or gt0
+    </p>
+    <p>
+        {!! Form::submit('create new alert monitor!') !!}
     </p>
     {!!  Form::close() !!}
 

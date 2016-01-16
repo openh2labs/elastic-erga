@@ -30,7 +30,7 @@ $b = $_SERVER['HTTP_HOST'];
         @foreach($alerts as $alert)
         <tr>
             <td>{{ $alert->id }}</td>
-            <td>{{ $alert->description  }}</td>
+            <td><a href="/alert/edit/{{$alert->id }}">{{ $alert->description  }}</a></td>
             <td class="text-center">{{ $alert->alert_type  }}</td>
             <td class="text-center">
                 @if($alert->alert_type === "gt0" )

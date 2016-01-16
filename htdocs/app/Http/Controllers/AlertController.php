@@ -53,6 +53,9 @@ class AlertController  extends BaseController {
         }elseif($state == "zero_hit_state"){
             $data['title'] = "zero hit active";
             $alert = alerts::AllZeroHit()->orderBy('created_at')->get();
+        }elseif($state == "es_config_error_state"){
+            $data['title'] = "elastic search config state";
+            $alert = alerts::AllESErrors()->orderBy('created_at')->get();
         }
         else{
             echo "error(1)";die;

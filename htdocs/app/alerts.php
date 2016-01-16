@@ -46,4 +46,14 @@ class alerts extends Model
     {
         return $query->where('zero_hit_alert_state', '=', true);
     }
+
+    /**
+     * scope query to only return config errors
+     *
+     * @param $query
+     * @return mixed
+     */
+    public function scopeAllESErrors($query){
+        return $query->where('es_config_error_state', '=', true);
+    }
 }

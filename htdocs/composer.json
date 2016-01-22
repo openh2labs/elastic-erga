@@ -9,7 +9,8 @@
         "laravel/framework": "5.1.*",
         "fzaninotto/Faker": "1.5.*",
         "illuminate/html": "5.*",
-        "elasticsearch/elasticsearch": "~2.0"
+        "elasticsearch/elasticsearch": "~2.0",
+        "guzzlehttp/guzzle": "~6.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
@@ -24,6 +25,7 @@
         "psr-4": {
             "App\\": "app/"
         }
+
     },
     "autoload-dev": {
         "classmap": [
@@ -54,12 +56,13 @@
     "repositories": [
         {
             "type": "vcs",
-            "url": "https://github.com/elasticquent/Elasticquent.git"
+            "url" : "https://github.com/fzaninotto/Faker.git"
         },
         {
-            "type": "vcs",
-            "url" : "https://github.com/fzaninotto/Faker.git"
-        }
+            "type": "composer",
+            "url": "https://packagist.org"
+        },
+        { "packagist": false }
     ]
 
 

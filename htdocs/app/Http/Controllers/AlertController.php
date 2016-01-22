@@ -16,6 +16,7 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use App\alerts;
 use App\Post;
 use App\AlertExecution;
+use App\LibratoUtil;
 use Mail;
 use Log;
 
@@ -179,6 +180,9 @@ class AlertController  extends BaseController {
             //check if we should be alerted
             $this->checkAlertCondition($alert, $hits, $hits_total);
 
+            //update cyfe
+            $this->updateLibrato($hits_total, $hits, $alert->librato_id);
+
             //screen output
             echo "<br>".$hits_total." total hits";
             if($hits_total>0){
@@ -190,6 +194,16 @@ class AlertController  extends BaseController {
 
             echo "<hr>";
         }
+    }
+
+    /**
+     * updates librato dashboard
+     * @param $metric
+     * @param $value
+     */
+    function updateLibrato($metric_ok, $metric_alert, $librato_id){
+        $librato = new LibratoUtil;
+        $librato->push($metric_ok, $metric_alert, $librato_id);
     }
 
 

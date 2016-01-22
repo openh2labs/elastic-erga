@@ -140,9 +140,6 @@ class AlertController  extends BaseController {
         $alert->criteria_temp = str_replace("%end_date%", $end_date, $alert->criteria_temp);
         $alert->criteria_total_temp = str_replace("%start_date%", $start_date, $alert->criteria_total);
         $alert->criteria_total_temp = str_replace("%end_date%", $end_date, $alert->criteria_total_temp);
-        echo $alert->criteria_temp;
-        echo $alert->criteria_total_temp;
-       // die;
         return $alert;
     }
 

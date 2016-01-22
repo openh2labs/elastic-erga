@@ -136,10 +136,13 @@ class AlertController  extends BaseController {
         echo "<br>To: ".date("Y-m-d H:i:s");
         $start_date = "".(date('U', strtotime('-'.$alert->minutes_back.' minutes'))*1000);
         $end_date = "".(date('U')*1000);
-        $alert->criteria = str_replace("%start_date%", $start_date, $alert->criteria);
-        $alert->criteria = str_replace("%end_date%", $end_date, $alert->criteria);
-        $alert->criteria_total = str_replace("%start_date%", $start_date, $alert->criteria_total);
-        $alert->criteria_total = str_replace("%end_date%", $end_date, $alert->criteria_total);
+        $alert->criteria_temp = str_replace("%start_date%", $start_date, $alert->criteria);
+        $alert->criteria_temp = str_replace("%end_date%", $end_date, $alert->criteria_temp);
+        $alert->criteria_total_temp = str_replace("%start_date%", $start_date, $alert->criteria_total);
+        $alert->criteria_total_temp = str_replace("%end_date%", $end_date, $alert->criteria_total_temp);
+        echo $alert->criteria_temp;
+        echo $alert->criteria_total_temp;
+       // die;
         return $alert;
     }
 
@@ -203,7 +206,8 @@ class AlertController  extends BaseController {
      */
     function updateLibrato($metric_ok, $metric_alert, $librato_id){
         $librato = new LibratoUtil;
-        $librato->push($metric_ok, $metric_alert, $librato_id);
+        //removing alert values as we are assuming that metric contains all responses
+        $librato->push(($metric_ok-$metric_alert), $metric_alert, $librato_id);
     }
 
 
@@ -277,10 +281,10 @@ class AlertController  extends BaseController {
     function doSearch($alert, $query_type){
         try{
             if($query_type == "alert"){
-                $params = json_decode($alert->criteria,true);
+                $params = json_decode($alert->criteria_temp,true);
                 //   echo "<br>($query_type type) ".($alert->criteria);//echo"filter:";print_r($filter2);echo"<hr>";
             }elseif($query_type == "total"){
-                $params = json_decode($alert->criteria_total,true);
+                $params = json_decode($alert->criteria_total_temp,true);
                 //   echo "<br>($query_type type) ".($alert->criteria_total);//echo"filter:";print_r($filter2);echo"<hr>";
             }
             echo "<br>index: ".$this->getDateParams($alert->es_index);

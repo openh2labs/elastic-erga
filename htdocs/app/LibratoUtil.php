@@ -22,13 +22,13 @@ class LibratoUtil
                 $this->send($l->uri, $l->username, $l->api_key, $l->gauge_ok, $l->gauge_alert, $metric_ok, $metric_alert, $l->saurce);
             }
         }catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e){
-            echo "librato row not found\n";
+            echo "\nlibrato row not found";
         }
     }
 
     private function send($url, $username, $api_key, $gauge_ok, $gauge_alert, $ok_value, $alert_value, $source){
         //echo "$url, $username, $api_key, $gauge_ok, $gauge_alert, $ok_value, $alert_value, $source";
-        echo "sending data to librato\n";
+        echo "\nsending data to librato";
 
         $curl = curl_init($url);
         $curl_post_data = array(
@@ -47,13 +47,12 @@ class LibratoUtil
         curl_setopt($curl, CURLOPT_USERPWD, "$username:$api_key");
         curl_setopt($curl, CURLOPT_POST, true);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-## Show the payload of the POST
-#print_r($curl_post_data);
+        ## Show the payload of the POST
+        #print_r($curl_post_data);
         $result = curl_exec($curl);
         $http_status = curl_getinfo($curl, CURLINFO_HTTP_CODE);
         curl_close($curl);
        // echo "HTTP Status Code: " . $http_status;
       //  echo "\n response from librato: ".$result;
-      //  die;
     }
 }

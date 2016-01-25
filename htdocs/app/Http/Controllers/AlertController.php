@@ -215,11 +215,16 @@ class AlertController  extends BaseController {
      * @param $total_hits, the total number of hits
      */
     function checkAlertCondition($alert, $hits, $total_hits){
+        $librato = new LibratoUtil;
         //absolute hit number check (greater than zero check)
         if($alert->number_of_hits > 0 && $alert->number_of_hits < $hits && $alert->alert_type == 'gt0'){
             $this->alert_run->total_alerts_absolute = $this->alert_run->total_alerts_absolute + 1;
             $alert->number_hit_alert_state = true;
+            //send email
             $this->sendMail($alert, $alert->description." exceeded ".$alert->number_of_hits." hits.");
+            //add librato annotation
+            $librato->pushAnnotation($alert->librato_id, "absolute-hit-alert-".$alert->description, "The number of hits for the search you are monitoring exceeded your threshold", "http://mytestlink.local", time(), time(), $alert->description);
+
             echo "<br>absolute hit threshold met";
         }else{
             $alert->number_hit_alert_state = false;
@@ -236,6 +241,8 @@ class AlertController  extends BaseController {
             $this->alert_run->total_alerts_pct = $this->alert_run->total_alerts_pct + 1;
             $alert->pct_alert_state = true;
             $this->sendMail($alert, $alert->description." exceeded ".$alert->pct_of_total_threshold."%.");
+            //add librato annotation
+            $librato->pushAnnotation($alert->librato_id, "percentage-hit-alert-".$alert->description, "The percentage for the search you are monitoring exceeded your threshold", "http://mytestlink.local", time(), time(), $alert->description);
             echo "<br>hit pct threshold met";
         }else{
             $alert->pct_alert_state = false;
@@ -246,6 +253,7 @@ class AlertController  extends BaseController {
             $this->alert_run->total_alerts_equal_zero = $this->alert_run->total_alerts_equal_zero + 1;
             $alert->zero_hit_alert_state = true;
             $this->sendMail($alert, $alert->description." has $hits hits");
+            $librato->pushAnnotation($alert->librato_id, "zero-hits-alert-".$alert->description, "The number of hits for the search you are monitoring is zero", "http://mytestlink.local", time(), time(), $alert->description);
             echo "<br>zero hits alert threshold met";
         }else{
             $alert->zero_hit_alert_state = false;

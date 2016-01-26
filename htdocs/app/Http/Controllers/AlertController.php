@@ -96,7 +96,6 @@ class AlertController  extends BaseController {
      */
     private function searchELK($index, $index_type, $host, $query, $fields, $search_type){
         try{
-
             $client = ClientBuilder::create()->setRetries(0)->setHosts($host)->build();
             $params2['index'] = $index;
             $params2['client'] = ['timeout'=>5, 'connect_timeout'=>1];
@@ -119,7 +118,7 @@ class AlertController  extends BaseController {
         }catch (\Exception $e){
             $this->current_alert->es_config_error_state = true;
             $this->current_alert->save();
-            echo "<pre>error(1)";print_r($e->getMessage());echo"</pre>";
+            echo "<pre>error(searchELK)";print_r($e->getMessage());print_r($params2);echo"<br>$query</pre>";
             $result['hits']['total'] = 0;
             return $result;
         }
@@ -284,20 +283,31 @@ class AlertController  extends BaseController {
      * @todo remove es_type from db as it doesn't get used anymore, the search json can apply a type filter
      */
     function doSearch($alert, $query_type){
+        echo "\n***** running $query_type *****";
         try{
+            $return_val = 0;
+            $this->current_alert = $alert;
             if($query_type == "alert"){
-                $params = json_decode($alert->criteria_temp,true);
-                //   echo "<br>($query_type type) ".($alert->criteria);//echo"filter:";print_r($filter2);echo"<hr>";
+                if($alert->criteria_temp != ""){
+                    $params = json_decode($alert->criteria_temp,true);
+                    $result = $this->searchELK($this->getDateParams($alert->es_index), $alert->es_type, array($alert->es_host), $params, array(), 'count');
+                    $return_val = $result['hits']['total'];
+                }else{
+                    echo "\nNo valid search query found for monitor";
+                }
             }elseif($query_type == "total"){
-                $params = json_decode($alert->criteria_total_temp,true);
-                //   echo "<br>($query_type type) ".($alert->criteria_total);//echo"filter:";print_r($filter2);echo"<hr>";
+                if($alert->criteria_total_temp != ""){
+                    $params = json_decode($alert->criteria_total_temp,true);
+                    $result = $this->searchELK($this->getDateParams($alert->es_index), $alert->es_type, array($alert->es_host), $params, array(), 'count');
+                    $return_val = $result['hits']['total'];
+                }else{
+                    echo "\nNo valid search query found for totals";
+                }
             }
             echo "<br>index: ".$this->getDateParams($alert->es_index);
             echo "<br>index type: ".$alert->es_type;
             echo "<br>index host: ".$alert->es_host;
-            $this->current_alert = $alert;
-            $result = $this->searchELK($this->getDateParams($alert->es_index), $alert->es_type, array($alert->es_host), $params, array(), 'count');
-            return $result['hits']['total'];
+            return $return_val;
         }catch(\Exception $e){
             echo $e->getMessage();
             return 0;

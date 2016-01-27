@@ -40,6 +40,7 @@ class LibratoUtil
      * @param $source
      */
     private function send($url, $username, $api_key, $gauge_ok, $gauge_alert, $ok_value, $alert_value, $source){
+        //@todo fix blank gauge names and throw and error
         //echo "$url, $username, $api_key, $gauge_ok, $gauge_alert, $ok_value, $alert_value, $source";
         echo "\nsending data to librato";
 

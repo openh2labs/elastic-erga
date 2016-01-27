@@ -179,7 +179,7 @@ class AlertController  extends BaseController {
             //check if we should be alerted
             $this->checkAlertCondition($alert, $hits, $hits_total);
 
-            //update cyfe
+            //update librato
             $this->updateLibrato($hits_total, $hits, $alert->librato_id);
 
             //screen output
@@ -203,6 +203,7 @@ class AlertController  extends BaseController {
     function updateLibrato($metric_ok, $metric_alert, $librato_id){
         $librato = new LibratoUtil;
         //removing alert values as we are assuming that metric contains all responses
+
         $librato->push(($metric_ok-$metric_alert), $metric_alert, $librato_id);
     }
 

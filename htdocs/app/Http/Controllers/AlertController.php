@@ -118,7 +118,10 @@ class AlertController  extends BaseController {
         }catch (\Exception $e){
             $this->current_alert->es_config_error_state = true;
             $this->current_alert->save();
-            echo "<pre>error(searchELK)";print_r($e->getMessage());print_r($params2);echo"<br>$query</pre>";
+            echo "<pre>error(searchELK)";
+            print_r($e->getMessage());
+            print_r($params2);
+            echo "\n query: $query</pre>";
             $result['hits']['total'] = 0;
             return $result;
         }
@@ -289,6 +292,7 @@ class AlertController  extends BaseController {
             $return_val = 0;
             $this->current_alert = $alert;
             if($query_type == "alert"){
+                echo "\nprocessing alert";
                 if($alert->criteria_temp != ""){
                     $params = json_decode($alert->criteria_temp,true);
                     $result = $this->searchELK($this->getDateParams($alert->es_index), $alert->es_type, array($alert->es_host), $params, array(), 'count');
@@ -310,7 +314,8 @@ class AlertController  extends BaseController {
             echo "<br>index host: ".$alert->es_host;
             return $return_val;
         }catch(\Exception $e){
-            echo $e->getMessage();
+            echo "\nerror doSearch: ".$e->getMessage();
+            echo "\nalert criteria: ".$alert->criteria_temp;
             return 0;
         }
     }

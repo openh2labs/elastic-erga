@@ -45,3 +45,13 @@ Route::get('alert/edit/{id}', 'AlertMgtController@edit');
 
 //store an alert edit
 Route::post('alert/storeedit/{id}', 'AlertMgtController@storeedit');
+
+/*
+ * Librato
+ */
+Route::get('librato/create/{alert_id}', 'LibratoMgt@create');
+
+//store a librato edit
+Route::post('librato/store/{alert_id}', 'LibratoMgt@store');
+
+Route::get('librato/edit/{alert_id}', 'LibratoMgt@edit');

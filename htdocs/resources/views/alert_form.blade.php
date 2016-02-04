@@ -25,8 +25,8 @@
     @endif
 
 <p>
-{!! Form::label('description', 'alert description') !!}
-    {!! Form::input('text', 'description', null, ['size' => '75'])  !!}
+        {!! Form::label('description', 'alert description') !!}
+        {!! Form::input('text', 'description', null, ['size' => '75'])  !!}
     </p>
     <p>
         {!! Form::label('criteria', 'alert query (json)') !!}
@@ -87,7 +87,11 @@
         </p>
     @endif
     {!!  Form::close() !!}
-
+    @if($librato != null)
+        <a href="/librato/edit/{!! $alert->id !!}">Edit Librato integration</a>
+    @else
+        <a href="/librato/create/{!! $alert->id !!}">Create Librato integration</a>
+    @endif
 @endsection
 
 @section('active_tab_alert_list') active @endsection

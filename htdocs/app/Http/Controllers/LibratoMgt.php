@@ -9,7 +9,7 @@ use App\Http\Controllers\Controller;
 use App\alerts;
 use App\Librato;
 
-class AlertMgtController extends Controller
+class LibratoMgt extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -26,12 +26,12 @@ class AlertMgtController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($id)
     {
-        //
+        $alert = alerts::find($id);
         $data = array();
         $data['type'] = "create";
-        return view ("alert_form", $data);
+        return view ("librato_form", $data)->with('alert', $alert);
     }
 
     /**
@@ -40,47 +40,35 @@ class AlertMgtController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store($id, Request $request)
     {
+        $alert = alerts::find($id);
+
         if($request->input('id') == ""){
-            $alert = new alerts;
+          //  $alert = new alerts;
+            $librato = new Librato;
         }else{
-            $alert = alerts::find($request->input('id'));
+          //  $alert = alerts::find($request->input('id'));
+            $librato = Librato::find($alert->librato_id);
         }
 
-        $alert->description = $request->input('description');
-        $alert->criteria = $request->input('criteria');
-        $alert->criteria_total = $request->input('criteria_total');
-        $alert->es_host = $request->input('es_host');
-        $alert->es_index = $request->input('es_index');
-        $alert->es_type = $request->input('es_type');
-        $alert->es_datetime_field = $request->input('es_datetime_field');
-        $alert->minutes_back = $request->input('minutes_back');
-        $alert->pct_of_total_threshold = $request->input('pct_of_total_threshold');
-        $alert->number_of_hits = $request->input('number_of_hits');
-        $alert->alert_email_sender = $request->input('alert_email_sender');
-        $alert->alert_email_recipient = $request->input('alert_email_recipient');
-        $alert->alert_type = $request->input('alert_type');
+        $librato->uri = $request->input('uri');
+        $librato->username = $request->input('username');
+        $librato->api_key = $request->input('api_key');
+        $librato->gauge_ok = $request->input('gauge_ok');
+        $librato->gauge_alert = $request->input('gauge_alert');
+        $librato->source = $request->input('source');
 
-        //only set alert states to false when a new alert is setup
-        if($request->input('id') == ""){
-            $alert->pct_alert_state = false;
-            $alert->number_hit_alert_state = false;
-            $alert->zero_hit_alert_state = false;
-            $alert->es_config_error_state = false;
-        }
+        $librato->save();
 
+        //update the librato_id
+        $alert->librato_id = $librato->id;
         $alert->save();
 
-        return redirect()->action('AlertController@home');
+        //return to the alert view
+        return redirect()->action('AlertMgtController@edit', $id);
+        //return redirect()->route('alert/edit/{id}', $id);
     }
-
-    public function storeedit($id, Request $request){
-        $this->store($request);
-        return redirect()->action('AlertController@home');
-    }
-
-
 
     /**
      * Display the specified resource.
@@ -103,13 +91,13 @@ class AlertMgtController extends Controller
     {
         $data = array();
         $data['type'] = "edit";
-       // $data['alert'] = alerts::find($id);
+        // $data['alert'] = alerts::find($id);
         $alert = alerts::find($id);
         if($alert == null){
             echo "something went wrong"; die;
         }
         $librato = Librato::find($alert->librato_id);
-        return view ("alert_form", $data)->with('alert', $alert)->with('librato', $librato);
+        return view ("librato_form", $data)->with('alert', $alert)->with('librato', $librato);
     }
 
     /**

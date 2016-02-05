@@ -4,6 +4,9 @@ elastic-erga:
    - "10080:80"
   links:
    - mysql
+  environment:
+   - APP_ENV=local
+   - APP_DEBUG=true
 
 mysql:
   image: mysql

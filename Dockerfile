@@ -10,11 +10,13 @@ RUN apt-get update && \
     libpng12-dev \
     libbz2-dev \
     php-pear \
+    cron \
     curl \
     git \
     subversion \
     unzip \
-  && rm -r /var/lib/apt/lists/*
+  && rm -r /var/lib/apt/lists/* \
+  && a2enmod rewrite
 
 # Install Extensions
 RUN docker-php-ext-install mcrypt zip bz2 mbstring pdo_mysql
@@ -37,4 +39,9 @@ RUN composer install
 RUN chown -R www-data:www-data /var/www/laravel/storage && \
     chown -R www-data:www-data /var/www/laravel/bootstrap/cache
 
+COPY docker-startup /usr/local/bin/
+COPY docker-crontab /etc/cron.d/elastic-erga
+
 EXPOSE 80
+
+CMD ["/usr/local/bin/docker-startup"]

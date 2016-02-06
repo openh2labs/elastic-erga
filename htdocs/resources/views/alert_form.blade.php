@@ -37,8 +37,10 @@
         {!! Form::textarea('criteria_total', null, ['cols'=>75, 'rows'=>20]) !!}
     </p>
     <p>
-        {!! Form::label('es_host', 'es_host') !!}
-        {!! Form::input('es_host', 'es_host', null, ['size' => '50'])  !!}
+    <div id="prefetch">
+            {!! Form::label('es_host', 'es_host') !!}
+            {!! Form::input('text', 'es_host', null, ['size' => '50', 'class'=>'typeahead tt-query',  'autocomplete'=>'off', 'spellcheck'=>'false'])  !!}
+         </div>
     </p>
     <p>
         {!! Form::label('es_index', 'es_index') !!}
@@ -87,11 +89,40 @@
         </p>
     @endif
     {!!  Form::close() !!}
-    @if($librato != null)
-        <a href="/librato/edit/{!! $alert->id !!}">Edit Librato integration</a>
-    @else
-        <a href="/librato/create/{!! $alert->id !!}">Create Librato integration</a>
+    @if(isset($librato))
+        @if($librato != null)
+            <a href="/librato/edit/{!! $alert->id !!}">Edit Librato integration</a>
+        @else
+            <a href="/librato/create/{!! $alert->id !!}">Create Librato integration</a>
+        @endif
     @endif
 @endsection
 
 @section('active_tab_alert_list') active @endsection
+
+@section('typeahead_es_host')
+    <script src="http://{{ $_SERVER['HTTP_HOST'] }}/js/typeahead.js/bloodhound.js"></script>
+    <script src="http://{{ $_SERVER['HTTP_HOST'] }}/js/typeahead.js/typeahead.bundle.js"></script>
+    <script type="text/javascript">
+    var es_hosts = new Bloodhound({
+        datumTokenizer: Bloodhound.tokenizers.whitespace,
+        queryTokenizer: Bloodhound.tokenizers.whitespace,
+        // url points to a json file that contains an array of country names, see
+        // https://github.com/twitter/typeahead.js/blob/gh-pages/data/countries.json
+        prefetch: window.location.origin+'/typeahead/eshosts'
+    });
+
+    // passing in `null` for the `options` arguments will result in the default
+    // options being used
+    $('#prefetch .typeahead').typeahead(null, {
+        name: 'es_hosts',
+        source: es_hosts,
+        valueKey: 'es_hosts'
+    });
+    </script>
+@endsection
+
+@section('typeahead_css')
+    <link rel="stylesheet" href="http://{{ $_SERVER['HTTP_HOST'] }}/css/typeahead.css">
+
+@endsection

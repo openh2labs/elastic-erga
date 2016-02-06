@@ -55,3 +55,8 @@ Route::get('librato/create/{alert_id}', 'LibratoMgt@create');
 Route::post('librato/store/{alert_id}', 'LibratoMgt@store');
 
 Route::get('librato/edit/{alert_id}', 'LibratoMgt@edit');
+
+/*
+ * typeAhead routes
+ */
+Route::get('typeahead/eshosts', 'TypeAhead@eshosts');

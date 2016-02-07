@@ -59,4 +59,4 @@ Route::get('librato/edit/{alert_id}', 'LibratoMgt@edit');
 /*
  * typeAhead routes
  */
-Route::get('typeahead/listcolumn/{column}', 'TypeAhead@listcolumn');
+Route::get('typeahead/listcolumn/{column}/{table}', 'TypeAhead@listcolumn');

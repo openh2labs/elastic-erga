@@ -110,7 +110,7 @@
 
 @section('active_tab_alert_list') active @endsection
 
-@section('typeahead_es_host')
+@section('typeahead')
     <script src="http://{{ $_SERVER['HTTP_HOST'] }}/js/typeahead.js/bloodhound.js"></script>
     <script src="http://{{ $_SERVER['HTTP_HOST'] }}/js/typeahead.js/typeahead.bundle.js"></script>
     <script type="text/javascript">
@@ -121,7 +121,7 @@
         // https://github.com/twitter/typeahead.js/blob/gh-pages/data/countries.json
         prefetch: {
             ttl: 0,
-            url: window.location.origin + '/typeahead/listcolumn/es_host'
+            url: window.location.origin + '/typeahead/listcolumn/es_host/alerts'
         }
     });
 
@@ -141,7 +141,7 @@
         // https://github.com/twitter/typeahead.js/blob/gh-pages/data/countries.json
         prefetch: {
             ttl: 0,
-            url: window.location.origin + '/typeahead/listcolumn/es_index'
+            url: window.location.origin + '/typeahead/listcolumn/es_index/alerts'
         }
     });
 
@@ -158,7 +158,7 @@
         // https://github.com/twitter/typeahead.js/blob/gh-pages/data/countries.json
         prefetch: {
             ttl: 0,
-            url: window.location.origin + '/typeahead/listcolumn/es_type'
+            url: window.location.origin + '/typeahead/listcolumn/es_type/alerts'
         }
     });
 
@@ -175,7 +175,7 @@
         // https://github.com/twitter/typeahead.js/blob/gh-pages/data/countries.json
         prefetch: {
             ttl: 0,
-            url: window.location.origin + '/typeahead/listcolumn/es_datetime_field'
+            url: window.location.origin + '/typeahead/listcolumn/es_datetime_field/alerts'
         }
     });
 
@@ -193,7 +193,7 @@
         // https://github.com/twitter/typeahead.js/blob/gh-pages/data/countries.json
         prefetch: {
             ttl: 0,
-            url: window.location.origin + '/typeahead/listcolumn/alert_email_sender'
+            url: window.location.origin + '/typeahead/listcolumn/alert_email_sender/alerts'
         }
     });
 
@@ -210,7 +210,7 @@
         // https://github.com/twitter/typeahead.js/blob/gh-pages/data/countries.json
         prefetch: {
             ttl: 0,
-            url: window.location.origin + '/typeahead/listcolumn/alert_email_recipient'
+            url: window.location.origin + '/typeahead/listcolumn/alert_email_recipient/alerts'
         }
     });
 
@@ -225,5 +225,4 @@
 
 @section('typeahead_css')
     <link rel="stylesheet" href="http://{{ $_SERVER['HTTP_HOST'] }}/css/typeahead.css">
-
 @endsection

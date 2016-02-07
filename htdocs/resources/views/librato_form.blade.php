@@ -2,6 +2,7 @@
 
 @section('main')
 
+    <a href="/alert/edit/{!! $alert->id !!}">Back to edit the alert</a>
     @if ($type === "create")
         <h1>create a new librato integration</h1>
         {!!   Form::open(array('url' => array('librato/store', $alert->id))) !!}
@@ -19,12 +20,16 @@
         </div>
     </p>
     <p>
-        {!! Form::label('username', 'librato username') !!}
-        {!! Form::input('username', 'username', null, ['size' => '75'])  !!}
+        <div id="prefetch_usernames">
+            {!! Form::label('username', 'librato username') !!}
+            {!! Form::input('username', 'username', null, ['size' => '75',  'class'=>'typeahead tt-query',  'autocomplete'=>'off', 'spellcheck'=>'false'])  !!}
+        </div>
     </p>
     <p>
-        {!! Form::label('api_key', 'librato api key') !!}
-        {!! Form::input('api_key', 'api_key', null, ['size' => '75'])  !!}
+        <div id="prefetch_api_keys">
+            {!! Form::label('api_key', 'librato api key') !!}
+            {!! Form::input('api_key', 'api_key', null, ['size' => '100',  'class'=>'typeahead tt-query',  'autocomplete'=>'off', 'spellcheck'=>'false'])  !!}
+      </div>
     </p>
     </p>
     <p>
@@ -36,8 +41,10 @@
         {!! Form::input('gauge_alert', 'gauge_alert', null, ['size' => '75'])  !!}
     </p>
     <p>
-        {!! Form::label('source', 'source') !!}
-        {!! Form::input('source', 'source', null, ['size' => '75'])  !!} for example elastic-erga
+        <div id="prefetch_sources">
+            {!! Form::label('source', 'source') !!}
+            {!! Form::input('source', 'source', null, ['size' => '75',  'class'=>'typeahead tt-query',  'autocomplete'=>'off', 'spellcheck'=>'false'])  !!} for example elastic-erga
+        </div>
     </p>
     @if ($type === "create")
         <p>
@@ -74,90 +81,54 @@
             limit: 10
         });
 
-
-        var es_indexes = new Bloodhound({
+        var usernames = new Bloodhound({
             datumTokenizer: Bloodhound.tokenizers.whitespace,
             queryTokenizer: Bloodhound.tokenizers.whitespace,
             // url points to a json file that contains an array of country names, see
             // https://github.com/twitter/typeahead.js/blob/gh-pages/data/countries.json
             prefetch: {
                 ttl: 0,
-                url: window.location.origin + '/typeahead/listcolumn/es_index'
+                url: window.location.origin + '/typeahead/listcolumn/username/librato'
             }
         });
 
-        $('#prefetch_indexes .typeahead').typeahead(null, {
-            name: 'es_indexes',
-            source: es_indexes,
+        $('#prefetch_usernames .typeahead').typeahead(null, {
+            name: 'usernames',
+            source: usernames,
             limit: 10,
         });
 
-        var es_types = new Bloodhound({
+        var api_keys = new Bloodhound({
             datumTokenizer: Bloodhound.tokenizers.whitespace,
             queryTokenizer: Bloodhound.tokenizers.whitespace,
             // url points to a json file that contains an array of country names, see
             // https://github.com/twitter/typeahead.js/blob/gh-pages/data/countries.json
             prefetch: {
                 ttl: 0,
-                url: window.location.origin + '/typeahead/listcolumn/es_type'
+                url: window.location.origin + '/typeahead/listcolumn/api_key/librato'
             }
         });
 
-        $('#prefetch_types .typeahead').typeahead(null, {
-            name: 'es_types',
-            source: es_types,
+        $('#prefetch_api_keys .typeahead').typeahead(null, {
+            name: 'api_keys',
+            source: api_keys,
             limit: 10,
         });
 
-        var es_datetime_fields = new Bloodhound({
+        var sources = new Bloodhound({
             datumTokenizer: Bloodhound.tokenizers.whitespace,
             queryTokenizer: Bloodhound.tokenizers.whitespace,
             // url points to a json file that contains an array of country names, see
             // https://github.com/twitter/typeahead.js/blob/gh-pages/data/countries.json
             prefetch: {
                 ttl: 0,
-                url: window.location.origin + '/typeahead/listcolumn/es_datetime_field'
+                url: window.location.origin + '/typeahead/listcolumn/source/librato'
             }
         });
 
-        $('#prefetch_es_date_time_field .typeahead').typeahead(null, {
-            name: 'es_datetime_fields',
-            source: es_datetime_fields,
-            limit: 10,
-        });
-
-
-        var alert_email_senders = new Bloodhound({
-            datumTokenizer: Bloodhound.tokenizers.whitespace,
-            queryTokenizer: Bloodhound.tokenizers.whitespace,
-            // url points to a json file that contains an array of country names, see
-            // https://github.com/twitter/typeahead.js/blob/gh-pages/data/countries.json
-            prefetch: {
-                ttl: 0,
-                url: window.location.origin + '/typeahead/listcolumn/alert_email_sender'
-            }
-        });
-
-        $('#prefetch_alert_email_sender .typeahead').typeahead(null, {
-            name: 'alert_email_senders',
-            source: alert_email_senders,
-            limit: 10,
-        });
-
-        var alert_email_recipients = new Bloodhound({
-            datumTokenizer: Bloodhound.tokenizers.whitespace,
-            queryTokenizer: Bloodhound.tokenizers.whitespace,
-            // url points to a json file that contains an array of country names, see
-            // https://github.com/twitter/typeahead.js/blob/gh-pages/data/countries.json
-            prefetch: {
-                ttl: 0,
-                url: window.location.origin + '/typeahead/listcolumn/alert_email_recipient'
-            }
-        });
-
-        $('#prefetch_alert_email_recipient .typeahead').typeahead(null, {
-            name: 'alert_email_recipients',
-            source: alert_email_recipients,
+        $('#prefetch_sources .typeahead').typeahead(null, {
+            name: 'sources',
+            source: sources,
             limit: 10,
         });
 

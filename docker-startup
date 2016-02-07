@@ -1,0 +1,16 @@
+#!/bin/bash
+
+DELAY=15
+until php artisan migrate || [ $DELAY -eq 20 ]; do
+   sleep $(( DELAY++ ))
+done
+
+set -e
+
+# Start cron in the background
+cron &
+
+# Apache gets grumpy about PID files pre-existing
+rm -f /var/run/apache2/apache2.pid
+
+exec apache2 -DFOREGROUND

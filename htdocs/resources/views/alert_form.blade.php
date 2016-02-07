@@ -43,12 +43,16 @@
          </div>
     </p>
     <p>
+         <div id="prefetch_indexes">
         {!! Form::label('es_index', 'es_index') !!}
-        {!! Form::input('es_index', 'es_index', null, ['size' => '50'])  !!} supported wild cards are %Y% (year in YYYY format), %m% (month 01 to 12) and %d% (day 01 to 31)
+        {!! Form::input('es_index', 'es_index', null, ['size' => '50', 'class'=>'typeahead tt-query',  'autocomplete'=>'off', 'spellcheck'=>'false'])  !!} supported wild cards are %Y% (year in YYYY format), %m% (month 01 to 12) and %d% (day 01 to 31)
+        </div>
     </p>
     <p>
-        {!! Form::label('es_index', 'es_type') !!}
-        {!! Form::input('es_index', 'es_type', null, ['size' => '50'])  !!}
+        <div id="prefetch_types">
+             {!! Form::label('es_index', 'es_type') !!}
+            {!! Form::input('es_index', 'es_type', null, ['size' => '50', 'class'=>'typeahead tt-query',  'autocomplete'=>'off', 'spellcheck'=>'false'])  !!}
+        </div>
     </p>
     <p>
         {!! Form::label('es_datetime_field', 'es_datetime_field') !!}
@@ -109,7 +113,10 @@
         queryTokenizer: Bloodhound.tokenizers.whitespace,
         // url points to a json file that contains an array of country names, see
         // https://github.com/twitter/typeahead.js/blob/gh-pages/data/countries.json
-        prefetch: window.location.origin+'/typeahead/eshosts'
+        prefetch: {
+            ttl: 0,
+            url: window.location.origin + '/typeahead/listcolumn/es_host'
+        }
     });
 
     // passing in `null` for the `options` arguments will result in the default
@@ -117,8 +124,44 @@
     $('#prefetch .typeahead').typeahead(null, {
         name: 'es_hosts',
         source: es_hosts,
-        valueKey: 'es_hosts'
+        limit: 10
     });
+
+
+    var es_indexes = new Bloodhound({
+        datumTokenizer: Bloodhound.tokenizers.whitespace,
+        queryTokenizer: Bloodhound.tokenizers.whitespace,
+        // url points to a json file that contains an array of country names, see
+        // https://github.com/twitter/typeahead.js/blob/gh-pages/data/countries.json
+        prefetch: {
+            ttl: 0,
+            url: window.location.origin + '/typeahead/listcolumn/es_index'
+        }
+    });
+
+    $('#prefetch_indexes .typeahead').typeahead(null, {
+        name: 'es_indexes',
+        source: es_indexes,
+        limit: 10,
+    });
+
+    var es_types = new Bloodhound({
+        datumTokenizer: Bloodhound.tokenizers.whitespace,
+        queryTokenizer: Bloodhound.tokenizers.whitespace,
+        // url points to a json file that contains an array of country names, see
+        // https://github.com/twitter/typeahead.js/blob/gh-pages/data/countries.json
+        prefetch: {
+            ttl: 0,
+            url: window.location.origin + '/typeahead/listcolumn/es_type'
+        }
+    });
+
+    $('#prefetch_types .typeahead').typeahead(null, {
+        name: 'es_types',
+        source: es_types,
+        limit: 10,
+    });
+
     </script>
 @endsection
 

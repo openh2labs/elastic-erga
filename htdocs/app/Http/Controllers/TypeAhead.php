@@ -20,10 +20,12 @@ class TypeAhead extends Controller
         //
     }
 
-    public function eshosts(){
-        $es = DB::table('alerts')->distinct()->lists('es_host');
-        //echo "<pre>";
-        //print_r($es);
+    /**
+     *  returns a json object with distinct values of a given column from the alert table
+     * @param $column, the name of the column
+     */
+    public function listcolumn($column){
+        $es = DB::table('alerts')->distinct()->lists($column);
         echo json_encode($es);
     }
 

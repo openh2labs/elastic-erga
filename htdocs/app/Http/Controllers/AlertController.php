@@ -25,19 +25,28 @@ use Log;
 
 
 class AlertController  extends BaseController {
+
     /*
      * @todo make echo statements displayed when in debug
+     * @todo move alert checking logic in a repository
+     *
      */
 
     private $alert_run;
     private $current_alert;
-    
+    private $alert_total_checks; //total alert checks
+
+    public function __construct()
+    {
+        $this->alert_total_checks = 0;
+    }
 
     /**
      * displays the alerts dashboard
      *
      */
     public function home($state="all"){
+        //$l = new LibratoUtil;
         $data = array();
         if($state == "all"){
             $alert = alerts::all();
@@ -61,6 +70,7 @@ class AlertController  extends BaseController {
         else{
             echo "error(1)";die;
         }
+
         $data['alerts'] = $alert;
         return view ("alerts_home", $data);
     }
@@ -85,6 +95,7 @@ class AlertController  extends BaseController {
         //$this->alert_run->description = "check for alerts";
         $this->alert_run->duration = date('U') - $start_time;
         $this->alert_run->save();
+
         Log::info('completed Alert checks (searchtest)');
     }
 
@@ -163,6 +174,8 @@ class AlertController  extends BaseController {
      * check all alerts
      */
     function getResult(){
+        $l = new LibratoUtil();
+        $start_time = date('U');
         echo"<pre>";
         //get data
         $alerts = alerts::all();
@@ -195,7 +208,10 @@ class AlertController  extends BaseController {
             }
 
             echo "<hr>";
+            $this->alert_total_checks = $this->alert_total_checks + 1;
         }
+        //update librato status
+        $l->pushAppStatus($this->alert_total_checks, $start_time, date('U'));
     }
 
     /**

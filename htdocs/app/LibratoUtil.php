@@ -10,6 +10,7 @@ namespace App;
 
 use GuzzleHttp\Client;
 use App\Librato;
+use App\Repositories\SystemSettingRepository;
 
 
 class LibratoUtil
@@ -92,6 +93,27 @@ class LibratoUtil
             }
         }catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e){
             echo "\nlibrato row not found";
+        }
+    }
+
+
+    /**
+     * push to librato elastic-erga alert status for a run
+     *
+     * @param $total_checks
+     * @param $duration
+     */
+    public function pushAppStatus($total_checks, $start_time, $end_time){
+
+        $s = new SystemSettingRepository();
+        $username = $s->forKey('librato_username');
+        $api_key = $s->forKey('librato_api_key');
+        $url = $s->forKey('librato_url');
+        $enabled = $s->forKey('librato_status_enabled');
+       // echo "push app status: total checks= $total_checks, $start_time, $end_time :: $username, $api_key, $url, $enabled";die;
+        if($enabled == "1"){
+            $this->send($url, $username, $api_key, 'elastic-erga-total-checks', 'elastic-erga-run-duration', $total_checks, $end_time-$start_time, 'elastic-erga');
+           // $this->sendAnnotation($username,$api_key,'elastic-erga','elastic-erga-run-status','total checks conducted by elastic-erga', '', $start_time, $end_time, '');
         }
     }
 

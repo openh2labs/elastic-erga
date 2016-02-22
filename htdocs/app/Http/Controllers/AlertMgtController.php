@@ -61,6 +61,7 @@ class AlertMgtController extends Controller
         $alert->alert_email_sender = $request->input('alert_email_sender');
         $alert->alert_email_recipient = $request->input('alert_email_recipient');
         $alert->alert_type = $request->input('alert_type');
+        $alert->consecutive_failures = $request->input('consecutive_failures');
 
         //only set alert states to false when a new alert is setup
         if($request->input('id') == ""){

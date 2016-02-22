@@ -88,6 +88,10 @@
         {!! Form::label('alert_type', 'alert_type') !!}
         {!! Form::input('alert_type', 'alert_type', null, ['size' => '50'])  !!} e0 or gt0
     </p>
+    <p>
+        {!! Form::label('consecutive_failures', 'consecutive_failures') !!}
+        {!! Form::input('consecutive_failures', 'consecutive_failures', null, ['size'=>'5']) !!}
+    </p>
 
     @if ($type === "create")
         <p>

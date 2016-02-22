@@ -21,6 +21,7 @@ let browserify = require('browserify');
 let jshint = require('gulp-jshint');
 let mocha = require('gulp-mocha');
 let gulp = require('gulp');
+let babel = require('gulp-babel');
 let source = require('vinyl-source-stream');
 let buffer = require('vinyl-buffer');
 let uglify = require('gulp-uglify');
@@ -47,6 +48,7 @@ gulp.task('javascript', () => {
         .pipe(buffer())
         .pipe(sourcemaps.init({loadMaps: true}))
         // Add transformation tasks to the pipeline here.
+        .pipe(babel())
         .pipe(uglify())
         .on('error', gutil.log)
         .pipe(sourcemaps.write('./'))
@@ -59,7 +61,7 @@ gulp.task('javascript', () => {
  * returns: gulp stream
  */
 gulp.task('lint', () => {
-    return gulp.src(jsSrcDir+'**/*.js')
+    return gulp.src([jsSrcDir+'**/*.js', jsTestsSrcDir+'/**/*.spec.js'] )
         .pipe(jshint())
         .pipe(jshint.reporter('default'));
 });

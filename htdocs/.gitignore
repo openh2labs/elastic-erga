@@ -1,3 +1,9 @@
 /.env
 /composer.lock
 /vendor/*
+/public/css/*
+/public/js/*
+/public/build/*
+.idea/
+/node_modules/
+.vagrant

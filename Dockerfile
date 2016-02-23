@@ -1,5 +1,8 @@
 FROM php:5.6-apache
 
+# Install nodejs repo
+RUN curl -sL https://deb.nodesource.com/setup_5.x | bash -
+
 # Install Packages
 RUN apt-get update && \
   DEBIAN_FRONTEND=noninteractive apt-get install -y \
@@ -13,6 +16,7 @@ RUN apt-get update && \
     cron \
     curl \
     git \
+    nodejs \
     subversion \
     unzip \
   && rm -r /var/lib/apt/lists/* \
@@ -35,6 +39,10 @@ RUN rmdir /var/www/html && ln -s /var/www/laravel/public /var/www/html
 WORKDIR /var/www/laravel/
 
 RUN composer install
+
+RUN npm install
+
+RUN gulp
 
 RUN chown -R www-data:www-data /var/www/laravel/storage && \
     chown -R www-data:www-data /var/www/laravel/bootstrap/cache

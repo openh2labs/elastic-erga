@@ -1,24 +1,24 @@
 "use strict";
 
 class DomJsModule {
-    constructor($, console, $placeholder, $container) {
-        this.$placeholder = $placeholder
-        this.$container = $container
+    constructor(dependencies, $elements) {
+        this.$placeholder   = $elements.$placeholder;
+        this.$container     = $elements.$container;
         this.params = null;
     }
 
-    mount($placeholder, $container) {
-        if($placeholder.length) {
-            let params = this.params = this.$placeholder.data('params');
-            $placeholder.replaceWith($container);
-            this.onMountSuccess($container, params, $placeholder);
+    mount() {
+        if(this.$placeholder.length) {
+            this.params = this.$placeholder.data('params');
+            this.$placeholder.replaceWith(this.$container);
+            this.onMountSuccess(this.$container, this.params, this.$placeholder);
         }
         else {
             this.onMountFailure("Couldn't mount on placeholder. Invalid $placeholder!");
         }
     }
 
-    onMountSuccess(container, params, placeholder) {
+    onMountSuccess() {
 
     }
 

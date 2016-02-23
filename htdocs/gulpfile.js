@@ -26,6 +26,7 @@ let jshint = require('gulp-jshint');
 let mocha = require('gulp-mocha');
 let gulp = require('gulp');
 let babel = require('gulp-babel');
+let babelRegister = require('babel-register');
 let source = require('vinyl-source-stream');
 let buffer = require('vinyl-buffer');
 let uglify = require('gulp-uglify');
@@ -88,7 +89,11 @@ function mochaTest(dir , rep) {
 
     return gulp.src(__dir, {read: false})
         // gulp-mocha needs filepaths so you can't have any plugins before it
-        .pipe(mocha({reporter: _rep}));
+        .pipe(mocha({
+            reporter: _rep,
+            compilers: {
+                js: babelRegister
+            }}));
 }
 
 /**
@@ -128,7 +133,7 @@ elixir((mix) => {
 
     //Javascript
     mix.task('lint');
-    mix.task('mocha-unit');
+    //mix.task('mocha-unit');
     //mix.task('mocha-api'); //No api tests at the moment, enable when we have some
     mix.task('javascript');
 

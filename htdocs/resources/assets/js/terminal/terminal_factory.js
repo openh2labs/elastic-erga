@@ -8,17 +8,22 @@
 var DomJsModule = require('./../dom_js_component/loader');
 
 class ErgaTerminal extends DomJsModule {
-        constructor($, console, view, $placeholder, $container) {
+        constructor(dependencies, $elements, mvvm) {
 
-            super($, console, $placeholder, $container);
-            this.view = view || require ('./terminal_view.jsx');
-            this.mount($placeholder, $container);
+            super(dependencies, $elements);
+            this.view = mvvm.view;
+            this.model = mvvm.model;
+            this.mount();
         }
 
-        onMountSuccess(container, params, placeholder) {
-            super.onMountSuccess(container, params, placeholder);
-            container.addClass('terminal');
-            this.view.create(this.$container.get(0));
+        onMountSuccess() {
+            super.onMountSuccess();
+            this.$container.addClass('terminal');
+            this.mountComponent(this.$container.get(0));
+        }
+
+        mountComponent(mountingElement) {
+            this.view.create(mountingElement, new this.model());
         }
 
         toString() {
@@ -27,9 +32,15 @@ class ErgaTerminal extends DomJsModule {
 }
 
 exports.create = function create($, console) {
-    return new ErgaTerminal( $,
-        console,
-        require ('./terminal_view.jsx'),
-        $('meta[type="js-module"][name="terminal"]'),
-        $('<div>Wait while loading!</div>'));
+    let view = require('./terminal_view.jsx');
+    let model = require('./../models/Events');
+
+    let $placeholder = $('meta[type="js-module"][name="terminal"]');
+    let $container = $('<div>Wait while loading!</div>');
+
+    let dependencies = {$, console};
+    let $elements = { $placeholder , $container };
+    let mvvm = { view , model };
+
+    return new ErgaTerminal(dependencies, $elements, mvvm );
 }

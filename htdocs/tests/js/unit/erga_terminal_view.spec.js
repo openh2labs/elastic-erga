@@ -1,5 +1,5 @@
 
-var lastMockJInstance = null
+var lastMockJInstance = null;
 var jqueryMock = function() {
     "use strict";
 
@@ -7,22 +7,23 @@ var jqueryMock = function() {
         lastMockJInstance = {
             length : 0,
             reset : function () {
-                lastMockJInstance = null
+                lastMockJInstance = null;
             }
-        }
+        };
     }
     return lastMockJInstance;
 };
 
 var consoleMock =  {
-    log: function (toLog) {}
+    log: function () {}
 };
 
 var assert = require('assert');
 var unit = require('./../../../resources/assets/js/erga_terminal/erga_terminal_view');
 
 describe('ErgaTerminalView', function() {
-    var something
+    "use strict";
+    var something;
 
     beforeEach(() => {
         something = new unit.create(jqueryMock, consoleMock);

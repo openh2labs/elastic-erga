@@ -7,7 +7,7 @@
 class ErgaTerminalView {
         constructor($, console) {
 
-            this.$element =  $(".erga-terminal-view");
+            this.$element = $(".erga-terminal-view");
             if(this.$element.length) {
                 this.$element.append("Hello World, This is Terminal!");
             }

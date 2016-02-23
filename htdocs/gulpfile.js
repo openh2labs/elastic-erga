@@ -98,9 +98,6 @@ gulp.task('mocha-unit' , () => {
 });
 
 
-
-
-
 /*
  |--------------------------------------------------------------------------
  | Elixir Asset Management
@@ -117,10 +114,11 @@ elixir((mix) => {
     //Javascript
     mix.task('lint');
     mix.task('mocha-unit');
-    mix.task('mocha-api');
+    //mix.task('mocha-api'); //No api tests at the moment, enable when we have some
     mix.task('javascript');
 
     //Styles
     mix.less('app.less', cssDist);
-    mix.version([cssDist+'/app.css', jsDist+'/app.js']);
+    mix.version([cssDist + '/app.css', jsDist + '/app.js']);
+
 });

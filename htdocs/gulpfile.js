@@ -12,12 +12,16 @@ let distDir = 'public';
 let cssDist = distDir + '/css';
 let jsDist = distDir + '/js';
 
+
+
 /**
  * Module exports
  *
  * @type {...|exports|module.exports}
  */
+require('node-jsx').install({extension: '.jsx'});
 let browserify = require('browserify');
+let reactify = require('reactify');
 let jshint = require('gulp-jshint');
 let mocha = require('gulp-mocha');
 let gulp = require('gulp');
@@ -27,7 +31,9 @@ let buffer = require('vinyl-buffer');
 let uglify = require('gulp-uglify');
 let sourcemaps = require('gulp-sourcemaps');
 let gutil = require('gulp-util');
+
 let elixir = require('laravel-elixir');
+let phplint = require('laravel-elixir-phplint');
 
 
 
@@ -40,7 +46,9 @@ gulp.task('javascript', () => {
     // set up the browserify instance on a task basis
     let b = browserify({
         entries: jsSrcDir + '/app.js',
-        debug: true
+        debug: true,
+        transform: [reactify]
+
     });
 
     return b.bundle()
@@ -61,7 +69,7 @@ gulp.task('javascript', () => {
  * returns: gulp stream
  */
 gulp.task('lint', () => {
-    return gulp.src([jsSrcDir+'**/*.js', jsTestsSrcDir+'/**/*.spec.js'] )
+    return gulp.src([jsSrcDir+'**/*.js', jsSrcDir+'**/*.jsx', jsTestsSrcDir+'/**/*.spec.js'] )
         .pipe(jshint())
         .pipe(jshint.reporter('default'));
 });
@@ -110,6 +118,13 @@ gulp.task('mocha-unit' , () => {
  */
 
 elixir((mix) => {
+
+    //mix.phplint([
+    //    'app/**/*.php',
+    //    'test/**/*.php'
+    //]);
+    //mix.phpSpec();
+    //mix.phpUnit();
 
     //Javascript
     mix.task('lint');

@@ -24,6 +24,8 @@ Route::get('alert/home/', 'AlertController@home');
 
 Route::get('alertrun/systemlog', 'SystemLogController@home');
 
+Route::get('terminal', 'TerminalController@index');
+
 //execute searches
 Route::get('alert/searchtest', 'AlertController@searchtest');
 

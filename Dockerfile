@@ -42,6 +42,8 @@ RUN composer install
 
 RUN npm install
 
+RUN npm install --global gulp-cli
+
 RUN gulp
 
 RUN chown -R www-data:www-data /var/www/laravel/storage && \

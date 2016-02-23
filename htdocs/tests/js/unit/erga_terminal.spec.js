@@ -6,6 +6,9 @@ var jqueryMock = function() {
     if (!lastMockJInstance) {
         lastMockJInstance = {
             length : 0,
+            data : function() {
+
+            },
             reset : function () {
                 lastMockJInstance = null;
             }
@@ -19,9 +22,9 @@ var consoleMock =  {
 };
 
 var assert = require('assert');
-var unit = require('./../../../resources/assets/js/terminal/erga_terminal_view');
+var unit = require('./../../../resources/assets/js/terminal/terminal_factory');
 
-describe('ErgaTerminalView', function() {
+describe('ErgaTerminal', function() {
     "use strict";
     var something;
 
@@ -34,7 +37,7 @@ describe('ErgaTerminalView', function() {
     });
 
     describe('#indexOf()', () => {
-        it('unit.$element must equal to juery object', function () {
+        it('unit.$container must equal to juery object', function () {
             assert.equal(something.$container, jqueryMock());
         });
     });

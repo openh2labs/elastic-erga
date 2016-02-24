@@ -57,7 +57,7 @@ gulp.task('javascript', () => {
         .pipe(buffer())
         .pipe(sourcemaps.init({loadMaps: true}))
         // Add transformation tasks to the pipeline here.
-        .pipe(babel())
+        .pipe(babel()) //TODO babel() appears to take a lot of time, optimise.... optimise...
         .pipe(uglify())
         .on('error', gutil.log)
         .pipe(sourcemaps.write('./'))
@@ -124,7 +124,7 @@ gulp.task('mocha-unit' , () => {
 
 elixir((mix) => {
 
-    //mix.phplint([
+    //mix.phplint([   //TODO enable & configure phpUnit tests properly.
     //    'app/**/*.php',
     //    'test/**/*.php'
     //]);
@@ -133,7 +133,7 @@ elixir((mix) => {
 
     //Javascript
     mix.task('lint');
-    //mix.task('mocha-unit');
+    mix.task('mocha-unit');
     //mix.task('mocha-api'); //No api tests at the moment, enable when we have some
     mix.task('javascript');
 

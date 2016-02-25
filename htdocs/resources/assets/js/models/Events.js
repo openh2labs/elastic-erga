@@ -33,6 +33,16 @@ class Events {
         });
     }
 
+
+    _update(events) {
+        this.items = events;
+        this.onUpdate(this.items);
+    }
+
+    onUpdate() {
+
+    }
+
     fakeData(n = 3) {
         let data = [];
 

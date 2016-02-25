@@ -5,6 +5,7 @@
     "babel-preset-es2015": "^6.5.0",
     "babel-preset-react": "^6.5.0",
     "babel-register": "^6.5.2",
+    "chai-as-promised": "^5.2.0",
     "chakram": "^1.2.2",
     "gulp": "^3.8.8",
     "gulp-babel": "^6.1.2",

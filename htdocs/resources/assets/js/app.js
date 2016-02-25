@@ -7,6 +7,8 @@ require('bootstrap-less');
 
 window.elastic_erga_app = (function($){
     "use strict";
-    var ergaTerminalView = require('./terminal/terminal_factory').create($, window.console);
+
+    /* Terminal */
+    require('./terminal/terminal_factory').create($, window.console);
 
 })(window.jQuery);

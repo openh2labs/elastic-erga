@@ -1,5 +1,7 @@
-
-let chai = require('chai').use(require('chai-as-promised'));
+let sinon = require('sinon');
+let chai = require('chai')
+                .use(require('chai-as-promised'))
+                .use(require('sinon-chai'));
 let expect = chai.expect;
 let should = chai.should();
 let Events = require('./../../../resources/assets/js/models/Events');
@@ -71,8 +73,7 @@ describe('ErgaTerminal', function() {
         });
     });
 
-    describe('load( params, (data)=>{} ).self || future', () => {
-
+    describe('load( params, (data)=>{} ).future:[Event]', () => {
 
         it('Should make an ajax call with params', () => {
             let fakeParams = {"fake":"params"};
@@ -114,6 +115,29 @@ describe('ErgaTerminal', function() {
                     return promise.should.be.rejectedWith(fakeError);
                 });
             });
+
+        });
+    });
+
+    describe('_update', () => {
+       it('Should update the Events.list with the new events', () => {
+           let fakeEventList = [new Event({id:1,message:"lol"})];
+           unit._update(fakeEventList);
+
+           expect(unit.items).to.equal(fakeEventList);
+       });
+
+        it('Should trigger the onUpdate method with [Event]', () => {
+            let stub = unit.onUpdate = sinon.stub();
+            let fakeEventList = [new Event({id:1,message:"lol"})];
+            unit._update(fakeEventList);
+
+            expect(stub).to.have.been.calledWith(fakeEventList);
+        });
+    });
+
+    describe('onUpdate', () => {
+        it('Should fire whenever Events.list is changed', () => {
 
         });
     });

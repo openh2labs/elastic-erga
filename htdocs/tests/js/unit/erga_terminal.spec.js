@@ -1,7 +1,8 @@
+"use strict";
 
 var lastMockJInstance = null;
 var jqueryMock = function() {
-    "use strict";
+
 
     if (!lastMockJInstance) {
         lastMockJInstance = {
@@ -25,7 +26,6 @@ var assert = require('assert');
 var unit = require('./../../../resources/assets/js/terminal/terminal_factory');
 
 describe('ErgaTerminal', function() {
-    "use strict";
     var something;
 
     beforeEach(() => {

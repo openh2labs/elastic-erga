@@ -1,9 +1,10 @@
+"use strict";
+
 let sinon = require('sinon');
 let chai = require('chai')
                 .use(require('chai-as-promised'))
                 .use(require('sinon-chai'));
 let expect = chai.expect;
-let should = chai.should();
 let Events = require('./../../../resources/assets/js/models/Events');
 
 class CallMock {
@@ -44,7 +45,6 @@ class HttpServiceMock {
 }
 
 describe('ErgaTerminal', function() {
-    "use strict";
     let unit;
     let httpServiceMock;
 
@@ -119,7 +119,7 @@ describe('ErgaTerminal', function() {
         });
     });
 
-    describe('_update', () => {
+    describe('_update([Event])', () => {
        it('Should update the Events.list with the new events', () => {
            let fakeEventList = [new Event({id:1,message:"lol"})];
            unit._update(fakeEventList);
@@ -127,8 +127,8 @@ describe('ErgaTerminal', function() {
            expect(unit.items).to.equal(fakeEventList);
        });
 
-        it('Should trigger the onUpdate method with [Event]', () => {
-            let stub = unit.onUpdate = sinon.stub();
+        it('Should trigger the _onChanged method with [Event]', () => {
+            let stub = unit._onChanged = sinon.stub();
             let fakeEventList = [new Event({id:1,message:"lol"})];
             unit._update(fakeEventList);
 
@@ -136,9 +136,35 @@ describe('ErgaTerminal', function() {
         });
     });
 
-    describe('onUpdate', () => {
-        it('Should fire whenever Events.list is changed', () => {
+    describe('_onChanged([Event])', () => {
+        it('should notify observers', function(){
+            let fakeEventList = [new Event({id:1,message:"lol"})];
+            let stub = sinon.stub();
 
+            unit.subscribe(stub);
+            unit.items = fakeEventList
+            unit._onChanged();
+
+            expect(stub).to.have.been.calledWith(fakeEventList)
+        });
+
+        it('Should notify all subsciptions', () => {
+            let stubA = sinon.stub();
+            let stubB = sinon.stub();
+            let fakeEventList = [new Event({id:1,message:"lol"})];
+
+            unit.subscribe(stubA);
+            unit.subscribe(stubB);
+
+            unit.items = fakeEventList
+
+            unit._onChanged(stubA);
+            unit._onChanged(stubB);
+
+            expect(stubA).to.have.been.calledWith(fakeEventList);
+            expect(stubB).to.have.been.calledWith(fakeEventList);
         });
     });
+
+
 });

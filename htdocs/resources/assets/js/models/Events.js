@@ -1,13 +1,15 @@
 "use strict";
 
+let Subscribable = require('./../Subscribable');
 
-class Events {
+class Events extends Subscribable {
 
     /**
      * d = dependencies
      * http is based on Jquery API https://api.jquery.com/jquery.get/ at the moment
      */
     constructor(d){
+        super();
         this.d = {
             http    : d.http,
             Event   : d.Event
@@ -26,6 +28,7 @@ class Events {
                     });
 
                     resolve(events);
+                    this._update(events);
                 })
                 .fail((error) => {
                     reject(error);
@@ -36,11 +39,11 @@ class Events {
 
     _update(events) {
         this.items = events;
-        this.onUpdate(this.items);
+        this._onChanged(this.items);
     }
 
-    onUpdate() {
-
+    _onChanged() {
+        this.notify(this.items);
     }
 
     fakeData(n = 3) {

@@ -12,22 +12,29 @@ let distDir = 'public';
 let cssDist = distDir + '/css';
 let jsDist = distDir + '/js';
 
+
+
 /**
  * Module exports
  *
  * @type {...|exports|module.exports}
  */
+require('node-jsx').install({extension: '.jsx'});
 let browserify = require('browserify');
+let reactify = require('reactify');
 let jshint = require('gulp-jshint');
 let mocha = require('gulp-mocha');
 let gulp = require('gulp');
 let babel = require('gulp-babel');
+let babelRegister = require('babel-register');
 let source = require('vinyl-source-stream');
 let buffer = require('vinyl-buffer');
 let uglify = require('gulp-uglify');
 let sourcemaps = require('gulp-sourcemaps');
 let gutil = require('gulp-util');
+
 let elixir = require('laravel-elixir');
+let phplint = require('laravel-elixir-phplint');
 
 
 
@@ -40,7 +47,9 @@ gulp.task('javascript', () => {
     // set up the browserify instance on a task basis
     let b = browserify({
         entries: jsSrcDir + '/app.js',
-        debug: true
+        debug: true,
+        transform: [reactify]
+
     });
 
     return b.bundle()
@@ -48,7 +57,7 @@ gulp.task('javascript', () => {
         .pipe(buffer())
         .pipe(sourcemaps.init({loadMaps: true}))
         // Add transformation tasks to the pipeline here.
-        .pipe(babel())
+        .pipe(babel()) //TODO babel() appears to take a lot of time, optimise.... optimise...
         .pipe(uglify())
         .on('error', gutil.log)
         .pipe(sourcemaps.write('./'))
@@ -61,7 +70,7 @@ gulp.task('javascript', () => {
  * returns: gulp stream
  */
 gulp.task('lint', () => {
-    return gulp.src([jsSrcDir+'**/*.js', jsTestsSrcDir+'/**/*.spec.js'] )
+    return gulp.src([jsSrcDir+'**/*.js', jsSrcDir+'**/*.jsx', jsTestsSrcDir+'/**/*.spec.js'] )
         .pipe(jshint())
         .pipe(jshint.reporter('default'));
 });
@@ -80,7 +89,11 @@ function mochaTest(dir , rep) {
 
     return gulp.src(__dir, {read: false})
         // gulp-mocha needs filepaths so you can't have any plugins before it
-        .pipe(mocha({reporter: _rep}));
+        .pipe(mocha({
+            reporter: _rep,
+            compilers: {
+                js: babelRegister
+            }}));
 }
 
 /**
@@ -98,9 +111,6 @@ gulp.task('mocha-unit' , () => {
 });
 
 
-
-
-
 /*
  |--------------------------------------------------------------------------
  | Elixir Asset Management
@@ -114,13 +124,21 @@ gulp.task('mocha-unit' , () => {
 
 elixir((mix) => {
 
+    //mix.phplint([   //TODO enable & configure phpUnit tests properly.
+    //    'app/**/*.php',
+    //    'test/**/*.php'
+    //]);
+    //mix.phpSpec();
+    //mix.phpUnit();
+
     //Javascript
     mix.task('lint');
     mix.task('mocha-unit');
-    mix.task('mocha-api');
+    //mix.task('mocha-api'); //No api tests at the moment, enable when we have some
     mix.task('javascript');
 
     //Styles
     mix.less('app.less', cssDist);
-    mix.version([cssDist+'/app.css', jsDist+'/app.js']);
+    mix.version([cssDist + '/app.css', jsDist + '/app.js']);
+
 });

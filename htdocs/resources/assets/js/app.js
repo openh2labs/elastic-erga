@@ -1,3 +1,4 @@
+"use strict";
 
 window.$ = window.jQuery = require('jquery');
 require('./bloodhound/init');
@@ -5,8 +6,10 @@ require('bootstrap-less');
 
 
 
-var App = (function(){
-    "use strict";
-    var ergaTerminalView = require('./erga_terminal/erga_terminal_view').create($, window.console)
+window.elastic_erga_app = (function($){
 
-})()
+
+    /* Terminal */
+    require('./terminal/terminal_factory').create($, window.console);
+
+})(window.jQuery);

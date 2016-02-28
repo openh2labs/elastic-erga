@@ -24,6 +24,8 @@ Route::get('alert/home/', 'AlertController@home');
 
 Route::get('alertrun/systemlog', 'SystemLogController@home');
 
+Route::get('terminal', 'TerminalController@index');
+
 //execute searches
 Route::get('alert/searchtest', 'AlertController@searchtest');
 
@@ -60,3 +62,10 @@ Route::get('librato/edit/{alert_id}', 'LibratoMgt@edit');
  * typeAhead routes
  */
 Route::get('typeahead/listcolumn/{column}/{table}', 'TypeAhead@listcolumn');
+
+
+
+/**
+ * Search Routes
+ */
+Route::get('/search', 'SearchController@elastic');

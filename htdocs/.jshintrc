@@ -1,7 +1,7 @@
 {
   // JSHint Default Configuration File (as on JSHint website)
   // See http://jshint.com/docs/ for more details
-
+  "esversion"     : 6,
   "maxerr"        : 50,       // {int} Maximum error before stopping
 
   // Enforcing
@@ -47,7 +47,7 @@
   "evil"          : false,     // true: Tolerate use of `eval` and `new Function()`
   "expr"          : false,     // true: Tolerate `ExpressionStatement` as Programs
   "funcscope"     : false,     // true: Tolerate defining variables inside control statements
-  "globalstrict"  : false,     // true: Allow global "use strict" (also enables 'strict')
+  "globalstrict"  : true,     // true: Allow global "use strict" (also enables 'strict')
   "iterator"      : false,     // true: Tolerate using the `__iterator__` property
   "lastsemic"     : false,     // true: Tolerate omitting a semicolon for the last statement of a 1-line block
   "laxbreak"      : false,     // true: Tolerate possibly unsafe line breakings
@@ -86,5 +86,5 @@
   "yui"           : false,    // Yahoo User Interface
 
   // Custom Globals
-  "globals"       : { "require" : true}        // additional predefined global variables
+  "globals"       : { "require" : true, "module":true}        // additional predefined global variables
 }

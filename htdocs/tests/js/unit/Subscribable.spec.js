@@ -47,12 +47,15 @@ describe('Subscribable', () => {
     describe('notify()', () => {
         it('Should fire all subscription callbacks', () => {
             let stub = sinon.stub();
+            let stubB = sinon.stub();
             let notification = "Ta daaaah!";
 
             unit.subscribe(stub);
+            unit.subscribe(stubB);
             unit.notify(notification);
 
             stub.should.have.been.calledWith(notification);
+            stubB.should.have.been.calledWith(notification);
         });
     });
 
@@ -77,6 +80,24 @@ describe('Subscribable', () => {
             unit.notify(notification);
 
             stub.should.have.not.been.called;
+        });
+
+        it('should unsubscribe only the targeted subscription', () => {
+           let stubs = [sinon.stub(), sinon.stub(), sinon.stub()];
+            let notification = "2 out of three must fire";
+            let subs = [];
+
+            stubs.forEach((stub) => {
+                subs.push(unit.subscribe(stub));
+            });
+
+            unit.unsubscribe(subs[1]);
+
+            unit.notify(notification);
+
+            stubs[0].should.have.been.called;
+            stubs[1].should.have.not.been.called;
+            stubs[2].should.have.been.called;
         });
     });
 
@@ -108,7 +129,5 @@ describe('Subscribable', () => {
                 expect(throws).to.equal(true);
             });
         });
-
-
     });
 });

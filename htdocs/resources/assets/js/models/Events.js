@@ -11,8 +11,8 @@ class Events extends Subscribable {
     constructor(d){
         super();
         this.d = {
-            http    : d.http,
-            Event   : d.Event
+            http    : (d && d.http)  ? d.http  : require('./../../../../tests/js/mocks/HttpServiceMock')(),//require('jQuery'),
+            Event   : (d && d.Event) ? d.Event : require('./../models/Events')
         };
 
         this.serviceUrl = "http://www.fake.com";
@@ -67,7 +67,6 @@ class Events extends Subscribable {
     fakeService(n = Math.floor((Math.random() * 3))) {
 
         let fakeServices = ['www.fake1.com', 'www.fake2.com', 'www.fake3.com'];
-
         return fakeServices[n];
     }
 }

@@ -29,6 +29,6 @@ The application is used entirely via a web UI
 
 ### migrate the tables
 
-    php arisan migrate:refresh --seed
+    php artisan migrate:refresh --seed
     
 

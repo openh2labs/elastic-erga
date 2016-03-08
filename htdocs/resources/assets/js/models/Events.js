@@ -1,6 +1,7 @@
 "use strict";
 
 let Subscribable = require('./../Subscribable');
+let HttpService  = require('./../../../../tests/js/mocks/HttpServiceMock');
 
 class Events extends Subscribable {
 
@@ -11,7 +12,7 @@ class Events extends Subscribable {
     constructor(d){
         super();
         this.d = {
-            http    : (d && d.http)  ? d.http  : require('./../../../../tests/js/mocks/HttpServiceMock')(),//require('jQuery'),
+            http    : (d && d.http)  ? d.http  : new HttpService(),//require('jQuery'),
             Event   : (d && d.Event) ? d.Event : require('./../models/Events')
         };
 

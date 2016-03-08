@@ -121,7 +121,7 @@ describe('ErgaTerminal', function() {
             unit.subscribe(stubA);
             unit.subscribe(stubB);
 
-            unit.items = fakeEventList
+            unit.items = fakeEventList;
 
             unit._onChanged(stubA);
             unit._onChanged(stubB);

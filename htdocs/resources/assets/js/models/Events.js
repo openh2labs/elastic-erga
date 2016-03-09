@@ -1,7 +1,8 @@
 "use strict";
 
 let Subscribable = require('./../Subscribable');
-let HttpService  = require('./../../../../tests/js/mocks/HttpServiceMock');
+let EventModel =require('./Event')
+
 
 class Events extends Subscribable {
 
@@ -9,14 +10,16 @@ class Events extends Subscribable {
      * d = dependencies
      * http is based on Jquery API https://api.jquery.com/jquery.get/ at the moment
      */
-    constructor(d){
+    constructor(d) {
+
+
         super();
         this.d = {
-            http    : (d && d.http)  ? d.http  : new HttpService(),//require('jQuery'),
-            Event   : (d && d.Event) ? d.Event : require('./../models/Events')
+            http    : (d) ? d.http : null,
+            Event   : (d && d.Event) ? d.Event : EventModel
         };
 
-        this.serviceUrl = "http://www.fake.com";
+        this.serviceUrl = "/elastic_fake";
         this.items = [];
     }
 
@@ -24,8 +27,10 @@ class Events extends Subscribable {
         return new Promise((resolve, reject) => {
             this.d.http.get(this.serviceUrl, params)
                 .done((result)=> {
-                    let events = result.data.map((rawEvent) => {
-                        return new this.d.Event(rawEvent);
+                    console.log(result);
+
+                    let events = result.events.map((events) => {
+                        return new this.d.Event(events);
                     });
 
                     resolve(events);
@@ -45,30 +50,6 @@ class Events extends Subscribable {
 
     _onChanged() {
         this.notify(this.items);
-    }
-
-    fakeData(n = 3) {
-        let data = [];
-
-        for (let i = 0; i < n; i++) {
-            var fid     = i + this.items.length + 1;
-            var fstamp  = new Date().getTime();
-
-            data.push( new this.d.Event({
-                                    id:fid,
-                                    description:'fake item:'+fid,
-                                    timestamp:fstamp,
-                                    service: this.fakeService(i)
-            }));
-        }
-
-        return data;
-    }
-
-    fakeService(n = Math.floor((Math.random() * 3))) {
-
-        let fakeServices = ['www.fake1.com', 'www.fake2.com', 'www.fake3.com'];
-        return fakeServices[n];
     }
 }
 

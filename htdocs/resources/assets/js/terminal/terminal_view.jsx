@@ -37,7 +37,10 @@ class TerminalView {
         this.$element = $element;
         this.model = model;
         this.model.load().then((collection) => {
+            console.log('dataLoaded', collection);
             this.update(collection);
+        }).catch((error) => {
+            console.log('data Failed to Load', error);
         });
     }
 

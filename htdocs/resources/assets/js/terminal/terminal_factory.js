@@ -4,7 +4,6 @@
  *
  */
 
-//var view = require ('./terminal_view.jsx');
 var DomJsModule = require('./../dom_js_component/loader');
 
 class ErgaTerminal extends DomJsModule {
@@ -12,7 +11,7 @@ class ErgaTerminal extends DomJsModule {
 
             super(dependencies, $elements);
             this.view = mvvm.view;
-            this.model = mvvm.model;
+            this.model = new mvvm.model({http: dependencies.$});
             this.mount();
         }
 
@@ -23,7 +22,8 @@ class ErgaTerminal extends DomJsModule {
         }
 
         mountComponent(mountingElement) {
-            this.view.create(mountingElement, new this.model());
+            this.view.create(mountingElement, this.model);
+            console.log('React Terminal Component Mounted', mountingElement, this.model)
         }
 
         toString() {

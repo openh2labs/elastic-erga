@@ -1,6 +1,11 @@
 "use strict";
 
 window.$ = window.jQuery = require('jquery');
+
+//TODO Remove this when elastic search is available
+require('jquery-mockjax')(window.$, window);
+require('../../../tests/js/mocks/elastic_server_mock').create($);
+
 require('./bloodhound/init');
 require('bootstrap-less');
 

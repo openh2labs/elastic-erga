@@ -50,7 +50,7 @@ describe('ErgaTerminal', function() {
             describe('success', () => {
                 it('Should return promise that resolves to [Event]', () => {
                     let fakeRawData = {
-                        "data": [
+                        "events": [
                             {"id":"item1", "message":"moooooo"},
                             {"id":"item2", "message":"moooooo I said"}
                         ],
@@ -58,7 +58,7 @@ describe('ErgaTerminal', function() {
                     };
 
                     let fakeParams = {"fake":"params"};
-                    let fakeResult = fakeRawData.data.map((rawEvent) => {
+                    let fakeResult = fakeRawData.events.map((rawEvent) => {
                         return new Event(rawEvent);
                     });
 

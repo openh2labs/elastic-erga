@@ -100,12 +100,7 @@ $b = $_SERVER['HTTP_HOST'];
 
 
     <hr>
-    {{
 
-     (1+1+$a)
-    }}
-
-    {{ $b }}.
 
 @endsection
 

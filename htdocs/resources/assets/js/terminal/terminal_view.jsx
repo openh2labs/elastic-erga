@@ -6,10 +6,34 @@ var ReactDOM = require('react-dom');
 var Event = React.createClass({
     render: function() {
 
-        return <li className="event">
-            <span className="timestamp">{this.props.model.timestamp}</span>
-            <span className="description">{this.props.model.description}</span>
-            <span className="service">{this.props.model.service}</span>
+        /**
+         * See models/Event.js
+         *
+         *
+         set model(rawData) {
+
+            this.id             = rawData.id;
+            this.source_ip      = rawData.source_ip;
+            this.program        = rawData.program;
+            this.message        = rawData.message;
+            this.event_message  = rawData.event_message;
+            this.severity       = rawData.severity;
+            this.facility       = rawData.facility;
+            this.html_class     = rawData.html_class;
+            this.timestamp      = rawData.received_at
+
+            }
+
+         */
+
+        let model = this.props.model;
+
+        return <li className="event ${model.severity} ${model.html_class}">
+            <span className="source_ip">{model.source_ip}</span>
+            <span className="program">{model.program}</span>
+            <span className="hostname">{model.hostname}</span>
+            <span className="event_message">{model.event_message}</span>
+            <span className="timestamp">{model.timestamp}</span>
         </li>;
     }
 });

@@ -25,6 +25,12 @@
 
  */
 
+function decodeHtml(html) {
+    var txt = document.createElement("textarea");
+    txt.innerHTML = html;
+    return txt.value;
+}
+
 class Event {
     constructor(rawData) {
         this.model = rawData;
@@ -34,14 +40,14 @@ class Event {
 
         this.id             = rawData.id;
         this.source_ip      = rawData.source_ip;
+        this.hostname       = rawData.hostname;
         this.program        = rawData.program;
-        this.message        = rawData.message;
-        this.event_message  = rawData.event_message;
-        this.severity       = rawData.severity;
+        this.message        = decodeHtml(rawData.message);
+        this.event_message  = decodeHtml(rawData.event_message);
+        this.severity       = rawData.severity.toLowerCase();
         this.facility       = rawData.facility;
         this.html_class     = rawData.html_class;
         this.timestamp      = rawData.received_at
-
     }
 }
 

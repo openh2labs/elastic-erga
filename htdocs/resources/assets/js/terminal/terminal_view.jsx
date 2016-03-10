@@ -28,7 +28,15 @@ var Event = React.createClass({
 
         let model = this.props.model;
 
-        return <li className="event ${model.severity} ${model.html_class}">
+        let classes = "event";
+        if (model.severity) {
+            classes += " "+model.severity;
+        }
+        if (model.html_class) {
+            classes += " "+model.html_class;
+        }
+
+        return <li className={classes}>
             <span className="source_ip">{model.source_ip}</span>
             <span className="program">{model.program}</span>
             <span className="hostname">{model.hostname}</span>

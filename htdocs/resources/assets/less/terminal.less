@@ -4,4 +4,57 @@
   width: 100%;
   background-color: @bg-dark;
   color: @font-clr-vs-bg-dark;
+  overflow: hidden;
+  position: relative;
+  max-height: 500px;
+
+  ul {
+    list-style-type: none;
+    padding:0;
+
+    overflow-wrap: break-word;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: -17px;
+    overflow-y: scroll;
+
+    /**
+      <li className="event ${model.severity} ${model.html_class}">
+        <span className="source_ip">{model.source_ip}</span>
+        <span className="program">{model.program}</span>
+        <span className="hostname">{model.hostname}</span>
+        <span className="event_message">{model.event_message}</span>
+        <span className="timestamp">{model.timestamp}</span>
+      </li>
+    */
+
+    li {
+      &:hover {
+        background-color: lighten(@bg-dark, 10%);
+      }
+
+      span {
+        padding-right:5px;
+      }
+
+      .source_ip, .hostname {
+        font-weight: bold;
+      }
+
+      &.error {
+        color: @brand-danger;
+      }
+
+      &.info {
+        color: @brand-info;
+      }
+    }
+  }
+
+  .event {
+
+  }
 }
+

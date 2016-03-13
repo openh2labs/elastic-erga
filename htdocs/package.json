@@ -11,8 +11,11 @@
     "gulp-babel": "^6.1.2",
     "gulp-jshint": "^2.0.0",
     "gulp-mocha": "^2.2.0",
+    "jsdom": "8.1.0",
+    "jsdom-global": "1.6.2",
     "jshint": "^2.9.1",
     "laravel-elixir-phplint": "^0.1.1",
+    "mocha-jsdom": "^1.1.0",
     "reactify": "^1.1.1",
     "sinon": "^1.17.3",
     "sinon-chai": "^2.8.0"

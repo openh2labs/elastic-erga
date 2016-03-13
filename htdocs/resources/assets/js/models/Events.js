@@ -12,7 +12,6 @@ class Events extends Subscribable {
      */
     constructor(d) {
 
-
         super();
         this.d = {
             http    : (d) ? d.http : null,
@@ -41,7 +40,6 @@ class Events extends Subscribable {
                 });
         });
     }
-
 
     _update(events) {
         this.items = events;

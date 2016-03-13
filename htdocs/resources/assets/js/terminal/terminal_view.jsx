@@ -63,12 +63,35 @@ var Events = React.createClass({
     }
 });
 
-
+/**
+ * elements prefixed with single underscore "_" are meant to be read only
+ *
+ * elements prefixed with double undersore "__" are meant to be private
+ * and It is not suggested to be used by other projects.
+ */
 class TerminalView {
-    constructor ($element, model) {
-        this.$element = $element;
-        this.model = model;
-        this.model.load().then((collection) => {
+    constructor (d, $element, model, config) {
+
+        this.__$element = $element;
+        this.__model = model;
+
+        /** never change config manually use __configure instead */
+        this._config = {
+            polling:true
+        };
+        this._clock = d.clock;
+
+        this.__configure(config);
+        this.load();
+
+        if (this._config.polling) {
+            this._clock.start();
+        }
+
+    }
+
+    load() {
+        this.__model.load().then((collection) => {
             console.log('dataLoaded', collection);
             this.update(collection);
         }).catch((error) => {
@@ -77,10 +100,50 @@ class TerminalView {
     }
 
     update(collection) {
-        ReactDOM.render(<Events model={collection} />, this.$element);
+        ReactDOM.render(<Events model={collection} />, this.__$element);
     }
+
+    __configure(config) {
+        if (config) {
+            for (let key in config) {
+                let changed = false;
+
+                if (this._config[key] != config[key]) {
+                    changed = changed ? changed : {};
+                    changed[key] = {
+                        old_value: this._config[key],
+                        value:config[key]
+                    };
+                }
+
+                this._config[key] = config[key];
+
+                if (changed) {
+                    this.__configObserveHandler(changed);
+                }
+            }
+        }
+    }
+
+    __configObserveHandler(changed) {
+        if (changed.polling) this.__onPollingChanged (changed.polling.value)
+    }
+
+    __onPollingChanged(value) {
+        value ? this._clock.start() : this._clock.stop();
+    }
+
+    __onTick() {
+        this.load();
+    }
+
 }
 
-exports.create = function create( $element, model ){
-    return new TerminalView( $element, model );
+exports.create = function create( $element, model, config){
+    let dependecies = {
+        clock : {}
+    }
+    return new TerminalView(dependecies, $element, model, config );
 }
+
+exports.__Class = TerminalView;

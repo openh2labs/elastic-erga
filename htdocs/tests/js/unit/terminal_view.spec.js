@@ -8,7 +8,7 @@ let expect = chai.expect;
 let TerminalViewFactory = require('./../../../resources/assets/js/terminal/terminal_view');
 
 
-describe.only('TerminalView ', () => {
+describe('TerminalView ', () => {
 
     let jsdom = null;
 

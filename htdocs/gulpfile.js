@@ -69,7 +69,7 @@ gulp.task('javascript', () => {
  *
  * returns: gulp stream
  */
-gulp.task('lint', () => {
+gulp.task('jslint', () => {
     return gulp.src([jsSrcDir+'**/*.js', jsSrcDir+'**/*.jsx', jsTestsSrcDir+'/**/*.spec.js'] )
         .pipe(jshint())
         .pipe(jshint.reporter('default'));
@@ -100,14 +100,21 @@ function mochaTest(dir , rep) {
  * It loads files from tests/js/api & runs js api tests with mocha & chakram
  */
 gulp.task('mocha-api' , () => {
-    return mochaTest('/api');
+    return mochaTest('/api', 'nyan');
 });
 
 /**
  * It loads files from tests/js/unit & runs js api tests with mocha
  */
 gulp.task('mocha-unit' , () => {
-    return mochaTest('/unit');
+    return mochaTest('/unit', 'nyan');
+});
+
+
+gulp.task('tdd-js', function() {
+    gulp.run(['jslint', 'mocha-unit']);
+    gulp.watch(jsSrcDir+'/**/*js', ['jslint', 'mocha-unit']);
+    gulp.watch(jsTestsSrcDir+'/**/*js', ['jslint','mocha-unit']);
 });
 
 
@@ -132,7 +139,7 @@ elixir((mix) => {
     //mix.phpUnit();
 
     //Javascript
-    mix.task('lint');
+    mix.task('jslint');
     mix.task('mocha-unit');
     //mix.task('mocha-api'); //No api tests at the moment, enable when we have some
     mix.task('javascript');

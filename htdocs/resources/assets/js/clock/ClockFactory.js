@@ -8,11 +8,21 @@ class ClockFactory {
         this.__instances = config.instances || new Map();
     }
 
-    create(name) {
-        let newClock = new this.__Clock();
-        let key = name || this.__instances.size; //TODO instead of size use a hashTag it's going to cause bugs when we will be able to destroy Clocks
-        this.__instances.set(key, newClock);
-        return this.__instances.get(key);
+    create({name, frequency} = {}) {
+        if (name === undefined) {
+            name = this.__instances.size; //TODO change it to hash because it will be bugged when we add destroy clock
+        }
+        if (frequency === undefined) {
+            frequency = 5;
+        }
+
+        let newClock = new this.__Clock({frequency:frequency});
+        this.__instances.set(name, newClock);
+        return this.__instances.get(name);
+    }
+
+    getInstance(key) {
+        return this.__instances.get(key) || null;
     }
 }
 

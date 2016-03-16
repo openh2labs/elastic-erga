@@ -1,55 +1,53 @@
 "use strict";
 
-class Event {
-    constructor(rawData) {
-        this.model = rawData;
-    }
-
-    set model(rawData) {
-        this.id             = rawData.id;
-        this.description    = rawData.description;
-        this.timestamp      = rawData.timestamp;
-        this.service        = rawData.service;
-    }
-}
+let Subscribable = require('./../Subscribable');
+let EventModel =require('./Event')
 
 
+class Events extends Subscribable {
 
-class Events {
-    constructor(){
+    /**
+     * d = dependencies
+     * http is based on Jquery API https://api.jquery.com/jquery.get/ at the moment
+     */
+    constructor(d) {
+
+        super();
+        this.d = {
+            http    : (d) ? d.http : null,
+            Event   : (d && d.Event) ? d.Event : EventModel
+        };
+
+        this.serviceUrl = "/elastic_fake";
         this.items = [];
     }
 
-    load() {
-        return new Promise((resolve,reject) => {
-            this.items = this.fakeData();
-            resolve(this.items);
+    load(params) {
+        return new Promise((resolve, reject) => {
+            this.d.http.get(this.serviceUrl, params)
+                .done((result)=> {
+                    console.log(result);
+
+                    let events = result.events.map((events) => {
+                        return new this.d.Event(events);
+                    });
+
+                    resolve(events);
+                    this._update(events);
+                })
+                .fail((error) => {
+                    reject(error);
+                });
         });
     }
 
-    fakeData(n = 3) {
-        var data = []
-
-        for (let i = 0; i < n; i++) {
-            var fid     = i + this.items.length + 1;
-            var fstamp  = new Date().getTime();
-
-            data.push( new Event({
-                                    id:fid,
-                                    description:'fake item:'+fid,
-                                    timestamp:fstamp,
-                                    service: this.fakeService(i)
-            }));
-        }
-
-        return data;
+    _update(events) {
+        this.items = events;
+        this._onChanged(this.items);
     }
 
-    fakeService(n = Math.floor((Math.random() * 3))) {
-
-        let fakeServices = ['www.fake1.com', 'www.fake2.com', 'www.fake3.com'];
-
-        return fakeServices[n];
+    _onChanged() {
+        this.notify(this.items);
     }
 }
 

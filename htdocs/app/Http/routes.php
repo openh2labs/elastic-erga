@@ -62,3 +62,10 @@ Route::get('librato/edit/{alert_id}', 'LibratoMgt@edit');
  * typeAhead routes
  */
 Route::get('typeahead/listcolumn/{column}/{table}', 'TypeAhead@listcolumn');
+
+
+
+/**
+ * Search Routes
+ */
+Route::get('/search', 'SearchController@elastic');

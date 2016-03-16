@@ -10,6 +10,7 @@ class DomJsModule {
     mount() {
         if(this.$placeholder.length) {
             this.params = this.$placeholder.data('params');
+            console.log(this.$placeholder);
             this.$placeholder.replaceWith(this.$container);
             this.onMountSuccess(this.$container, this.params, this.$placeholder);
         }
@@ -19,7 +20,7 @@ class DomJsModule {
     }
 
     onMountSuccess() {
-
+        console.log('DOM JS module mounted successful', arguments);
     }
 
     onMountFailure(error) {

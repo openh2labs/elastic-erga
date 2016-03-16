@@ -1,14 +1,14 @@
-class Clock {
-
-}
+let Clock = require('./Clock');
 
 class ClockFactory {
+
     constructor(config = {}) {
         this.__Clock = config.Clock || Clock;
         this.__instances = config.instances || new Map();
     }
 
     create({name, frequency} = {}) {
+
         if (name === undefined) {
             name = this.__instances.size; //TODO change it to hash because it will be bugged when we add destroy clock
         }

@@ -30,7 +30,7 @@ describe('TerminalView ', () => {
             //Provide sinon spies for the methods you want
             this.spies = {
                 load :sinon.spy(this, "load")
-            }
+            };
         }
 
         load() {
@@ -47,7 +47,7 @@ describe('TerminalView ', () => {
             this.spies = {
                 start: sinon.spy(this, "start"),
                 stop: sinon.spy(this, "stop")
-            }
+            };
         }
 
         start() {
@@ -138,7 +138,7 @@ describe('TerminalView ', () => {
             unit.__onPollingChanged = sinon.stub();
             unit.__configure({polling:false});
             unit.__configure({polling:true});
-            expect(unit.__onPollingChanged.called).to.equal(true)
+            expect(unit.__onPollingChanged.called).to.equal(true);
         });
 
     });

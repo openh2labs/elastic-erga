@@ -8,17 +8,15 @@ let expect = chai.expect;
 let ClockFactory = require('./../../../resources/assets/js/clock/ClockFactory');
 
 
-describe('ClockFactory ', () => {
+describe('ClockFactory ', ()=>{
 
     class ClockMock {
 
     }
 
     let unit = null;
-    let cMock = null;
 
     beforeEach(()=>{
-
        unit = new ClockFactory({
             Clock : ClockMock
        });
@@ -80,7 +78,6 @@ describe('ClockFactory ', () => {
                 expect(unit.getInstance("LOLZ")).to.be.an.instanceof(ClockMock);
             });
         });
-
     });
-
 });
+

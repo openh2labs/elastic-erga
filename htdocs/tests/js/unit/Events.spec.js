@@ -5,6 +5,7 @@ let chai = require('chai')
                 .use(require('chai-as-promised'))
                 .use(require('sinon-chai'));
 let expect = chai.expect;
+let should = chai.should();
 let Events = require('./../../../resources/assets/js/models/Events');
 let HttpServiceMock = require('./../mocks/HttpServiceMock');
 
@@ -107,10 +108,10 @@ describe('ErgaTerminal', function() {
             let stub = sinon.stub();
 
             unit.subscribe(stub);
-            unit.items = fakeEventList
+            unit.items = fakeEventList;
             unit._onChanged();
 
-            expect(stub).to.have.been.calledWith(fakeEventList)
+            expect(stub).to.have.been.calledWith(fakeEventList);
         });
 
         it('Should notify all subsciptions', () => {

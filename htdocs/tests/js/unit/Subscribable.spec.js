@@ -5,7 +5,6 @@ let chai = require('chai')
     .use(require('chai-as-promised'))
     .use(require('sinon-chai'));
 let expect = chai.expect;
-let should = chai.should();
 let Subscribable = require('./../../../resources/assets/js/Subscribable');
 
 
@@ -79,7 +78,7 @@ describe('Subscribable', () => {
             unit.unsubscribe(subscription);
             unit.notify(notification);
 
-            stub.should.have.not.been.called;
+            return stub.should.have.not.been.called;
         });
 
         it('should unsubscribe only the targeted subscription', () => {
@@ -95,9 +94,11 @@ describe('Subscribable', () => {
 
             unit.notify(notification);
 
-            stubs[0].should.have.been.called;
-            stubs[1].should.have.not.been.called;
-            stubs[2].should.have.been.called;
+            var a = stubs[0].should.have.been.called;
+            var b =stubs[1].should.have.not.been.called;
+            var c = stubs[2].should.have.been.called;
+
+            return a && b && c;
         });
     });
 

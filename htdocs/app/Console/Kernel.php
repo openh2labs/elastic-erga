@@ -4,6 +4,7 @@ namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use App\Repositories\AlertExecutionsRepository;
 
 class Kernel extends ConsoleKernel
 {
@@ -28,5 +29,12 @@ class Kernel extends ConsoleKernel
                  ->hourly();
 
         $schedule->call('\App\Http\Controllers\AlertController@searchtest')->everyFiveMinutes();
+
+        //purge old alert execution records
+        $schedule->call(function () {
+            $ar = new AlertExecutionsRepository;
+            $ar->purge(3);
+        })->everyFiveMinutes();
+
     }
 }

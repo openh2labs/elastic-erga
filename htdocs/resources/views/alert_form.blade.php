@@ -106,7 +106,9 @@
     @if(isset($librato))
         @if($librato != null)
             <a href="/librato/edit/{!! $alert->id !!}">Edit Librato integration</a>
-        @else
+        @endif
+    @else
+        @if ($type === "edit")
             <a href="/librato/create/{!! $alert->id !!}">Create Librato integration</a>
         @endif
     @endif

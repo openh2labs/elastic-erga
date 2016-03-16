@@ -24,7 +24,7 @@ class ElasticUtil {
      * if search_type = count then it will only return aggregation results
      * if fields array is empty it will return all fields
      */
-    private function searchELK($index, $index_type, $host, $query, $fields, $search_type){
+    public function searchELK($index, $index_type, $host, $query, $fields, $search_type){
         try{
 
             $client = ClientBuilder::create()->setRetries(0)->setHosts($host)->build();
@@ -42,13 +42,9 @@ class ElasticUtil {
             if($search_type != ""){
                 $params2['search_type'] = $search_type;
             }
-            $this->current_alert->es_config_error_state = false;
-            $this->current_alert->save();
             return $client->search($params2);
 
         }catch (\Exception $e){
-            $this->current_alert->es_config_error_state = true;
-            $this->current_alert->save();
             echo "<pre>error(1)";print_r($e->getMessage());echo"</pre>";
             $result['hits']['total'] = 0;
             return $result;

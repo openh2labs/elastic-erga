@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use App\ElasticUtil;
 
 class TerminalController extends Controller
 {
@@ -46,9 +47,26 @@ class TerminalController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show()
     {
-        //
+        $e = new ElasticUtil;
+        $query = json_decode($this->someTestData(),true);
+        //$index, $index_type, $host, $query, $fields, $search_type
+        $data = $e->searchELK("web_logs-2016-03-16", "nginx", array("10.0.22.71:9200"), $query, array('host', 'status'), "");
+      //  if(count($data['hits']['hits'])>0){
+        //    echo "<pre>";
+           echo json_encode($data['hits']['hits']);
+      //  }
+    }
+
+    //temp sample data @todo remove
+    private function someTestData(){
+        return '{
+        "size" : 50,
+        "query" : {
+        "match_all" : {}
+    }
+}';
     }
 
     /**

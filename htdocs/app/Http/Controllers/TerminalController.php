@@ -44,30 +44,21 @@ class TerminalController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function show()
     {
         $e = new ElasticUtil;
-        $query = json_decode($this->someTestData(),true);
+     //   $query = json_decode($this->someTestData(),true);
         //$index, $index_type, $host, $query, $fields, $search_type
-        $data = $e->searchELK("web_logs-2016-03-16", "nginx", array("10.0.22.71:9200"), $query, array('host', 'status'), "");
+     //   $data = $e->searchELK("web_logs-2016-03-16", "nginx", array("10.0.22.71:9200"), $query, array(), "");
       //  if(count($data['hits']['hits'])>0){
-        //    echo "<pre>";
-           echo json_encode($data['hits']['hits']);
+       $data = $e->getTerminal();
+           echo "<pre>";print_r($data);
+           //echo(json_encode($data['hits']['hits']));
       //  }
     }
 
-    //temp sample data @todo remove
-    private function someTestData(){
-        return '{
-        "size" : 50,
-        "query" : {
-        "match_all" : {}
-    }
-}';
-    }
 
     /**
      * Show the form for editing the specified resource.

@@ -14,9 +14,19 @@ use Elasticsearch\ClientBuilder;
 
 class ElasticUtil {
 
-    public function hi() {
-        die('hi');
+
+    /**
+     * returns a string where the current year, month, day replace some holders
+     * @param $string
+     * @return mixed
+     */
+    public function getDateValues($string){
+        $string = str_replace("%Y%", date('Y'), $string);
+        $string = str_replace("%m%", date('m'), $string);
+        $string = str_replace("%d%", date('d'), $string);
+        return $string;
     }
+
 
 
     /**
@@ -171,5 +181,32 @@ class ElasticUtil {
         //add test data
         $this->populateELKtestData();
     }
+
+    /**
+     * returns data used in the terminal
+     */
+    function getTerminal(){
+        $query = json_decode($this->someTestData(),true);
+        //$index, $index_type, $host, $query, $fields, $search_type
+        $t = $this->searchELK("web_logs-2016-03-16", "nginx", array("10.0.22.71:9200"), $query, array(), "");
+        //  if(count($data['hits']['hits'])>0){
+        //echo "<pre>";print_r($data['hits']['hits']);
+        //echo(json_encode($data['hits']['hits']));
+        //  }
+        $data['indices'] = array();
+        $data['hits'] = $t['hits']['hits'];
+        return $data;
+    }
+
+    //temp sample data @todo remove
+    private function someTestData(){
+        return '{
+        "size" : 50,
+        "query" : {
+        "match_all" : {}
+    }
+    }';
+    }
+
 
 }

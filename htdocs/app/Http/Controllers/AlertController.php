@@ -9,6 +9,7 @@
 namespace App\Http\Controllers;
 
 
+use App\ElasticUtil;
 use Elasticsearch\ClientBuilder;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
@@ -35,10 +36,12 @@ class AlertController  extends BaseController {
     private $alert_run;
     private $current_alert;
     private $alert_total_checks; //total alert checks
+    private $eu; //elastic util helper
 
     public function __construct()
     {
         $this->alert_total_checks = 0;
+        $this->eu = new ElasticUtil();
     }
 
     /**
@@ -155,20 +158,6 @@ class AlertController  extends BaseController {
         $alert->criteria_total_temp = str_replace("%end_date%", $end_date, $alert->criteria_total_temp);
         return $alert;
     }
-
-
-    /**
-     * returns a string where the current year, month, day replace some holders
-     * @param $string
-     * @return mixed
-     */
-    private function getDateParams($string){
-        $string = str_replace("%Y%", date('Y'), $string);
-        $string = str_replace("%m%", date('m'), $string);
-        $string = str_replace("%d%", date('d'), $string);
-        return $string;
-    }
-
 
     /**
      * check all alerts
@@ -335,7 +324,7 @@ class AlertController  extends BaseController {
                 echo "\nprocessing alert";
                 if($alert->criteria_temp != ""){
                     $params = json_decode($alert->criteria_temp,true);
-                    $result = $this->searchELK($this->getDateParams($alert->es_index), $alert->es_type, array($alert->es_host), $params, array(), 'count');
+                    $result = $this->searchELK($this->eu->getDateValues($alert->es_index), $alert->es_type, array($alert->es_host), $params, array(), 'count');
                     $return_val = $result['hits']['total'];
                 }else{
                     echo "\nNo valid search query found for monitor";
@@ -343,13 +332,13 @@ class AlertController  extends BaseController {
             }elseif($query_type == "total"){
                 if($alert->criteria_total_temp != ""){
                     $params = json_decode($alert->criteria_total_temp,true);
-                    $result = $this->searchELK($this->getDateParams($alert->es_index), $alert->es_type, array($alert->es_host), $params, array(), 'count');
+                    $result = $this->searchELK($this->eu->getDateValues($alert->es_index), $alert->es_type, array($alert->es_host), $params, array(), 'count');
                     $return_val = $result['hits']['total'];
                 }else{
                     echo "\nNo valid search query found for totals";
                 }
             }
-            echo "<br>index: ".$this->getDateParams($alert->es_index);
+            echo "<br>index: ".$this->eu->getDateValues($alert->es_index);
             echo "<br>index type: ".$alert->es_type;
             echo "<br>index host: ".$alert->es_host;
             return $return_val;

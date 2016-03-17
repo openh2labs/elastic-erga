@@ -496,6 +496,5 @@ class AlertController  extends BaseController {
 
     }
 
-
 }
 

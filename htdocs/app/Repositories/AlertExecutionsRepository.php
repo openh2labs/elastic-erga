@@ -20,7 +20,7 @@ class AlertExecutionsRepository
      * @param $daysBack
      */
     function purge($daysBack){
-        $dt =  date('Y-m-d H:i:s', strtotime('-'.$daysBack.' days'));
-        DB::table('alert_executions')->where('created_at', '>=', $dt)->delete();
+        $dt =  "".date('Y-m-d H:i:s', strtotime('-'.$daysBack.' days'));
+        DB::table('alert_executions')->where('created_at', '<=', $dt)->delete();
     }
 }

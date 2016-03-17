@@ -52,6 +52,11 @@ Route::get('alert/edit/{id}', 'AlertMgtController@edit');
 Route::post('alert/storeedit/{id}', 'AlertMgtController@storeedit');
 
 /*
+ * alert executios
+ */
+Route::get('alertexecutions/purge/', 'AlertExecutionController@purge');
+
+/*
  * Librato
  */
 Route::get('librato/create/{alert_id}', 'LibratoMgt@create');

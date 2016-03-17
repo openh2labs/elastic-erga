@@ -81,8 +81,6 @@ class AlertMgtController extends Controller
         return redirect()->action('AlertController@home');
     }
 
-
-
     /**
      * Display the specified resource.
      *

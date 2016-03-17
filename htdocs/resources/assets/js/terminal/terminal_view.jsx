@@ -2,6 +2,7 @@
 
 var React = require('react');
 var ReactDOM = require('react-dom');
+var ClockFactory = require('../clock/ClockFactory');
 
 var Event = React.createClass({
     render: function() {
@@ -84,7 +85,11 @@ class TerminalView {
         this.__configure(config);
         this.load();
 
+        this._clock.onTick(()=>{
+          this.__onTick();
+        });
         if (this._config.polling) {
+
             this._clock.start();
         }
 
@@ -92,7 +97,6 @@ class TerminalView {
 
     load() {
         this.__model.load().then((collection) => {
-            console.log('dataLoaded', collection);
             this.update(collection);
         }).catch((error) => {
             console.log('data Failed to Load', error);
@@ -141,7 +145,7 @@ class TerminalView {
 
 exports.create = function create( $element, model, config){
     let dependecies = {
-        clock : {}
+        clock : new ClockFactory({systemTimers:window}).create({name:"terminal", frequency:1})
     }
     return new TerminalView(dependecies, $element, model, config );
 }

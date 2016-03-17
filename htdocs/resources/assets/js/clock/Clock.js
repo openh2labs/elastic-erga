@@ -3,7 +3,7 @@
 var Subscribable = require("./../Subscribable");
 
 class Clock {
-    constructor({frequency, sTO} = {}) {
+    constructor({frequency, systemTimers} = {}) {
 
         if (!frequency) {
             throw RangeError(`Invalid argument range for parameter frequency! Got ${frequency}`);
@@ -17,8 +17,8 @@ class Clock {
             throw RangeError(`Invalid argument range for parameter frequency! Got ${frequency}`);
         }
 
+        this.systemTimers = systemTimers;
         this.frequency = frequency;
-        this.sTO = sTO || setTimeout;
 
         this.state = 0;
         this.stateLabel = ['paused', 'play'];
@@ -51,10 +51,15 @@ class Clock {
     }
 
     __tick() {
+        let self = this;
+
         this.meta.tickCount = ++this.meta.tickCount;
-        this.sTO(() => {
-            this.__tick();
-        }, 1);
+        this.delegates.tick.notify();
+
+        //set the next tick
+        this.systemTimers.setTimeout.call(this.systemTimers, () => {
+            self.__tick();
+        }, this.frequency*1000);
     }
 
     __makeDelegates(keys) {

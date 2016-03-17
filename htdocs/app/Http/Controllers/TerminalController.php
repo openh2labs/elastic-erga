@@ -49,14 +49,8 @@ class TerminalController extends Controller
     public function show()
     {
         $e = new ElasticUtil;
-     //   $query = json_decode($this->someTestData(),true);
-        //$index, $index_type, $host, $query, $fields, $search_type
-     //   $data = $e->searchELK("web_logs-2016-03-16", "nginx", array("10.0.22.71:9200"), $query, array(), "");
-      //  if(count($data['hits']['hits'])>0){
-       $data = $e->getTerminal();
-           echo "<pre>";print_r($data);
-           //echo(json_encode($data['hits']['hits']));
-      //  }
+        $data = $e->getTerminalData();
+        echo(json_encode($data));
     }
 
 

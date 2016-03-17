@@ -9,6 +9,7 @@
 namespace App;
 
 use Elasticsearch\ClientBuilder;
+use App\Repositories\AlertRepository;
 
 // ADD use ElasticSearchClassesHere
 
@@ -27,7 +28,19 @@ class ElasticUtil {
         return $string;
     }
 
-
+    /**
+     *
+     * returns an updated array with the date values injected
+     *
+     * @param $arr, array of strings
+     */
+    private function getDateValuesForArray($arr){
+        foreach($arr as $key=>$value){
+            $value->es_index = $this->getDateValues($value->es_index);
+            $arr[$key] = $value;
+        }
+        return $arr;
+    }
 
     /**
      * searches ELK for a doc
@@ -37,6 +50,13 @@ class ElasticUtil {
     public function searchELK($index, $index_type, $host, $query, $fields, $search_type){
         try{
 
+           // echo"<pre>";print_r($index);print_r($host);die;
+            //check if we need to search across indices
+            if(is_array($index)){
+                $index = implode($index, ",");
+            }
+
+           // echo"$index";die;
             $client = ClientBuilder::create()->setRetries(0)->setHosts($host)->build();
             $params2['index'] = $index;
             $params2['client'] = ['timeout'=>5, 'connect_timeout'=>1];
@@ -55,8 +75,9 @@ class ElasticUtil {
             return $client->search($params2);
 
         }catch (\Exception $e){
-            echo "<pre>error(1)";print_r($e->getMessage());echo"</pre>";
+            echo "<pre>error(1:searchELK)";print_r($e->getMessage());echo"</pre>";
             $result['hits']['total'] = 0;
+            $result['es_error'] = true;
             return $result;
         }
     }
@@ -184,17 +205,25 @@ class ElasticUtil {
 
     /**
      * returns data used in the terminal
+     * @todo return minus offset
      */
-    function getTerminal(){
+    public function getTerminalData(){
+        $ar = new AlertRepository();
+        $indices = $this->getDateValuesForArray($this->getValidIndices($ar->getAllIndices()));
+        $indices_arr = $this->getAllIndices($indices);
         $query = json_decode($this->someTestData(),true);
-        //$index, $index_type, $host, $query, $fields, $search_type
-        $t = $this->searchELK("web_logs-2016-03-16", "nginx", array("10.0.22.71:9200"), $query, array(), "");
-        //  if(count($data['hits']['hits'])>0){
-        //echo "<pre>";print_r($data['hits']['hits']);
-        //echo(json_encode($data['hits']['hits']));
-        //  }
-        $data['indices'] = array();
-        $data['hits'] = $t['hits']['hits'];
+        $hosts_arr  = $this->getAllHosts($indices);
+        $t = $this->searchELK($indices_arr, "", $hosts_arr, $query, array(), "");
+        $data['meta']['total'] = $t['hits']['total'];
+        $data['meta']['total_hits_returned'] = 50;
+        $data['meta']['event_timestamp_max'] = "";
+        $data['meta']['event_timestamp_min'] = "";
+        $data['indices'] = $indices_arr;
+        $data['hosts'] = $hosts_arr;
+        if($t['hits']['total']>0){
+            $data['hits'] = $t['hits']['hits'];
+        }
+
         return $data;
     }
 
@@ -208,5 +237,87 @@ class ElasticUtil {
     }';
     }
 
+    /**
+     *
+     * returns an array of indices that can be found
+     *
+     * @param $indexArray
+     * @return array of indices that the application can connect to
+     */
+    private function getValidIndices($indexArray){
+        $indices = array();
+        foreach($indexArray as $value){
+            if($this->indexExists($value->es_host, $value->es_index)==true){
+                $indices[] = $value;
+            }
+        }
+        return $indices;
+    }
+
+    /**
+     *
+     * checks if an index exists
+     *
+     * @param string $host
+     * @param $index
+     * @return boolean , true if index exists
+     */
+    public function indexExists($host, $index){
+        try{
+            $index = $this->getDateValues($index);
+            $client = ClientBuilder::create()->setRetries(0)->setHosts(array($host))->build();
+            $indexParams['index'][]  = $index;
+            return $client->indices()->exists($indexParams);
+        }catch(\Exception $e){
+            return false;
+        }
+    }
+
+    /**
+     *
+     * returns an array of all indices for a given host
+     *
+     * @param $indicesArr
+     * @return array
+     */
+    private function getAllIndicesForHost($indicesArr){
+        $result = array();
+        foreach($indicesArr as $key=>$value){
+            $result[$value->es_host][] = $value->es_index;
+        }
+      //  echo "<pre>";print_r($result);die;
+        return $result;
+    }
+
+    /**
+     *
+     * returns an array of es_hosts
+     *
+     * @param $indicesArr
+     * @return array
+     */
+    private function getAllHosts($indicesArr){
+        $result = array();
+       // echo"<pre>";print_r($indicesArr);die;
+        foreach($indicesArr as $key=>$value){
+            $result[] = $value->es_host;
+        }
+        return $result;
+    }
+
+    /**
+     *
+     * returns all indices
+     *
+     * @param $indicesArr
+     * @return array
+     */
+    private function getAllIndices($indicesArr){
+        $result = array();
+        foreach($indicesArr as $key=>$value){
+            $result[] = $value->es_index;
+        }
+        return $result;
+    }
 
 }

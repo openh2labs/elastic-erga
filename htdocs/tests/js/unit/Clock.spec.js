@@ -115,6 +115,37 @@ describe('Clock', ()=>{
                 expect(unit.state).to.equal(0);
             });
         });
+
+        describe('delegates', ()=>{
+
+            describe('onStart()', ()=>{
+                it('should subscribe the argument callback to a startEvent', ()=>{
+                    let stub = sinon.stub(unit.delegates.start, 'subscribe');
+                    let fake = sinon.stub();
+                    unit.onStart(fake);
+                    expect(stub).to.have.been.calledWith(fake);
+                });
+            });
+
+            describe('onStop()', ()=>{
+                it('should subscribe the argument callback to a startEvent', ()=>{
+                    let stub = sinon.stub(unit.delegates.stop, 'subscribe');
+                    let fake = sinon.stub();
+                    unit.onStop(fake);
+                    expect(stub).to.have.been.calledWith(fake);
+                });
+            });
+
+            describe('onTick()', ()=>{
+                it('should subscribe the argument callback to a tick event', ()=>{
+                    let stub = sinon.stub(unit.delegates.tick, 'subscribe');
+                    let fake = sinon.stub();
+                    unit.onTick(fake);
+                    expect(stub).to.have.been.calledWith(fake);
+                });
+            });
+        });
+
     });
 
     describe('private methods', ()=>{
@@ -139,6 +170,19 @@ describe('Clock', ()=>{
                 wtm.flush();
                 expect(spy.callCount).to.equal(2);
             });
+        });
+
+        describe('__makeDelegates', ()=> {
+           it('should create and return delegates registry object using an array of keys', ()=>{
+               let fakeKeys = ["lola", "here", "one", "apple"];
+
+               let delegates = unit.__makeDelegates(fakeKeys);
+
+               fakeKeys.forEach((key)=>{
+                   expect(delegates).to.have.property(key);
+                   expect(delegates[key]).to.have.property("subscribe");
+               });
+           });
         });
     });
 });

@@ -210,20 +210,24 @@ class ElasticUtil {
     public function getTerminalData(){
         $ar = new AlertRepository();
         $indices = $this->getDateValuesForArray($this->getValidIndices($ar->getAllIndices()));
-        $indices_arr = $this->getAllIndices($indices);
         $query = json_decode($this->someTestData(),true);
-        $hosts_arr  = $this->getAllHosts($indices);
-        $t = $this->searchELK($indices_arr, "", $hosts_arr, $query, array(), "");
-        $data['meta']['total'] = $t['hits']['total'];
-        $data['meta']['total_hits_returned'] = 50;
+        $data = array();
+        $data['meta']['total'] = 0;
+        $data['meta']['total_hits_returned'] = 0;
         $data['meta']['event_timestamp_max'] = "";
         $data['meta']['event_timestamp_min'] = "";
-        $data['indices'] = $indices_arr;
-        $data['hosts'] = $hosts_arr;
-        if($t['hits']['total']>0){
-            $data['hits'] = $t['hits']['hits'];
+        $data['indices'] = $this->getAllIndices($indices);
+        $data['hosts'] = $this->getAllHosts($indices);
+        $data['hits'] = array();
+        foreach($indices as $key=>$val){
+            $indices_arr = $this->getAllIndicesForHost($indices,$val->es_host);
+            $t = $this->searchELK($indices_arr, "", array($val->es_host), $query, array(), "");
+            if($t['hits']['total']>0){
+                $data['hits'] = array_merge($data['hits'], $t['hits']['hits']);
+            }
+            $data['meta']['total'] = $data['meta']['total'] + $t['hits']['total'];
+            $data['meta']['total_hits_returned'] = $data['meta']['total_hits_returned'] + 50;
         }
-
         return $data;
     }
 
@@ -280,13 +284,13 @@ class ElasticUtil {
      * @param $indicesArr
      * @return array
      */
-    private function getAllIndicesForHost($indicesArr){
+    private function getAllIndicesForHost($indicesArr, $host){
         $result = array();
         foreach($indicesArr as $key=>$value){
             $result[$value->es_host][] = $value->es_index;
         }
       //  echo "<pre>";print_r($result);die;
-        return $result;
+        return $result[$host];
     }
 
     /**

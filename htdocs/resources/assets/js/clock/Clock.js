@@ -1,7 +1,10 @@
 "use strict";
 
+var Subscribable = require("./../Subscribable");
+
 class Clock {
-    constructor({frequency, sTO} = {}) {
+    constructor({frequency, systemTimers} = {}) {
+
         if (!frequency) {
             throw RangeError(`Invalid argument range for parameter frequency! Got ${frequency}`);
         }
@@ -14,14 +17,16 @@ class Clock {
             throw RangeError(`Invalid argument range for parameter frequency! Got ${frequency}`);
         }
 
+        this.systemTimers = systemTimers;
         this.frequency = frequency;
-        this.sTO = sTO || setTimeout;
 
         this.state = 0;
         this.stateLabel = ['paused', 'play'];
         this.meta = {
             tickCount: 0
         };
+
+        this.delegates = this.__makeDelegates(["start","stop","tick"]);
     }
 
     start() {
@@ -33,11 +38,42 @@ class Clock {
         this.state = 0;
     }
 
+    onStart(callback) {
+        this.delegates.start.subscribe(callback);
+    }
+
+    onStop(callback) {
+        this.delegates.stop.subscribe(callback);
+    }
+
+    onTick(callback) {
+        this.delegates.tick.subscribe(callback);
+    }
+
     __tick() {
+        let self = this;
+
         this.meta.tickCount = ++this.meta.tickCount;
-        this.sTO(() => {
-            this.__tick();
-        }, 1);
+        this.delegates.tick.notify();
+
+        //set the next tick
+        this.systemTimers.setTimeout.call(this.systemTimers, () => {
+            self.__tick();
+        }, this.frequency*1000);
+    }
+
+    __makeDelegates(keys) {
+        if (Object.prototype.toString.call( keys ) !== '[object Array]') {
+            throw RangeError(`keys is not an array! got :${keys}!`)
+        }
+
+        let delegates = {};
+
+        keys.forEach((key)=>{
+            delegates[key] = new Subscribable();
+        });
+
+        return delegates;
     }
 }
 

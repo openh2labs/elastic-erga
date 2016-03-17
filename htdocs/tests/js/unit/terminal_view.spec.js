@@ -57,6 +57,10 @@ describe('TerminalView ', () => {
         stop() {
 
         }
+
+        onTick(){
+
+        }
     }
 
     beforeEach(() => {

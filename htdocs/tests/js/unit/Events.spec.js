@@ -13,12 +13,13 @@ let HttpServiceMock = require('./../mocks/HttpServiceMock');
 describe('ErgaTerminal', function() {
     let unit;
     let httpServiceMock;
+    let fakeDate = new Date('1821-3-25');
 
     class Event {
         constructor(rawData){
             this.id = rawData.id;
             this.message = rawData.message;
-            this.timestamp = new Date('1821-3-25');
+            this.timestamp = fakeDate;
         }
     }
 
@@ -82,6 +83,58 @@ describe('ErgaTerminal', function() {
                 });
             });
 
+        });
+    });
+
+    describe('loadTail()', ()=>{
+        let lastEventTimestamp
+
+        beforeEach(()=>{
+            lastEventTimestamp = new Date().getTime();
+            unit.items = [{timestamp: lastEventTimestamp }];
+        });
+
+        it('should make a load request with tail parameters', ()=>{
+            unit.request = sinon.spy();
+            unit.loadTail();
+            expect(unit.request).to.have.been.calledWith({event_min:lastEventTimestamp});
+        });
+
+        it('should call an empty load() if no item in this.items', ()=>{
+            unit.request = sinon.spy();
+            unit.items = [];
+            unit.loadTail();
+            expect(unit.request).to.have.been.calledWith({});
+        });
+
+        describe('failure', ()=>{
+           it('should reject the promise with error when load rejects',()=>{
+               let future = unit.loadTail();
+               let fakeError = new Error('server says No');
+
+               httpServiceMock.calls[0].reject(fakeError);
+
+               return future.should.be.rejectedWith(fakeError);
+           });
+        });
+
+        describe('success', ()=>{
+            it('updates the tail of the items = [Events]', ()=>{
+                let items = [new Event({id:"1",message:"a"}), new Event({id:"2",message:"b"})];
+                let fakeNewItems = [new Event({id:"3",message:"c"})];
+                let fakeResponse = {
+                    "events": [
+                        {"id":"3", "message":"c"}
+                    ],
+                    "meta": {"fake" : "meta"}
+                };
+
+                unit.items = items;
+                let future = unit.loadTail();
+                httpServiceMock.calls[0].resolve(fakeResponse);
+
+                return future.should.eventually.deep.equal(items.concat(fakeNewItems));
+            });
         });
     });
 

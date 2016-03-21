@@ -96,7 +96,7 @@ class TerminalView {
     }
 
     load() {
-        this.__model.load().then((collection) => {
+        this.__model.loadTail().then((collection) => {
             this.update(collection);
         }).catch((error) => {
             console.log('data Failed to Load', error);

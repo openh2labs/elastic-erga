@@ -29,11 +29,19 @@ describe('TerminalView ', () => {
 
             //Provide sinon spies for the methods you want
             this.spies = {
-                load :sinon.spy(this, "load")
+                load :sinon.spy(this, "load"),
+                loadTail :sinon.spy(this, "loadTail")
             };
         }
 
         load() {
+            return new Promise((resolve, reject) => {
+                this.loadResolve = resolve;
+                this.loadReject = reject;
+            });
+        }
+
+        loadTail() {
             return new Promise((resolve, reject) => {
                 this.loadResolve = resolve;
                 this.loadReject = reject;
@@ -84,8 +92,8 @@ describe('TerminalView ', () => {
     });
 
     describe('constructor' , () => {
-        it('should request model.load', () => {
-            expect(fakeModel.spies.load.called).to.equal(true);
+        it('should request model.loadTail', () => {
+            expect(fakeModel.spies.loadTail.called).to.equal(true);
         });
 
         it('should default config', ()=>{

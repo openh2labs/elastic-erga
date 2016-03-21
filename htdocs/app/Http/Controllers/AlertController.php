@@ -263,7 +263,7 @@ class AlertController  extends BaseController {
                     $librato->pushAnnotation($alert->librato_id, "percentage-hit-alert-".$alert->description, "The percentage for the search you are monitoring exceeded your threshold", "http://mytestlink.local", time(), time(), $alert->description);
                     echo "<br>hit pct threshold met";
                 }else{
-                    echo "<br>consecutive threshold count not me for percentaget";
+                    echo "<br>consecutive threshold count not met for percentage";
                 }
             }else{
                 $alert->pct_alert_state = false;

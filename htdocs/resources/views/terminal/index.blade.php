@@ -4,7 +4,7 @@
     <h1>Terminal</h1>
     <div class="row">
         <div class="col-md-12 terminal">
-            <meta type="js-module" name="terminal">
+            <meta type="js-module" name="terminal" data-parameters="">
         </div>
     </div>
 @endsection

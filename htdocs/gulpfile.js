@@ -2,7 +2,7 @@
 
 /**
  * Source Directories
- * 
+ *
  * @type {string}
  */
 let srcDir = './resources/assets';
@@ -113,7 +113,7 @@ gulp.task('mocha-unit' , () => {
 
 gulp.task('tdd-js', function() {
     gulp.run(['jslint', 'mocha-unit']);
-    gulp.watch(jsSrcDir+'/**/*js', ['jslint', 'mocha-unit']);
+    gulp.watch([jsSrcDir+'/**/*js', jsSrcDir+'/**/*jsx'], ['jslint', 'mocha-unit']);
     gulp.watch(jsTestsSrcDir+'/**/*js', ['jslint','mocha-unit']);
 });
 

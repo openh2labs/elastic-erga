@@ -15,10 +15,12 @@ describe('ClockFactory ', ()=>{
     }
 
     let unit = null;
+    let fakeTimers = null;
 
     beforeEach(()=>{
        unit = new ClockFactory({
-            Clock : ClockMock
+            Clock : ClockMock,
+            systemTimers: fakeTimers
        });
     });
 
@@ -38,14 +40,14 @@ describe('ClockFactory ', ()=>{
             let clockInstance = unit.create({name:'awesomeClock', frequency:3});
             expect(unit.__instances.get('awesomeClock')).to.be.an.instanceof(ClockMock);
             expect(unit.__instances.get('awesomeClock')).to.equal(clockInstance);
-            expect(spy).to.have.been.calledWith({frequency:3});
+            expect(spy).to.have.been.calledWith({frequency:3, systemTimers:fakeTimers});
         });
 
         it ('should be able to create Clocks with frequency', ()=>{
             //stub the constructor of __Class
             let stub = sinon.stub(unit, "__Clock");
             unit.create({name:'awesomeFrequencyClock', frequency:1.1});
-            expect(stub).to.have.been.calledWith({frequency:1.1});
+            expect(stub).to.have.been.calledWith({frequency:1.1, systemTimers:fakeTimers});
         });
 
         describe('default parameters', () => {
@@ -57,7 +59,7 @@ describe('ClockFactory ', ()=>{
             it('frequency param should default to 5', () => {
                 let spy = sinon.spy(unit, "__Clock");
                 unit.create();
-                expect(spy).to.have.been.calledWith({frequency:5});
+                expect(spy).to.have.been.calledWith({frequency:5, systemTimers:fakeTimers});
             });
         });
     });
@@ -80,4 +82,3 @@ describe('ClockFactory ', ()=>{
         });
     });
 });
-

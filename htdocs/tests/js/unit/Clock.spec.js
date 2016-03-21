@@ -115,6 +115,37 @@ describe('Clock', ()=>{
                 expect(unit.state).to.equal(0);
             });
         });
+
+        describe('delegates', ()=>{
+
+            describe('onStart()', ()=>{
+                it('should subscribe the argument callback to a startEvent', ()=>{
+                    let stub = sinon.stub(unit.delegates.start, 'subscribe');
+                    let fake = sinon.stub();
+                    unit.onStart(fake);
+                    expect(stub).to.have.been.calledWith(fake);
+                });
+            });
+
+            describe('onStop()', ()=>{
+                it('should subscribe the argument callback to a startEvent', ()=>{
+                    let stub = sinon.stub(unit.delegates.stop, 'subscribe');
+                    let fake = sinon.stub();
+                    unit.onStop(fake);
+                    expect(stub).to.have.been.calledWith(fake);
+                });
+            });
+
+            describe('onTick()', ()=>{
+                it('should subscribe the argument callback to a tick event', ()=>{
+                    let stub = sinon.stub(unit.delegates.tick, 'subscribe');
+                    let fake = sinon.stub();
+                    unit.onTick(fake);
+                    expect(stub).to.have.been.calledWith(fake);
+                });
+            });
+        });
+
     });
 
     describe('private methods', ()=>{
@@ -125,7 +156,7 @@ describe('Clock', ()=>{
 
             beforeEach(()=>{
                 wtm = new WindowTimersMock();
-                unit = new Clock({frequency:1, sTO:wtm.setTimeout});
+                unit = new Clock({frequency:1, systemTimers:wtm});
             });
 
             it('should set the tickCount +1', ()=>{
@@ -133,12 +164,39 @@ describe('Clock', ()=>{
                 expect(unit.meta.tickCount).to.equal(1);
             });
 
-            it('should call itself after 1 second', () => {
+            it('should call itself  when setTimeout calls back', () => {
                 let spy = sinon.spy(unit, '__tick');
                 unit.__tick();
                 wtm.flush();
                 expect(spy.callCount).to.equal(2);
             });
+
+            it("should call setTimeout with the right context", ()=>{
+                let stub = sinon.stub(wtm,"setTimeout");
+                unit.__tick();
+                wtm.flush();
+                expect(stub).to.be.calledOn(wtm);
+            });
+
+            it("should notify the subscribers of a tick event", ()=>{
+                let stub = sinon.stub(unit.delegates.tick, "notify");
+                unit.__tick();
+                wtm.flush();
+                expect(stub).to.have.been.calledTwice;
+            });
+        });
+
+        describe('__makeDelegates', ()=> {
+           it('should create and return delegates registry object using an array of keys', ()=>{
+               let fakeKeys = ["lola", "here", "one", "apple"];
+
+               let delegates = unit.__makeDelegates(fakeKeys);
+
+               fakeKeys.forEach((key)=>{
+                   expect(delegates).to.have.property(key);
+                   expect(delegates[key]).to.have.property("subscribe");
+               });
+           });
         });
     });
 });

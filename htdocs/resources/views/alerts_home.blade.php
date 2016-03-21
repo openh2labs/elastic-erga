@@ -48,12 +48,14 @@ $b = $_SERVER['HTTP_HOST'];
                 @endif
             </td>
             <td class="text-center">
-                @if($alert->alert_type === "gt0" )
+                @if($alert->alert_type === "gt0" && $alert->number_of_hits > 0)
                     @if($alert->number_hit_alert_state === 1)
                         <span class="label label-danger"> {{ $alert->number_of_hits  }}</span>
                     @else
                         <span class="label label-success">{{ $alert->number_of_hits }}</span>
                     @endif
+                @else
+                    N/A
                 @endif
             </td>
             <td class="text-center">
@@ -64,7 +66,7 @@ $b = $_SERVER['HTTP_HOST'];
                         <span class="label label-success">OK</span>
                     @endif
 
-                    @else
+                @else
                     N/A
                 @endif
             </td>

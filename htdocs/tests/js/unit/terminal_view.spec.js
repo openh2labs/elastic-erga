@@ -176,4 +176,17 @@ describe('TerminalView ', () => {
         });
     });
 
+    describe('update', ()=>{
+        it('should render Events to ReactDOM');
+
+        describe('when polling', ()=>{
+           it('should scroll to the bottom of the list');
+        });
+    });
+
+    describe('get __list()', ()=>{
+        it('should return the list element');
+    });
+
+
 });

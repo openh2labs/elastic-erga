@@ -5,7 +5,7 @@ let chai = require('chai')
                 .use(require('chai-as-promised'))
                 .use(require('sinon-chai'));
 let expect = chai.expect;
-let should = chai.should();
+chai.should();
 let Events = require('./../../../resources/assets/js/models/Events');
 let HttpServiceMock = require('./../mocks/HttpServiceMock');
 
@@ -87,7 +87,7 @@ describe('ErgaTerminal', function() {
     });
 
     describe('loadTail()', ()=>{
-        let lastEventTimestamp
+        let lastEventTimestamp;
 
         beforeEach(()=>{
             lastEventTimestamp = new Date().getTime();
@@ -184,6 +184,4 @@ describe('ErgaTerminal', function() {
             expect(stubB).to.have.been.calledWith(fakeEventList);
         });
     });
-
-
 });

@@ -11,10 +11,10 @@ let Clock = require('./../../../resources/assets/js/clock/Clock');
 
 class WindowTimersMock {
     constructor(){
-        WindowTimersMock.callback = function(){console.log('default');}
+        WindowTimersMock.callback = function(){console.log('default');};
     }
 
-    setTimeout(cb, interval) {
+    setTimeout(cb) {
         WindowTimersMock.callback = cb;
     }
 
@@ -182,7 +182,7 @@ describe('Clock', ()=>{
                 let stub = sinon.stub(unit.delegates.tick, "notify");
                 unit.__tick();
                 wtm.flush();
-                expect(stub).to.have.been.calledTwice;
+                return expect(stub).to.have.been.calledTwice;
             });
         });
 

@@ -3,7 +3,7 @@
 @section('main')
     <h1>Terminal</h1>
     <div class="row">
-        <div class="col-md-12 terminal">
+        <div class="col-md-12">
             <meta type="js-module" name="terminal">
         </div>
     </div>

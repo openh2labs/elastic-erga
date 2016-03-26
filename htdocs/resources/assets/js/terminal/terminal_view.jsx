@@ -64,6 +64,20 @@ var Events = React.createClass({
     }
 });
 
+var Search = React.createClass({
+
+    render: function () {
+        return (
+            <form className="form-inline">
+                <div className="form-group">
+                    <input type="text" className="form-control" id="search" placeholder="search" />
+                </div>
+                <button type="submit" className="btn btn-default">Submit</button>
+            </form>
+        )
+    }
+});
+
 /**
  * elements prefixed with single underscore "_" are meant to be read only
  *
@@ -103,7 +117,15 @@ class TerminalView {
     }
 
     update(collection) {
-        ReactDOM.render(<Events model={collection} />, this.__$element);
+        ReactDOM.render(
+            <div className="">
+                <div className="terminal">
+                    <Events model={collection} />
+                </div>
+                <Search />
+            </div>
+            , this.__$element);
+
         if (this._config.polling) {
             this.__$list.scrollTop = this.__$list.scrollHeight;
         }
@@ -149,11 +171,11 @@ class TerminalView {
 
 }
 
-exports.create = function create( $element, model, config){
-    let dependecies = {
+exports.create = function create( $element, model, config) {
+    let dependencies = {
         clock : new ClockFactory({systemTimers:window}).create({name:"terminal", frequency:1})
     };
-    return new TerminalView(dependecies, $element, model, config );
+    return new TerminalView(dependencies, $element, model, config );
 };
 
 exports.__Class = TerminalView;

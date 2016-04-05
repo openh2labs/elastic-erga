@@ -1,1 +1,1 @@
-* * * * * www-data /usr/local/bin/php /var/www/laravel/artisan schedule:run
+* * * * * www-data /usr/local/bin/elastic-erga-schedule

@@ -50,7 +50,8 @@ RUN chown -R www-data:www-data /var/www/laravel/storage && \
     chown -R www-data:www-data /var/www/laravel/bootstrap/cache
 
 COPY docker-startup /usr/local/bin/
-COPY docker-crontab /etc/cron.d/elastic-erga
+COPY docker-cronjob /usr/local/bin/elastic-erga-schedule
+COPY docker-crontab /etc/cron.d/elastic-erga-schedule
 
 EXPOSE 80
 

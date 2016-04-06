@@ -50,7 +50,6 @@ class ElasticUtil {
     public function searchELK($index, $index_type, $host, $query, $fields, $search_type){
         try{
 
-           // echo"<pre>";print_r($index);print_r($host);die;
             //check if we need to search across indices
             if(is_array($index)){
                 $index = implode($index, ",");
@@ -295,7 +294,7 @@ class ElasticUtil {
 
     /**
      *
-     * returns an array of es_hosts
+     * returns an array of es_hosts from an indices array
      *
      * @param $indicesArr
      * @return array
@@ -307,6 +306,18 @@ class ElasticUtil {
             $result[] = $value->es_host;
         }
         return $result;
+    }
+
+    /**
+     *
+     * returns an array of all hosts
+     *
+     * @return array
+     */
+    public function getESHosts(){
+        $ar = new AlertRepository();
+        $indices = $this->getDateValuesForArray($this->getValidIndices($ar->getAllIndices()));
+        return $this->getAllHosts($indices);
     }
 
     /**

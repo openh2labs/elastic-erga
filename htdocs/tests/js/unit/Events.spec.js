@@ -40,6 +40,22 @@ describe('ErgaTerminal', function() {
         });
     });
 
+    describe('__request(params:{})', () => {
+        describe('http request Success', () => {
+            describe('failures', ()=> {
+                it('it should reject if the response does not contain hits (Events) key', ()=> {
+                    expect(unit.__request).to.not.throw();
+                    let fakeRawData = {};
+                    let promise = unit.__request();
+
+                    httpServiceMock.calls[0].resolve(fakeRawData);
+
+                    return promise.should.be.rejected;
+                });
+            });
+        });
+    });
+
     describe('load( params, (data)=>{} ).future:[Event]', () => {
 
         it('Should make an ajax call with params', () => {
@@ -52,7 +68,7 @@ describe('ErgaTerminal', function() {
             describe('success', () => {
                 it('Should return promise that resolves to [Event]', () => {
                     let fakeRawData = {
-                        "events": [
+                        "hits": [
                             {"id":"item1", "message":"moooooo"},
                             {"id":"item2", "message":"moooooo I said"}
                         ],
@@ -60,7 +76,7 @@ describe('ErgaTerminal', function() {
                     };
 
                     let fakeParams = {"fake":"params"};
-                    let fakeResult = fakeRawData.events.map((rawEvent) => {
+                    let fakeResult = fakeRawData.hits.map((rawEvent) => {
                         return new Event(rawEvent);
                     });
 
@@ -95,16 +111,16 @@ describe('ErgaTerminal', function() {
         });
 
         it('should make a load request with tail parameters', ()=>{
-            unit.request = sinon.spy();
+            unit.__request = sinon.spy();
             unit.loadTail();
-            expect(unit.request).to.have.been.calledWith({event_min:lastEventTimestamp});
+            expect(unit.__request).to.have.been.calledWith({event_min:lastEventTimestamp});
         });
 
         it('should call an empty load() if no item in this.items', ()=>{
-            unit.request = sinon.spy();
+            unit.__request = sinon.spy();
             unit.items = [];
             unit.loadTail();
-            expect(unit.request).to.have.been.calledWith({});
+            expect(unit.__request).to.have.been.calledWith({});
         });
 
         describe('failure', ()=>{
@@ -123,7 +139,7 @@ describe('ErgaTerminal', function() {
                 let items = [new Event({id:"1",message:"a"}), new Event({id:"2",message:"b"})];
                 let fakeNewItems = [new Event({id:"3",message:"c"})];
                 let fakeResponse = {
-                    "events": [
+                    "hits": [
                         {"id":"3", "message":"c"}
                     ],
                     "meta": {"fake" : "meta"}

@@ -57,9 +57,11 @@ var Events = React.createClass({
             );
         });
         return (
-            <ul className="event-list">
-                {list}
-            </ul>
+            <div className="event-list-container">
+                <ul className="event-list">
+                    {list}
+                </ul>
+            </div>
         );
     }
 });
@@ -86,7 +88,7 @@ var Search = React.createClass({
  */
 class TerminalView {
     constructor (d, $element, model, config) {
-
+        console.log('------> ',config)
         this.__model = model;
         this.__$element = $element;
 
@@ -127,12 +129,12 @@ class TerminalView {
             , this.__$element);
 
         if (this._config.polling) {
-            this.__$list.scrollTop = this.__$list.scrollHeight;
+            this.__$container.scrollTop = this.__$container.scrollHeight;
         }
     }
 
-    get __$list()  {
-        return this.__$element.getElementsByClassName("event-list")[0];
+    get __$container()  {
+        return this.__$element.getElementsByClassName("event-list-container")[0];
     }
 
     __configure(config) {

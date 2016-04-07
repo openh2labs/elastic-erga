@@ -18,7 +18,8 @@ class TerminalController extends Controller
     public function index()
     {
         $e = new ElasticUtil;
-        $data['hosts'] = $e->getESHosts();
+        $data['data']['hosts'] = $e->getESHosts();
+        $data['data']['config']['endpoint'] = '/terminal/show';
         return view('terminal.index', $data);
     }
 

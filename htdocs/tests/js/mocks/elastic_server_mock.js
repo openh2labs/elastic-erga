@@ -1,5 +1,10 @@
 
-var data = [require('./response_0'), require('./response_1'), require('./response_2')];
+var data = [
+    //require('./response_0')
+    //,
+    require('./response_1')
+    //, require('./response_2')
+];
 
 
 class EventsHandler {

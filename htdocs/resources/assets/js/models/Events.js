@@ -18,14 +18,14 @@ class Events extends Subscribable {
             Event   : (d && d.Event) ? d.Event : EventModel
         };
 
-        this.serviceUrl = "/elastic_fake";
+        this.__serviceUrl = "/elastic_fake";
         this.items = [];
     }
 
 
     request(params = {}) {
         return new Promise((resolve, reject) => {
-            this.d.http.get(this.serviceUrl, params)
+            this.d.http.get(this.__serviceUrl, params)
                 .done((result)=> {
 
                     let events = result.events.map((events) => {
@@ -67,6 +67,10 @@ class Events extends Subscribable {
                     reject(error);
                 });
         });
+    }
+
+    set serviceUrl(newUrl) {
+        this.__serviceUrl = newUrl;
     }
 
     _update(events) {

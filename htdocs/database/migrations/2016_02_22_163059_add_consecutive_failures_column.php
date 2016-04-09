@@ -15,7 +15,7 @@ class AddConsecutiveFailuresColumn extends Migration
         //
         Schema::table('alerts', function ($table) {
             $table->integer('consecutive_failures')->default(2); //no of consecutive failures before alerting, defaults to 2
-            $table->integer('consecutive_failures_count')->defaul(0); //current total of consecutive failures
+            $table->integer('consecutive_failures_count')->defaul(0); //current total of consecutive failures for absolute hit
         });
     }
 

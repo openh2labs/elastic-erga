@@ -73,8 +73,8 @@ var Events = React.createClass({
 class TerminalView {
     constructor (d, $element, model, config) {
 
-        this.__$element = $element;
         this.__model = model;
+        this.__$element = $element;
 
         /** never change config manually use __configure instead */
         this._config = {
@@ -88,15 +88,14 @@ class TerminalView {
         this._clock.onTick(()=>{
           this.__onTick();
         });
-        if (this._config.polling) {
 
+        if (this._config.polling) {
             this._clock.start();
         }
-
     }
 
     load() {
-        this.__model.load().then((collection) => {
+        this.__model.loadTail().then((collection) => {
             this.update(collection);
         }).catch((error) => {
             console.log('data Failed to Load', error);
@@ -105,6 +104,13 @@ class TerminalView {
 
     update(collection) {
         ReactDOM.render(<Events model={collection} />, this.__$element);
+        if (this._config.polling) {
+            this.__$list.scrollTop = this.__$list.scrollHeight;
+        }
+    }
+
+    get __$list()  {
+        return this.__$element.getElementsByClassName("event-list")[0];
     }
 
     __configure(config) {
@@ -146,8 +152,8 @@ class TerminalView {
 exports.create = function create( $element, model, config){
     let dependecies = {
         clock : new ClockFactory({systemTimers:window}).create({name:"terminal", frequency:1})
-    }
+    };
     return new TerminalView(dependecies, $element, model, config );
-}
+};
 
 exports.__Class = TerminalView;

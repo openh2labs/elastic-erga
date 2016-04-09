@@ -22,20 +22,48 @@ class Events extends Subscribable {
         this.items = [];
     }
 
-    load(params) {
+
+    request(params = {}) {
         return new Promise((resolve, reject) => {
             this.d.http.get(this.serviceUrl, params)
                 .done((result)=> {
-                    console.log(result);
 
                     let events = result.events.map((events) => {
                         return new this.d.Event(events);
                     });
 
                     resolve(events);
-                    this._update(events);
                 })
                 .fail((error) => {
+                    reject(error);
+                });
+        });
+    }
+
+    load(params) {
+        return new Promise((resolve, reject) => {
+            this.request(params)
+                .then((events)=> {
+                    resolve(this._update(events));
+                })
+                .catch((error) => {
+                    reject(error);
+                });
+        });
+    }
+
+    loadTail() {
+        return new Promise((resolve, reject) => {
+            let parameters = {};
+            if (this.items.length) {
+                parameters = {event_min: this.items[this.items.length-1].timestamp};
+            }
+
+            this.request(parameters)
+                .then((newEvents) => {
+                    resolve(this._update(this.items.concat(newEvents)));
+                })
+                .catch((error)=>{
                     reject(error);
                 });
         });
@@ -44,6 +72,7 @@ class Events extends Subscribable {
     _update(events) {
         this.items = events;
         this._onChanged(this.items);
+        return this.items;
     }
 
     _onChanged() {

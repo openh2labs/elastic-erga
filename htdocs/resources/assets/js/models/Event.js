@@ -47,7 +47,7 @@ class Event {
         this.severity       = rawData.severity.toLowerCase();
         this.facility       = rawData.facility;
         this.html_class     = rawData.html_class;
-        this.timestamp      = rawData.received_at
+        this.timestamp      = rawData.received_at;
     }
 }
 

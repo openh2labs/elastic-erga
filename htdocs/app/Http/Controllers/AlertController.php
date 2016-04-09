@@ -241,19 +241,29 @@ class AlertController  extends BaseController {
         $alert->save();
     }
 
+    /**
+     *
+     * checks for equal zero alert
+     *
+     * @param $alert
+     * @param $hits
+     * @return mixed
+     */
     private function checkE0($alert, $hits){
         $librato = new LibratoUtil;
         if($alert->alert_type == 'e0'){
-            if($hits == 0 ){
+            if($hits == 0){
                 $alert->consecutive_failures_count_e0 = $alert->consecutive_failures_count_e0 + 1;
                 if($alert->consecutive_failures_count_e0 >= $alert->consecutive_failures_e0) { //check if the consecutive failure threshold has been met
                     $this->alert_run->total_alerts_equal_zero = $this->alert_run->total_alerts_equal_zero + 1;
                     $alert->zero_hit_alert_state = true;
-                    $this->sendMail($alert, $alert->description." has $hits hits");
-                    $librato->pushAnnotation($alert->librato_id, "zero-hits-alert-".$alert->description, "The number of hits for the search you are monitoring is zero", "http://mytestlink.local", time(), time(), $alert->description);
+                    if($alert->alert_enabled_e0 == true){//only send  notification if enabled
+                        $this->sendMail($alert, $alert->description." has $hits hits");
+                        $librato->pushAnnotation($alert->librato_id, "zero-hits-alert-".$alert->description, "The number of hits for the search you are monitoring is zero", "http://mytestlink.local", time(), time(), $alert->description);
+                    }
                     echo "<br>zero hits alert threshold met";
                 }else{
-                    echo "<br>consecutive threshold count not me for equals zero";
+                    echo "<br>consecutive threshold count not me for equal zero";
                 }
             }else{
                 $alert->zero_hit_alert_state = false;
@@ -286,9 +296,11 @@ class AlertController  extends BaseController {
                 if($alert->consecutive_failures_count_pct >= $alert->consecutive_failures_pct) { //check if the consecutive failure threshold has been met
                     $this->alert_run->total_alerts_pct = $this->alert_run->total_alerts_pct + 1;
                     $alert->pct_alert_state = true;
-                    $this->sendMail($alert, $alert->description." exceeded ".$alert->pct_of_total_threshold."%.");
-                    //add librato annotation
-                    $librato->pushAnnotation($alert->librato_id, "percentage-hit-alert-".$alert->description, "The percentage for the search you are monitoring exceeded your threshold", "http://mytestlink.local", time(), time(), $alert->description);
+                    if($alert->alert_enabled_gt0_pct == true) {//only send  notification if enabled
+                        $this->sendMail($alert, $alert->description." exceeded ".$alert->pct_of_total_threshold."%.");
+                        //add librato annotation
+                        $librato->pushAnnotation($alert->librato_id, "percentage-hit-alert-".$alert->description, "The percentage for the search you are monitoring exceeded your threshold", "http://mytestlink.local", time(), time(), $alert->description);
+                    }
                     echo "<br>gt0 percentage threshold met";
                 }else{
                     echo "<br>consecutive threshold count not met for gt0 percetnage";
@@ -320,10 +332,12 @@ class AlertController  extends BaseController {
                 if($alert->consecutive_failures_count >= $alert->consecutive_failures){ //check if the consecutive failure threshold has been met
                     $this->alert_run->total_alerts_absolute = $this->alert_run->total_alerts_absolute + 1;
                     $alert->number_hit_alert_state = true;
-                    //send email
-                    $this->sendMail($alert, $alert->description." exceeded ".$alert->number_of_hits." hits.");
-                    //add librato annotation
-                    $librato->pushAnnotation($alert->librato_id, "absolute-hit-alert-".$alert->description, "The number of hits for the search you are monitoring exceeded your threshold", "http://mytestlink.local", time(), time(), $alert->description);
+                    if($alert->alert_enabled_gt0 == true) {//only send  notification if enabled
+                        ////send email
+                        $this->sendMail($alert, $alert->description." exceeded ".$alert->number_of_hits." hits.");
+                        //add librato annotation
+                        $librato->pushAnnotation($alert->librato_id, "absolute-hit-alert-".$alert->description, "The number of hits for the search you are monitoring exceeded your threshold", "http://mytestlink.local", time(), time(), $alert->description);
+                    }
                     echo "<br>gt0 hit threshold met";
                 }else{
                     echo "<br>consecutive threshold count not met for gt0";

@@ -20,7 +20,6 @@ class CreateAdditionalConsecutiveFailures extends Migration
 
             $table->integer('consecutive_failures_e0')->default(2); //no of consecutive failures before alerting, defaults to 2, for zero based based
             $table->integer('consecutive_failures_count_e0')->defaul(0); //current total of consecutive failures for zero based
-
         });
     }
 
@@ -38,7 +37,6 @@ class CreateAdditionalConsecutiveFailures extends Migration
 
             $table->dropColumn('consecutive_failures_e0');
             $table->dropColumn('consecutive_failures_count_e0');
-
         });
     }
 }

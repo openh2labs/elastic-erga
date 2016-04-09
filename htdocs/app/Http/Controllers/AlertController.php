@@ -254,8 +254,8 @@ class AlertController  extends BaseController {
                 $alert_pct=0;
             }
             if($alert->pct_of_total_threshold > 0 && $alert->pct_of_total_threshold < $alert_pct ){
-                $alert->consecutive_failures_count = $alert->consecutive_failures_count + 1;
-                if($alert->consecutive_failures_count >= $alert->consecutive_failures) { //check if the consecutive failure threshold has been met
+                $alert->consecutive_failures_count_pct = $alert->consecutive_failures_count_pct + 1;
+                if($alert->consecutive_failures_count_pct >= $alert->consecutive_failures_pct) { //check if the consecutive failure threshold has been met
                     $this->alert_run->total_alerts_pct = $this->alert_run->total_alerts_pct + 1;
                     $alert->pct_alert_state = true;
                     $this->sendMail($alert, $alert->description." exceeded ".$alert->pct_of_total_threshold."%.");
@@ -267,15 +267,15 @@ class AlertController  extends BaseController {
                 }
             }else{
                 $alert->pct_alert_state = false;
-                $alert->consecutive_failures_count = 0;
+                $alert->consecutive_failures_count_pct = 0;
             }
         }
 
         //alert hits equal zero
         if($alert->alert_type == 'e0'){
             if($hits == 0 ){
-                $alert->consecutive_failures_count = $alert->consecutive_failures_count + 1;
-                if($alert->consecutive_failures_count >= $alert->consecutive_failures) { //check if the consecutive failure threshold has been met
+                $alert->consecutive_failures_count_e0 = $alert->consecutive_failures_count_e0 + 1;
+                if($alert->consecutive_failures_count_e0 >= $alert->consecutive_failures_e0) { //check if the consecutive failure threshold has been met
                     $this->alert_run->total_alerts_equal_zero = $this->alert_run->total_alerts_equal_zero + 1;
                     $alert->zero_hit_alert_state = true;
                     $this->sendMail($alert, $alert->description." has $hits hits");
@@ -286,7 +286,7 @@ class AlertController  extends BaseController {
                 }
             }else{
                 $alert->zero_hit_alert_state = false;
-                $alert->consecutive_failures_count = 0;
+                $alert->consecutive_failures_count_e0 = 0;
             }
         }
 

@@ -12,6 +12,7 @@ RUN apt-get update && \
     libmcrypt-dev \
     libpng12-dev \
     libbz2-dev \
+    libv8-dev \
     php-pear \
     cron \
     curl \
@@ -24,6 +25,7 @@ RUN apt-get update && \
 
 # Install Extensions
 RUN docker-php-ext-install mcrypt zip bz2 mbstring pdo_mysql
+RUN pecl install v8js-0.1.3 && docker-php-ext-enable v8js
 
 # Install composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
@@ -38,6 +40,7 @@ RUN rmdir /var/www/html && ln -s /var/www/laravel/public /var/www/html
 
 WORKDIR /var/www/laravel/
 
+RUN composer update --no-scripts
 RUN composer install
 
 RUN npm install

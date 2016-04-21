@@ -40,7 +40,6 @@ RUN rmdir /var/www/html && ln -s /var/www/laravel/public /var/www/html
 
 WORKDIR /var/www/laravel/
 
-RUN composer update --no-scripts
 RUN composer install
 
 RUN npm install

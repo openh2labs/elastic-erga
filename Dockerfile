@@ -1,7 +1,7 @@
 FROM php:5.6-apache
 
 # Install nodejs repo
-RUN curl -sL https://deb.nodesource.com/setup_5.x | bash -
+RUN curl -sL https://deb.nodesource.com/setup_6.x | bash -
 
 # Install Packages
 RUN apt-get update && \

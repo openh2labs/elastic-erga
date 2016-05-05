@@ -90,7 +90,23 @@
     </p>
     <p>
         {!! Form::label('consecutive_failures', 'consecutive_failures') !!}
-        {!! Form::input('consecutive_failures', 'consecutive_failures', null, ['size'=>'5']) !!}
+        {!! Form::input('consecutive_failures', 'consecutive_failures', null, ['size'=>'5']) !!} number of consecutive failures before hit alerts are sent
+    </p>
+    <p>
+        {!! Form::label('consecutive_failures_pct', 'consecutive_failures_pct') !!}
+        {!! Form::input('consecutive_failures_pct', 'consecutive_failures_pct', null, ['size'=>'5']) !!} number of consecutive failures before pct alerts are sent
+    </p>
+    <p>
+        {!! Form::label('alert_enabled_gt0', 'alert_enabled_gt0') !!}
+        {!! Form::input('alert_enabled_gt0', 'alert_enabled_gt0', null, ['size'=>'5']) !!} hits greater than zero alerts (1=enabled, 0=disabled)
+    </p>
+    <p>
+        {!! Form::label('alert_enabled_gt0_pct', 'alert_enabled_gt0_pct') !!}
+        {!! Form::input('alert_enabled_gt0_pct', 'alert_enabled_gt0_pct', null, ['size'=>'5']) !!} percentage greater than zero alerts (1=enabled, 0=disabled)
+    </p>
+    <p>
+        {!! Form::label('alert_enabled_e0', 'alert_enabled_e0') !!}
+        {!! Form::input('alert_enabled_e0', 'alert_enabled_e0', null, ['size'=>'5']) !!} zero hit alerts (1=enabled, 0=disabled)
     </p>
 
     @if ($type === "create")

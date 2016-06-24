@@ -18,55 +18,65 @@
 *			}
 */
 
-var manefest = {}, 
-	file = 'manifest.json',
+(function(){
+
+	var manefest = {}, 
+	file = MAIFEST_FILE_PATH || undefined,
 	selectors = ['.','#'];
 
-function loadJSON(callback) {   
+	function loadJSON(callback) {   
 
-    var xobj = new XMLHttpRequest();
-        xobj.overrideMimeType("application/json");
-    xobj.open('GET', file, true);
-    xobj.onreadystatechange = function () {
-          if (xobj.readyState == 4 && xobj.status == "200") {
-            callback(xobj.responseText);
-          }
-    };
-    xobj.send(null);  
- }
+	    var xobj = new XMLHttpRequest();
+	        xobj.overrideMimeType("application/json");
+	    xobj.open('GET', file, true);
+	    xobj.onreadystatechange = function () {
+	          if (xobj.readyState == 4 && xobj.status == "200") {
+	            callback(JSON.parse(xobj.responseText));
+	          }
+	    };
+	    xobj.send(null);  
+	 }
 
-function loadScript(url){
-    var script = document.createElement("script")
-    script.type = "text/javascript";
-    script.src = url;
-    document.getElementsByTagName("body")[0].appendChild(script);
-}
-
-function resolveComponents(json){
-	manifest = json;
-	var obj = manifest[location.pathname.substring(1)];
-
-	if (typeof obj != 'undefined') {
-		obj.forEach(function(component) {
-			
-			if (!document.querySelector(component.appendTo)) {
-
-				var newElement = document.createElement('div');
-
-				switch(component.appendTo.substring(1)){
-					case '.':
-						newElement.className = component.appendTo.slice(1);
-						break;
-					case '#':
-						newElement.id = component.appendTo.slice(1);
-				}
-				
-				document.getElementsByTagName('body')[0].appendChild(newElement);
-			} 
-
-			loadScript(component.bundle);
-		});
+	function loadScript(url){
+	    var script = document.createElement("script")
+	    script.type = "text/javascript";
+	    script.src = url;
+	    document.getElementsByTagName("body")[0].appendChild(script);
 	}
-}
 
-loadJSON(resolveComponents);
+	function resolveComponents(json){
+		manifest = json;
+		var obj = manifest[location.pathname.substring(1)];
+
+		if (typeof obj != 'undefined') {
+			obj.forEach(function(component) {
+				
+				if (!document.querySelector(component.appendTo)) {
+
+					var newElement = document.createElement('div');
+
+					switch(component.appendTo.substring(1)){
+						case '.':
+							newElement.className = component.appendTo.slice(1);
+							break;
+						case '#':
+							newElement.id = component.appendTo.slice(1);
+					}
+					
+					document.getElementsByTagName('body')[0].appendChild(newElement);
+				} 
+
+				loadScript(component.bundle);
+			});
+		}
+	}
+
+	try {
+		loadJSON(resolveComponents);	
+	}
+	catch(e){
+		console.error('manefest file may not exist. ', e);
+	}
+	
+})();
+

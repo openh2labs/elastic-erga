@@ -1,0 +1,9 @@
+{
+	"terminalv2" : [
+		{ "bundle": "my-component-1/build/my-component-1.js", "appendTo": ".div1"},
+		{ "bundle": "my-component-2/build/my-component-2.js", "appendTo": ".div2"}
+	],
+	"terminalv3" : [
+		{ "bundle": "my-component-2/build/my-component-2.js", "appendTo": ".div3"}
+	]
+}

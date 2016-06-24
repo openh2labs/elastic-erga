@@ -26,6 +26,8 @@ Route::get('alertrun/systemlog', 'SystemLogController@home');
 
 Route::get('terminal', 'TerminalController@index');
 
+Route::get('terminalv2', 'TerminalV2Controller@index');
+
 Route::get('terminal/show', 'TerminalController@show');
 
 

@@ -1,0 +1,32 @@
+version: '2'
+services:
+  elastic-erga:
+    build:
+      context: ../../
+      dockerfile: devops/docker_reference/Dockerfile
+    ports:
+     - "10080:80"
+    links:
+     - mysql
+    environment:
+     - APP_ENV=local
+     - APP_DEBUG=true
+     - DB_HOST=mysql
+     - DB_DATABASE=elastic_erga
+     - DB_USERNAME=elastic_erga
+     - DB_PASSWORD=elastic_erga
+
+  mysql:
+    image: mysql
+    ports:
+     - "13306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=unsafe-local-dev-only
+      - MYSQL_USER=elastic_erga
+      - MYSQL_PASSWORD=elastic_erga
+      - MYSQL_DATABASE=elastic_erga
+
+  elasticsearch:
+    image: elasticsearch
+    ports:
+      - "19200:9200"

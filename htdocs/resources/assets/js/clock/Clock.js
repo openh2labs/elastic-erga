@@ -6,15 +6,15 @@ class Clock {
     constructor({frequency, systemTimers} = {}) {
 
         if (!frequency) {
-            throw RangeError(`Invalid argument range for parameter frequency! Got ${frequency}`);
+            throw new RangeError(`Invalid argument range for parameter frequency! Got ${frequency}`);
         }
 
         if (typeof frequency !== 'number') {
-            throw TypeError(`Invalid argument type for parameter frequency! Got ${typeof frequency}`);
+            throw new TypeError(`Invalid argument type for parameter frequency! Got ${typeof frequency}`);
         }
 
         if (frequency < 0) {
-            throw RangeError(`Invalid argument range for parameter frequency! Got ${frequency}`);
+            throw new RangeError(`Invalid argument range for parameter frequency! Got ${frequency}`);
         }
 
         this.systemTimers = systemTimers;

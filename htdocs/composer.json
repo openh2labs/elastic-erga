@@ -52,18 +52,7 @@
     },
     "config": {
         "preferred-install": "dist"
-    },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url" : "https://github.com/fzaninotto/Faker.git"
-        },
-        {
-            "type": "composer",
-            "url": "https://packagist.org"
-        },
-        { "packagist": false }
-    ]
+    }
 
 
 }

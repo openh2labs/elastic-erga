@@ -17,7 +17,9 @@ ADD devops/docker/app/crontab /etc/cron.d/elastic-erga-schedule
 
 # add nodejs repository, the script will run apt-get update
 # install packages
+# cron - runs elastic-erga-schedule
 # git - for pulling composer dependencies
+# nodejs - installs node and npm for dependencies in package.json
 # zlib1g-dev - to build php zip extension, which is required by composer
 RUN curl -sL https://deb.nodesource.com/setup_6.x | bash - && \
     apt-get install -y \
@@ -26,12 +28,13 @@ RUN curl -sL https://deb.nodesource.com/setup_6.x | bash - && \
     nodejs \
     zlib1g-dev \
     && rm -r /var/lib/apt/lists/*
-# clear apt cache
+# remove downloaded packages from disk
 
 # enable rewrite rules for laravel
 RUN a2enmod rewrite
 
 # install php extensions
+# pdo_mysql - php mysql driver
 # zip - composer dependency
 RUN docker-php-ext-install \
     pdo_mysql \

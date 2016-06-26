@@ -1,5 +1,4 @@
 /.env
-/composer.lock
 /vendor/*
 /public/css/*
 /public/js/*

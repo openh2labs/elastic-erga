@@ -1,5 +1,8 @@
+version '2'
 elastic-erga:
-  build: .
+  build:
+    context: ../../
+    dockerfile: devops/docker/reference/Dockerfile
   ports:
    - "10080:80"
   links:

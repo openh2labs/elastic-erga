@@ -1,3 +1,5 @@
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/openh2labs/elastic-erga/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/openh2labs/elastic-erga/?branch=master)
+
 # elastic-erga
 A toolkit for elastic search. 
 

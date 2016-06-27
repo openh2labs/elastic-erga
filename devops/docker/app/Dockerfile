@@ -1,6 +1,9 @@
 # official latest php container with apache
 FROM php:apache
 
+# pretty
+ENV TERM="xterm"
+
 # add nodejs repository, the script will run apt-get update
 # install packages
 # cron - runs elastic-erga-schedule
@@ -25,11 +28,6 @@ RUN a2enmod rewrite
 RUN docker-php-ext-install \
     pdo_mysql \
     zip
-
-# necessary to satisfy talyssonoc/react-laravel composer dependency
-ADD devops/docker/app/v8/v8.sh /usr/local/bin/v8.sh
-RUN v8.sh
-# TODO: fix me, see if it is possible to deprecate v8 dependency
 
 # install composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer

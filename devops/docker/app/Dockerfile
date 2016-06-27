@@ -1,19 +1,8 @@
 # official latest php container with apache
 FROM php:apache
 
-# copy source code to container
-# on dev a volume is mounted on top of this, which means bootstrap needs to be run again
-COPY htdocs /var/www/elastic-erga
-
-# give write access to webserver
-RUN chown -R www-data:www-data /var/www/elastic-erga/storage
-RUN chown -R www-data:www-data /var/www/elastic-erga/bootstrap/cache # why is this needed?
-
-# set up project webroot
-RUN rmdir /var/www/html && ln -s /var/www/elastic-erga/public /var/www/html
-
-# set up cron
-ADD devops/docker/app/crontab /etc/cron.d/elastic-erga-schedule
+# pretty
+ENV TERM="xterm"
 
 # add nodejs repository, the script will run apt-get update
 # install packages
@@ -40,11 +29,6 @@ RUN docker-php-ext-install \
     pdo_mysql \
     zip
 
-# necessary to satisfy talyssonoc/react-laravel composer dependency
-ADD devops/docker/app/v8/v8.sh /usr/local/bin/v8.sh
-RUN v8.sh
-# TODO: fix me, see if it is possible to deprecate v8 dependency
-
 # install composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
@@ -53,6 +37,20 @@ RUN composer global require "hirak/prestissimo:^0.3"
 
 # install gulp
 RUN npm install --global gulp-cli
+
+# copy source code to container
+# on dev a volume is mounted on top of this, which means bootstrap needs to be run again
+COPY htdocs /var/www/elastic-erga
+
+# give write access to webserver
+RUN chown -R www-data:www-data /var/www/elastic-erga/storage
+RUN chown -R www-data:www-data /var/www/elastic-erga/bootstrap/cache # why is this needed?
+
+# set up project webroot
+RUN rmdir /var/www/html && ln -s /var/www/elastic-erga/public /var/www/html
+
+# set up cron
+ADD devops/docker/app/crontab /etc/cron.d/elastic-erga-schedule
 
 # import and run bootstrap script
 ADD devops/docker/app/bootstrap.sh /usr/local/bin/bootstrap.sh

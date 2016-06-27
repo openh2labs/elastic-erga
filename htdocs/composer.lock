@@ -637,6 +637,7 @@
                     "email": "taylorotwell@gmail.com"
                 }
             ],
+            "abandoned": "laravelcollective/html",
             "time": "2015-01-01 16:31:18"
         },
         {
@@ -1535,12 +1536,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "8af97897118d0291e93d3026d444a48a0dc2abd6"
+                "reference": "b7d2232cf5a1a210098173845c9c2ea63f525c7e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/8af97897118d0291e93d3026d444a48a0dc2abd6",
-                "reference": "8af97897118d0291e93d3026d444a48a0dc2abd6",
+                "url": "https://api.github.com/repos/symfony/console/zipball/b7d2232cf5a1a210098173845c9c2ea63f525c7e",
+                "reference": "b7d2232cf5a1a210098173845c9c2ea63f525c7e",
                 "shasum": ""
             },
             "require": {
@@ -1586,7 +1587,7 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2016-06-24 05:18:49"
+            "time": "2016-06-25 16:30:09"
         },
         {
             "name": "symfony/css-selector",

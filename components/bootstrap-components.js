@@ -22,7 +22,8 @@
 
 	var manefest = {}, 
 	file = MAIFEST_FILE_PATH || undefined,
-	selectors = ['.','#'];
+	selectors = ['.','#'],
+	basePath = 'build/js/components/';
 
 	function loadJSON(callback) {   
 
@@ -40,22 +41,22 @@
 	function loadScript(url){
 	    var script = document.createElement("script")
 	    script.type = "text/javascript";
-	    script.src = url;
+	    script.src = [basePath, url, '?cachebuster=', new Date().getTime()].join('');
 	    document.getElementsByTagName("body")[0].appendChild(script);
 	}
 
 	function resolveComponents(json){
 		manifest = json;
 		var obj = manifest[location.pathname.substring(1)];
-
 		if (typeof obj != 'undefined') {
+
 			obj.forEach(function(component) {
 				
 				if (!document.querySelector(component.appendTo)) {
 
 					var newElement = document.createElement('div');
 
-					switch(component.appendTo.substring(1)){
+					switch(component.appendTo.substring(0, 1)){
 						case '.':
 							newElement.className = component.appendTo.slice(1);
 							break;
@@ -75,7 +76,7 @@
 		loadJSON(resolveComponents);	
 	}
 	catch(e){
-		console.error('manefest file may not exist. ', e);
+		console.error('manefist file may not exist. ', e);
 	}
 	
 })();

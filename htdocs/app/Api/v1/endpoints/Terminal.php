@@ -3,6 +3,7 @@
 namespace App\Api\v1\Endpoints;
 
 
+use App\Api\v1\Components\Mock;
 use Illuminate\Http\Request;
 
 class Terminal extends BaseEndpoint
@@ -14,7 +15,8 @@ class Terminal extends BaseEndpoint
      */
     public function get(Request $request, $q='')
     {
-        $ret = ['key' => 'val'];
+        $ret = (new Mock())->generateMockData();
+
         return response()->json($ret);
     }
 }

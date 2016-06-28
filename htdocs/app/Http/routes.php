@@ -77,3 +77,8 @@ Route::get('typeahead/listcolumn/{column}/{table}', 'TypeAhead@listcolumn');
  * Search Routes
  */
 Route::get('/search', 'SearchController@elastic');
+
+/**
+ * Api routes
+ */
+Route::get('/api/v1/terminal', 'ApiV1Controller@terminalGet');

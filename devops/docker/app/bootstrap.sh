@@ -11,8 +11,8 @@ cd /var/www/elastic-erga
 # install composer packages
 composer install -o
 
-# run gulp tasks
-gulp javascript
-
 # install npm packages
 npm install
+
+# run gulp tasks
+gulp javascript

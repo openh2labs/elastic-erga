@@ -51,7 +51,6 @@
 			var css = document.createElement('link')
 		    css.rel = 'stylesheet';
 		    css.href = [basePath, obj.basePath, obj.url, '?csscachebuster=', new Date().getTime()].join('');
-		    console.log(css.href);
 		    document.getElementsByTagName('head')[0].appendChild(css);
 		} 
 

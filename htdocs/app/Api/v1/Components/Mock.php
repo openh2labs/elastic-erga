@@ -38,9 +38,9 @@ class Mock
     /**
      * Loads mock data from file
      * @param $filename
-     * @return mixed
+     * @return array
      */
-    public function loadMockData($filename)
+    protected function loadMockData($filename)
     {
         $data = file_get_contents($filename);
         $json = json_decode($data);

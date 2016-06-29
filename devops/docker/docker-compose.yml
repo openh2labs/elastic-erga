@@ -11,6 +11,7 @@ services:
       - elasticsearch
     volumes:
       - ../../htdocs:/var/www/elastic-erga
+      - ../../components:/var/www/html/build/js/components
     environment:
       - APP_ENV=local
       - APP_DEBUG=true

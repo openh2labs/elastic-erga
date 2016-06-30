@@ -49,15 +49,40 @@ class Mock
 
     /**
      * Generates random data set
+     * @param string $q
      * @return mixed
      */
-    public function generateMockData()
+    public function generateMockData($q)
     {
         $files = $this->getMockDataFileNames();
         $file = $files[array_rand($files)];
         $data = $this->loadMockData($file);
 
-        return $data;
+        return $this->filter($data, $q);
     }
+
+    /**
+     * Simple O(n) filter
+     * @param array $data
+     * @param string $q
+     * @return array
+     */
+    public function filter(array $data, $q)
+    {
+        if (empty($q)) {
+            return $data;
+        }
+
+        $ret = [];
+
+        foreach ($data as $line) {
+            if (stripos($line->event_message, $q) !== false) {
+                $ret[] = $line;
+            }
+        }
+
+        return $ret;
+    }
+
 
 }

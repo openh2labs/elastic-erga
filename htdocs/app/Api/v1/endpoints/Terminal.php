@@ -10,12 +10,13 @@ class Terminal extends BaseEndpoint
 {
     /**
      * @param Request $request
-     * @param string $q
      * @return \Illuminate\Http\JsonResponse
      */
-    public function get(Request $request, $q='')
+    public function get(Request $request)
     {
-        $ret = (new Mock())->generateMockData();
+        $q = $request->input('q');
+
+        $ret = (new Mock())->generateMockData($q);
 
         return response()->json($ret);
     }

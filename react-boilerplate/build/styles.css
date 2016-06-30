@@ -1,0 +1,32 @@
+@import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,200,700);body {
+  margin: 0; }
+  body .container > * {
+    /* width: 1024px;
+		margin: 0 auto; */ }
+  body .clearfix:after {
+    content: "";
+    display: table;
+    clear: both; }
+  body .centre {
+    text-align: center; }
+  body .right {
+    text-align: right; }
+  body .left {
+    text-align: left; }
+  body .absolute {
+    position: absolute; }
+  body .relative {
+    position: relative; }
+  body .pad {
+    padding: 1em; }
+  body .mgn {
+    margin: 1em; }
+  body .absoluteHorizonalCentre {
+    position: absolute;
+    left: 50%; }
+    body .absoluteHorizonalCentre > * {
+      position: relative;
+      left: -50%; }
+  body .index-priority {
+    position: relative;
+    z-index: 1; }

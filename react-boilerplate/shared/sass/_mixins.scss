@@ -1,0 +1,30 @@
+@mixin primary-cta {
+	border-radius: .2em;
+	background: linear-gradient(180deg, rgba(71,157,210,100), rgba(0,108,181,100));
+	padding: .2em .5em .4em;
+	color: $white;
+} 
+
+@mixin when-screen-is ($of-type) {
+
+    @if $of-type == mobile {
+        @media only screen and (max-width: 480px) { @content; }
+    }
+
+    @else if $of-type == portable {
+        @media only screen and (min-width: 481px) and (max-width: 800px) { @content; }
+    }
+
+    @else if $of-type == desk {
+        @media only screen and (min-width: 801px) { @content; }
+    }
+
+    @else if $of-type == not-mobile {
+        @media only screen and (min-width: 481px) { @content; }
+    }
+
+    @else if $of-type == not-desk {
+        @media only screen and (max-width: 800px) { @content; }
+    }
+
+}

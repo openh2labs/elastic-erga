@@ -3,19 +3,20 @@
  * Created by PhpStorm.
  * User: mavperi
  * Date: 20/09/15
- * Time: 17:32
+ * Time: 17:32.
  */
+
 namespace App\Http\Controllers;
 
 use App\User;
-use App\Http\Controllers\Controller;
 
 class UserController extends Controller
 {
     /**
      * Show the profile for the given user.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return Response
      */
     public function showProfile($id)

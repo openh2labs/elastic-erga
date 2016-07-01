@@ -3,33 +3,29 @@
  * Created by PhpStorm.
  * User: mavperi
  * Date: 22/01/16
- * Time: 19:07
+ * Time: 19:07.
  */
 
 namespace App;
 
-use GuzzleHttp\Client;
-use App\Librato;
 use App\Repositories\SystemSettingRepository;
-
 
 class LibratoUtil
 {
-
-    public function push($metric_ok, $metric_alert, $librato_id){
-        try{
+    public function push($metric_ok, $metric_alert, $librato_id)
+    {
+        try {
             $l = Librato::find($librato_id);
-            if($l != null){
+            if ($l != null) {
                 $this->send($l->uri, $l->username, $l->api_key, $l->gauge_ok, $l->gauge_alert, $metric_ok, $metric_alert, $l->saurce);
             }
-        }catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e){
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             echo "\nlibrato row not found";
         }
     }
 
     /**
-     *
-     * sends Librato alerts
+     * sends Librato alerts.
      *
      * @param $url
      * @param $username
@@ -40,21 +36,22 @@ class LibratoUtil
      * @param $alert_value
      * @param $source
      */
-    private function send($url, $username, $api_key, $gauge_ok, $gauge_alert, $ok_value, $alert_value, $source){
+    private function send($url, $username, $api_key, $gauge_ok, $gauge_alert, $ok_value, $alert_value, $source)
+    {
         //@todo fix blank gauge names and throw and error
         //echo "$url, $username, $api_key, $gauge_ok, $gauge_alert, $ok_value, $alert_value, $source";
         echo "\nsending data to librato";
 
         $curl = curl_init($url);
         $curl_post_data = array(
-            "gauges" => array(
-                array("name" => $gauge_ok, "value" => $ok_value),
-                array("name" => $gauge_alert, "value" => $alert_value, 'source' => $source)
-            )
+            'gauges' => array(
+                array('name' => $gauge_ok, 'value' => $ok_value),
+                array('name' => $gauge_alert, 'value' => $alert_value, 'source' => $source),
+            ),
         );
 
         $headers = array(
-            'Content-Type: application/json'
+            'Content-Type: application/json',
         );
         curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
         curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($curl_post_data));
@@ -71,10 +68,8 @@ class LibratoUtil
       //  echo "\n response from librato: ".$result;
     }
 
-
     /**
-     *
-     * pushes an annotation to librato
+     * pushes an annotation to librato.
      *
      * @param $librato_id
      * @param $title
@@ -83,43 +78,42 @@ class LibratoUtil
      * @param $start_time
      * @param $end_time
      */
-    public function pushAnnotation($librato_id, $title, $description, $link, $start_time, $end_time, $alertDescription){
-        try{
+    public function pushAnnotation($librato_id, $title, $description, $link, $start_time, $end_time, $alertDescription)
+    {
+        try {
             $l = Librato::find($librato_id);
-            if($l != null){
+            if ($l != null) {
                 echo "\nsending librato annotation";
                 //$l->uri, $l->username, $l->api_key, $l->gauge_ok, $l->gauge_alert, $metric_ok, $metric_alert, $l->saurce
                 $this->sendAnnotation($l->username, $l->api_key, $l->saurce, $title, $description, $link, $start_time, $end_time, $alertDescription);
             }
-        }catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e){
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             echo "\nlibrato row not found";
         }
     }
 
-
     /**
-     * push to librato elastic-erga alert status for a run
+     * push to librato elastic-erga alert status for a run.
      *
      * @param $total_checks
      * @param $duration
      */
-    public function pushAppStatus($total_checks, $start_time, $end_time){
-
+    public function pushAppStatus($total_checks, $start_time, $end_time)
+    {
         $s = new SystemSettingRepository();
         $username = $s->forKey('librato_username');
         $api_key = $s->forKey('librato_api_key');
         $url = $s->forKey('librato_url');
         $enabled = $s->forKey('librato_status_enabled');
        // echo "push app status: total checks= $total_checks, $start_time, $end_time :: $username, $api_key, $url, $enabled";die;
-        if($enabled == "1"){
-            $this->send($url, $username, $api_key, 'elastic-erga-total-checks', 'elastic-erga-run-duration', $total_checks, $end_time-$start_time, 'elastic-erga');
+        if ($enabled == '1') {
+            $this->send($url, $username, $api_key, 'elastic-erga-total-checks', 'elastic-erga-run-duration', $total_checks, $end_time - $start_time, 'elastic-erga');
            // $this->sendAnnotation($username,$api_key,'elastic-erga','elastic-erga-run-status','total checks conducted by elastic-erga', '', $start_time, $end_time, '');
         }
     }
 
     /**
-     *
-     * send an annotation to librato
+     * send an annotation to librato.
      *
      * @param $username
      * @param $api_key
@@ -131,15 +125,16 @@ class LibratoUtil
      * @param $end_time
      * @param $alertDescription, the actual alert description without anything added to it
      */
-    private function sendAnnotation($username, $api_key, $source, $title, $description, $link, $start_time, $end_time, $alertDescription){
+    private function sendAnnotation($username, $api_key, $source, $title, $description, $link, $start_time, $end_time, $alertDescription)
+    {
         //echo "$url, $username, $api_key, $gauge_ok, $gauge_alert, $ok_value, $alert_value, $source";
         echo "\nsending data to librato";
 
-        $curl = curl_init("https://metrics-api.librato.com/v1/annotations/elastic-erga-".str_replace(" ", "-",$title));
-        $curl_post_data = array("title" => $title, "description" => $description, "start_time" => $start_time, "end_time" => $end_time); //@todo add link support
+        $curl = curl_init('https://metrics-api.librato.com/v1/annotations/elastic-erga-'.str_replace(' ', '-', $title));
+        $curl_post_data = array('title' => $title, 'description' => $description, 'start_time' => $start_time, 'end_time' => $end_time); //@todo add link support
 
         $headers = array(
-            'Content-Type: application/json'
+            'Content-Type: application/json',
         );
         curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
         curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($curl_post_data));
@@ -152,7 +147,7 @@ class LibratoUtil
         $result = curl_exec($curl);
         $http_status = curl_getinfo($curl, CURLINFO_HTTP_CODE);
         curl_close($curl);
-         echo "HTTP Status Code: " . $http_status;
-          echo "\n response from librato: ".$result;
+        echo 'HTTP Status Code: '.$http_status;
+        echo "\n response from librato: ".$result;
     }
 }

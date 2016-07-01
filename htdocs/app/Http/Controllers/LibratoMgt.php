@@ -3,9 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
-use App\Http\Requests;
-use App\Http\Controllers\Controller;
 use App\alerts;
 use App\Librato;
 
@@ -30,25 +27,27 @@ class LibratoMgt extends Controller
     {
         $alert = alerts::find($id);
         $data = array();
-        $data['type'] = "create";
-        return view ("librato_form", $data)->with('alert', $alert);
+        $data['type'] = 'create';
+
+        return view('librato_form', $data)->with('alert', $alert);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function store($id, Request $request)
     {
         $alert = alerts::find($id);
 
-        if($request->input('id') == ""){
-          //  $alert = new alerts;
-            $librato = new Librato;
-        }else{
-          //  $alert = alerts::find($request->input('id'));
+        if ($request->input('id') == '') {
+            //  $alert = new alerts;
+            $librato = new Librato();
+        } else {
+            //  $alert = alerts::find($request->input('id'));
             $librato = Librato::find($alert->librato_id);
         }
 
@@ -73,7 +72,8 @@ class LibratoMgt extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -84,27 +84,31 @@ class LibratoMgt extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
         $data = array();
-        $data['type'] = "edit";
+        $data['type'] = 'edit';
         // $data['alert'] = alerts::find($id);
         $alert = alerts::find($id);
-        if($alert == null){
-            echo "something went wrong"; die;
+        if ($alert == null) {
+            echo 'something went wrong';
+            die;
         }
         $librato = Librato::find($alert->librato_id);
-        return view ("librato_form", $data)->with('alert', $alert)->with('librato', $librato);
+
+        return view('librato_form', $data)->with('alert', $alert)->with('librato', $librato);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int                      $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -115,7 +119,8 @@ class LibratoMgt extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

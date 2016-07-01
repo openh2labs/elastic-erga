@@ -28,7 +28,6 @@ Route::get('terminal', 'TerminalController@index');
 
 Route::get('terminal/show', 'TerminalController@show');
 
-
 //execute searches
 Route::get('alert/searchtest', 'AlertController@searchtest');
 
@@ -71,14 +70,12 @@ Route::get('librato/edit/{alert_id}', 'LibratoMgt@edit');
  */
 Route::get('typeahead/listcolumn/{column}/{table}', 'TypeAhead@listcolumn');
 
-
-
-/**
+/*
  * Search Routes
  */
 Route::get('/search', 'SearchController@elastic');
 
-/**
+/*
  * Api routes
  */
 Route::get('/api/v1/terminal', 'ApiV1Controller@terminalGet');

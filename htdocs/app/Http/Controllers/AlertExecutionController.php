@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Requests;
-use App\Http\Controllers\Controller;
 use App\Repositories\AlertExecutionsRepository;
 
 class AlertExecutionController extends Controller
@@ -32,7 +30,8 @@ class AlertExecutionController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -43,7 +42,8 @@ class AlertExecutionController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -54,7 +54,8 @@ class AlertExecutionController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -65,8 +66,9 @@ class AlertExecutionController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int                      $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -77,7 +79,8 @@ class AlertExecutionController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
@@ -86,12 +89,11 @@ class AlertExecutionController extends Controller
     }
 
     /**
-     *
-     * Deletes old executions
-     *
+     * Deletes old executions.
      */
-    public function purge(){
-        $ar = new AlertExecutionsRepository;
+    public function purge()
+    {
+        $ar = new AlertExecutionsRepository();
         $ar->purge(3);
     }
 }

@@ -3,17 +3,17 @@
  * Created by PhpStorm.
  * User: mavperi
  * Date: 22/01/16
- * Time: 08:49
+ * Time: 08:49.
  */
 
 namespace App;
+
 use GuzzleHttp\Client;
 
 class CyfeUtil
 {
-
-    public function sendData(){
-
+    public function sendData()
+    {
 
        // $request = \Illuminate\Http\Request::create('https://app.cyfe.com/api/push/56a1dddfe89813214667461868558', 'POST', ['data' => array("Date"=>'20160122', "users"=>10), 'param2' => 'value2']);
 
@@ -23,15 +23,15 @@ class CyfeUtil
         $data['color'] = array('Users' => '#52ff7f');
         $data['type'] = array('Users' => 'line');
 
-        $client = new Client(['debug'=>true,'exceptions'=>false,'headers' => ['Authorization' => "Bearer " . "", "Accept" => "application/json"], 'verify' => false]);
+        $client = new Client(['debug' => true, 'exceptions' => false, 'headers' => ['Authorization' => 'Bearer '.'', 'Accept' => 'application/json'], 'verify' => false]);
         echo "\n just about to send";
         $request = $client->post('https://app.cyfe.com/api/push/56a1dddfe89813214667461868558', array(), array(
             'data' => array('Users' => 'replace'),
-            'file_field'   => '@/path/to/file.xml'
+            'file_field' => '@/path/to/file.xml',
         ));
         echo "\n about to send";
         $response = $request->send();
-        echo "@@@";
+        echo '@@@';
 
         die;
 
@@ -41,8 +41,8 @@ class CyfeUtil
         ]);
         */
 
-        $request = $client->post('https://app.cyfe.com/api/push/56a1dddfe89813214667461868558',array(
-            'content-type' => 'application/json'
+        $request = $client->post('https://app.cyfe.com/api/push/56a1dddfe89813214667461868558', array(
+            'content-type' => 'application/json',
         ));
        // $request->addPostFields($data);
 
@@ -56,15 +56,14 @@ class CyfeUtil
         echo $request->getBody();
         // {"type":"User"...'
 
-
-        echo "<br>cyfe message sent";
+        echo '<br>cyfe message sent';
     }
 
-
-    public function sendCurlData($uri, $metric, $value){
+    public function sendCurlData($uri, $metric, $value)
+    {
         $endpoint = 'https://app.cyfe.com/api/push/56a1dddfe89813214667461868558';
         $data = array();
-        $data['data'][] = array('Date' => '20160122', 'Users' => rand(0,205));
+        $data['data'][] = array('Date' => '20160122', 'Users' => rand(0, 205));
         $data['onduplicate'] = array('Users' => 'replace');
         $data['color'] = array('Users' => '#52ff7f');
         $data['type'] = array('Users' => 'line');
@@ -78,10 +77,10 @@ class CyfeUtil
         $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
 
-        if(stripos($status, '200') !== false)
+        if (stripos($status, '200') !== false) {
             echo 'success';
-        else
+        } else {
             echo 'failure';
+        }
     }
-
 }

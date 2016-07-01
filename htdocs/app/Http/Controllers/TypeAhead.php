@@ -3,9 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
-use App\Http\Requests;
-use App\Http\Controllers\Controller;
 use DB;
 
 class TypeAhead extends Controller
@@ -21,10 +18,12 @@ class TypeAhead extends Controller
     }
 
     /**
-     *  returns a json object with distinct values of a given column from the alert table
+     *  returns a json object with distinct values of a given column from the alert table.
+     *
      * @param $column, the name of the column
      */
-    public function listcolumn($column, $table){
+    public function listcolumn($column, $table)
+    {
         $es = DB::table($table)->distinct()->lists($column);
         echo json_encode($es);
     }
@@ -42,7 +41,8 @@ class TypeAhead extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -53,7 +53,8 @@ class TypeAhead extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -64,7 +65,8 @@ class TypeAhead extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -75,8 +77,9 @@ class TypeAhead extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int                      $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -87,7 +90,8 @@ class TypeAhead extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

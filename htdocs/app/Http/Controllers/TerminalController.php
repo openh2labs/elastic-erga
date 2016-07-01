@@ -3,9 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
-use App\Http\Requests;
-use App\Http\Controllers\Controller;
 use App\ElasticUtil;
 
 class TerminalController extends Controller
@@ -17,8 +14,9 @@ class TerminalController extends Controller
      */
     public function index()
     {
-        $e = new ElasticUtil;
+        $e = new ElasticUtil();
         $data['hosts'] = $e->getESHosts();
+
         return view('terminal.index', $data);
     }
 
@@ -35,7 +33,8 @@ class TerminalController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -50,16 +49,16 @@ class TerminalController extends Controller
      */
     public function show()
     {
-        $e = new ElasticUtil;
+        $e = new ElasticUtil();
         $data = $e->getTerminalData();
-        echo(json_encode($data));
+        echo json_encode($data);
     }
-
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -70,8 +69,9 @@ class TerminalController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int                      $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -82,7 +82,8 @@ class TerminalController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

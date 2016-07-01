@@ -8,7 +8,7 @@
  */
 
 use Illuminate\Database\Seeder;
-use App\alerts;
+use App\Alert;
 
 /**
  * Class alertsSeeder
@@ -26,7 +26,7 @@ class alertsSeeder extends seeder
         for($i=0; $i<30; $i++)
         {
 
-            App:alerts::create(array(
+            App:Alert::create(array(
             'description' => $faker->sentence(3),
             'criteria' => '{"query":{"query_string":{"analyze_wildcard":true,"query":"content: '.$faker->word().'"}},"filter":{"bool":{"must":[{"range":{"updated_at":{"gte":%start_date%,"lte":%end_date%,"format":"epoch_millis"}}}],"must_not":[]}}}',
             'criteria_total' => '{"query":{"query_string":{"query":"*","analyze_wildcard":true}},"filter":{"bool":{"must":[{"range":{"updated_at":{"gte":%start_date%,"lte":%end_date%,"format":"epoch_millis"}}}],"must_not":[]}}}',

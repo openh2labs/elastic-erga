@@ -14,7 +14,7 @@ use Elasticsearch\ClientBuilder;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
-use App\alerts;
+use App\Alert;
 use App\Post;
 use App\AlertExecution;
 use App\LibratoUtil;
@@ -51,23 +51,23 @@ class AlertController extends BaseController
         //$l = new LibratoUtil;
         $data = array();
         if ($state == "all") {
-            $alert = alerts::all();
+            $alert = Alert::all();
             $data['title'] = "all setup";
         } elseif ($state == "all_state") { //all types in alert state
-            $alert = alerts::AllState()->get();
+            $alert = Alert::AllState()->get();
             $data['title'] = "all active";
         } elseif ($state == "pct_state") { //all in pct alert state
-            $alert = alerts::AllPct()->orderBy('created_at')->get();
+            $alert = Alert::AllPct()->orderBy('created_at')->get();
             $data['title'] = "percentage active";
         } elseif ($state == "hit_state") { //in hit alert state
-            $alert = alerts::AllHit()->orderBy('created_at')->get();
+            $alert = Alert::AllHit()->orderBy('created_at')->get();
             $data['title'] = "hit active";
         } elseif ($state == "zero_hit_state") {
             $data['title'] = "zero hit active";
-            $alert = alerts::AllZeroHit()->orderBy('created_at')->get();
+            $alert = Alert::AllZeroHit()->orderBy('created_at')->get();
         } elseif ($state == "es_config_error_state") {
             $data['title'] = "elastic search config state";
-            $alert = alerts::AllESErrors()->orderBy('created_at')->get();
+            $alert = Alert::AllESErrors()->orderBy('created_at')->get();
         } else {
             echo "error(1)";
             die;
@@ -170,7 +170,7 @@ class AlertController extends BaseController
         $start_time = date('U');
         echo "<pre>";
         //get data
-        $alerts = alerts::all();
+        $alerts = Alert::all();
         foreach ($alerts as $alert) {
             echo "<h2>" . $alert->description . "</h2>";
 

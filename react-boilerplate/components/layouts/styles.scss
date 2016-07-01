@@ -1,7 +1,8 @@
-@import '../global.scss';
+@import '../../shared/sass/mixins';
+@import '../global';
 
 $menu-height	:	40px; 
-$padding-unit	:	1rem; 
+$padding-unit	:	1rem;
 
 header {
 	height: $menu-height;
@@ -13,7 +14,7 @@ section {
 	right: 0;
 	top: $menu-height;
 	bottom: $menu-height;
-	background: #000;
+	background: $black;
 	padding: 0 $padding-unit;
 	
 	.section {
@@ -37,13 +38,14 @@ section {
 
 footer {
 	height: $menu-height;
-	background: #990000;
 	position: fixed;
 	left: 0;
 	right: 0;
 	bottom: 0;
 	display: table;
 	width: 100%;
+
+	@include gradient-ltr($blue-dark, $blue-light);
 
 	input {
 		padding: 2px;
@@ -108,11 +110,5 @@ footer {
 			filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#dfdfdf', endColorstr='#ededed',GradientType=0);
 			background-color:#dfdfdf;
 		}
-		&:active {
-			position:relative;
-			top:1px;
-		}
-
-
 	}
 	

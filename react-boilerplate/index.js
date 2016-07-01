@@ -22,7 +22,6 @@ ReactDOM.render(
       <Router history={browserHistory}>
         <Route path="/" component={App}>
           <IndexRoute component={Index} />
-          {/*<Route path="/path" component={ } />*/}
         </Route>
       </Router>
   </Provider>

@@ -2,9 +2,13 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import styles from './styles.scss';
 
-import { getTerminalData } from '../../actions';
+import { getTerminalData, startPollServer, stopPollServer } from '../../actions';
 
-let UIData, searchPhrase = '';
+let UIData, 
+	searchPhrase = '', 
+	lastScrollPos = 0, 
+	timer,
+	terminalSection;
 
 class Index extends Component {
 
@@ -16,24 +20,42 @@ class Index extends Component {
 		update(nextProps);
 	}
 
+	componentDidUpdate() {
+		terminalSection = document.querySelector('.section-terminal');
+		terminalSection.scrollTop = terminalSection.scrollHeight;
+	}
+
 	onKeyPress (event) {
 		searchPhrase = document.querySelector('.search').value.trim();
 		const terminalData = localFilter(this.props.terminalData, searchPhrase);
+
 		update({terminalData});
 		this.forceUpdate();
-		console.log(event.keyCode);
+
 		if (searchPhrase && (event.keyCode == 13 || event.type == 'click')) {
 			getTerminalData({q: searchPhrase});
 		}
 	}
 
+	onScroll (event) {
+		const currentScrollPos = terminalSection.scrollTop;
+
+		if (currentScrollPos > lastScrollPos) {
+			startPollServer();
+		}
+		else if (currentScrollPos < lastScrollPos) {
+			stopPollServer();
+		}
+
+		lastScrollPos = currentScrollPos;
+	}
+
 	render() {
-		
 		return (
 			<div>
 				<header></header>
 				<section className="container">
-					<div className="section-terminal">{UIData}</div>
+					<div className="section-terminal" ref="section-terminal" onScroll={this.onScroll.bind(this)}>{UIData}</div>
 				</section>
 				<footer>
 					<div className="table-row">
@@ -42,7 +64,6 @@ class Index extends Component {
 					</div>
 				</footer>
 			</div>);
-
 	}
 }
 
@@ -60,7 +81,6 @@ function update(nextProps) {
 		});
 
 		UIData = [...mappedData];
-		console.log('UIData.length', UIData.length);
 	}
 }
 

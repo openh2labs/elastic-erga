@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class alerts extends Model
 {
-
     /**
      * Scope a query to only include all alerts in alert state.
      *
@@ -19,7 +18,8 @@ class alerts extends Model
 
     /**
      * Scope a query to only include all alerts in pct alert state.
-     *s
+     *s.
+     *
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeAllPct($query)
@@ -48,12 +48,14 @@ class alerts extends Model
     }
 
     /**
-     * scope query to only return config errors
+     * scope query to only return config errors.
      *
      * @param $query
+     *
      * @return mixed
      */
-    public function scopeAllESErrors($query){
+    public function scopeAllESErrors($query)
+    {
         return $query->where('es_config_error_state', '=', true);
     }
 }

@@ -3,7 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Elasticsearch\ClientBuilder;
+
 //use Elasticquent\ElasticquentTrait;
 //use illuminate\html;
 //use Illuminate\Database\Eloquent\Model;
@@ -36,8 +36,4 @@ class Post extends Model
         ]
     );
     */
-
-
 }
-
-

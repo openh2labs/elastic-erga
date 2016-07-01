@@ -1,7 +1,6 @@
 <?php
 
-namespace App\Api\v1\Endpoints;
-
+namespace App\Api\v1\endpoints;
 
 use App\Api\v1\Components\Mock;
 use Illuminate\Http\Request;
@@ -10,6 +9,7 @@ class Terminal extends BaseEndpoint
 {
     /**
      * @param Request $request
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function get(Request $request)

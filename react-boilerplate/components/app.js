@@ -1,13 +1,13 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-class App extends Component {
-	constructor(props) {
-		super(props);
-	}
+class App {
 
 	render() {
-		return (<div> { this.props.children } </div>);
+
+		return (<div>{this.props.children}</div>);
+
 	}
+
 }
 
 App.propTypes = {

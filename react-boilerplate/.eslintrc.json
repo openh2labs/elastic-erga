@@ -1,0 +1,28 @@
+{
+    "extends": "airbnb",
+    "plugins": [
+        "react"
+    ],
+    "globals": {
+        "dispatch": true
+    },
+    "env": {
+        "browser": true,
+        "node": true,
+        "es6": true,
+        "jest": true
+    },
+    "rules": {
+    	"padded-blocks": ["error", {"blocks": "always", "switches": "never"}],
+    	"indent": ["error", "tab", {"VariableDeclarator": {"var": 2, "let": 2, "const": 3}, "SwitchCase": 1}],
+    	"keyword-spacing": ["error", { "after": true }],
+    	"no-param-reassign": 0,
+    	"react/jsx-indent": [2, "tab"],
+    	"one-var": ["error", {
+            "var": "always", // Exactly one var declaration per function
+            "let": "always", // Exactly one let declaration per block
+            "const": "never" // Exactly one declarator per const declaration per block
+        }], 
+        "eqeqeq": ["error", "smart"]
+    }
+}

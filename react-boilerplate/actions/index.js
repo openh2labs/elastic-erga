@@ -4,7 +4,8 @@ import { LOAD_DATA } from './types';
 
 const TERMINAL_URL = 'http://localhost:10080/api/v1/terminal';
 let pollId,
-		lastParams;
+		lastParams,
+		dispatch;
 
 function action(actionType, payload) {
 

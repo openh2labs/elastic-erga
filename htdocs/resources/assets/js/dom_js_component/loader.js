@@ -4,15 +4,15 @@ class DomJsModule {
     constructor(dependencies, $elements) {
         this.$placeholder   = $elements.$placeholder;
         this.$container     = $elements.$container;
-        this.params = null;
+        this.config = null;
     }
 
     mount() {
         if(this.$placeholder.length) {
-            this.params = this.$placeholder.data('params');
+            this.config = this.$placeholder.data('parameters');
             console.log(this.$placeholder);
             this.$placeholder.replaceWith(this.$container);
-            this.onMountSuccess(this.$container, this.params, this.$placeholder);
+            this.onMountSuccess(this.$container, this.config, this.$placeholder);
         }
         else {
             this.onMountFailure("Couldn't mount on placeholder. Invalid $placeholder!");

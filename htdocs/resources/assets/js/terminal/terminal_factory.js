@@ -10,19 +10,25 @@ class ErgaTerminal extends DomJsModule {
         constructor(dependencies, $elements, mvvm) {
 
             super(dependencies, $elements);
-            this.view = mvvm.view;
+            this.view = mvvm.view; //This is a factory
             this.model = new mvvm.model({http: dependencies.$});
             this.mount();
         }
 
-        onMountSuccess() {
+        onMountSuccess($container, config, $placeholder) {
             super.onMountSuccess();
-            this.$container.addClass('terminal');
+
+            //this.$container.addClass('terminal');
+            if (config && config.config) {
+                this.model.serviceUrl = config.config.endpoint;
+            }
+
             this.mountComponent(this.$container.get(0));
         }
 
         mountComponent(mountingElement) {
-            this.view.create(mountingElement, this.model);
+
+            this.view.create(mountingElement, this.model, this.config);
             console.log('React Terminal Component Mounted', mountingElement, this.model)
         }
 

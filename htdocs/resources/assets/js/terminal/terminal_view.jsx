@@ -57,10 +57,26 @@ var Events = React.createClass({
             );
         });
         return (
-            <ul className="event-list">
-                {list}
-            </ul>
+            <div className="event-list-container">
+                <ul className="event-list">
+                    {list}
+                </ul>
+            </div>
         );
+    }
+});
+
+var Search = React.createClass({
+
+    render: function () {
+        return (
+            <form className="form-inline">
+                <div className="form-group">
+                    <input type="text" className="form-control" id="search" placeholder="search" />
+                </div>
+                <button type="submit" className="btn btn-default">Submit</button>
+            </form>
+        )
     }
 });
 
@@ -72,7 +88,7 @@ var Events = React.createClass({
  */
 class TerminalView {
     constructor (d, $element, model, config) {
-
+        console.log('------> ',config)
         this.__model = model;
         this.__$element = $element;
 
@@ -103,14 +119,22 @@ class TerminalView {
     }
 
     update(collection) {
-        ReactDOM.render(<Events model={collection} />, this.__$element);
+        ReactDOM.render(
+            <div className="">
+                <div className="terminal">
+                    <Events model={collection} />
+                </div>
+                <Search />
+            </div>
+            , this.__$element);
+
         if (this._config.polling) {
-            this.__$list.scrollTop = this.__$list.scrollHeight;
+            this.__$container.scrollTop = this.__$container.scrollHeight;
         }
     }
 
-    get __$list()  {
-        return this.__$element.getElementsByClassName("event-list")[0];
+    get __$container()  {
+        return this.__$element.getElementsByClassName("event-list-container")[0];
     }
 
     __configure(config) {
@@ -149,11 +173,11 @@ class TerminalView {
 
 }
 
-exports.create = function create( $element, model, config){
-    let dependecies = {
+exports.create = function create( $element, model, config) {
+    let dependencies = {
         clock : new ClockFactory({systemTimers:window}).create({name:"terminal", frequency:1})
     };
-    return new TerminalView(dependecies, $element, model, config );
+    return new TerminalView(dependencies, $element, model, config );
 };
 
 exports.__Class = TerminalView;

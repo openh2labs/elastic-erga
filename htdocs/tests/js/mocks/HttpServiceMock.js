@@ -33,6 +33,12 @@ class HttpServiceMock {
         this.calls.push(callmock);
         return callmock;
     }
+
+    getJSON (uri, params) {
+        let callmock = new CallMock('GET', uri, params);
+        this.calls.push(callmock);
+        return callmock;
+    }
 }
 
 module.exports = HttpServiceMock;

@@ -23,6 +23,7 @@
   "dependencies": {
     "bloodhound": "^1.0.0",
     "bootstrap-less": "^3.0.0",
+    "elasticsearch-query-builder": "0.0.2",
     "jquery": "^2.2.0",
     "jquery-mockjax": "^2.1.1",
     "laravel-elixir": "^2.0.0",

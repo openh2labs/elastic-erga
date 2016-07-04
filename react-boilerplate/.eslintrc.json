@@ -19,9 +19,9 @@
     	"no-param-reassign": 0,
     	"react/jsx-indent": [2, "tab"],
     	"one-var": ["error", {
-            "var": "always", // Exactly one var declaration per function
-            "let": "always", // Exactly one let declaration per block
-            "const": "never" // Exactly one declarator per const declaration per block
+            "var": "always",
+            "let": "always",
+            "const": "never"
         }], 
         "eqeqeq": ["error", "smart"]
     }

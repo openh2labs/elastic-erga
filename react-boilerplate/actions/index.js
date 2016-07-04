@@ -1,3 +1,8 @@
+/*
+*	This file is to store in one plce all definitive shared actions across the appliction.
+*	Generally actions should be defined here. http://redux.js.org/docs/basics/Actions.html
+*/
+
 import axios from 'axios';
 import _ from 'underscore';
 import { LOAD_DATA } from './types';

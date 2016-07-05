@@ -1,9 +1,9 @@
 var fs = require('fs');
 
 var defaults = {
-	basePath : '../components',
 	bundleName : 'bundle.js',
-	appendTo : 'body'
+	appendTo : 'body',
+	css: 'styles.css'
 };
 var manifestFile = '../components/manifest.json';
 
@@ -16,15 +16,27 @@ StageDependancies.prototype.apply = function(compiler) {
 
 	config.basePath = config.basePath || defaults.basePath;
 	config.bundleName = config.bundleName || defaults.bundleName; 
+	config.css = config.css || defaults.css; 
 	config.appendTo = config.appendTo || defaults.appendTo; 
 
 	compiler.plugin('done', function() {
-		var d = new Date();
 		var manifest = require(manifestFile);
-		manifest['terminal'] = {
-			'bundle': [config.basePath, config.bundleName].join('/'), 
-			'appendTo': config.appendTo
-		};
+
+		if (config.default) {
+			manifest['terminal'] = {
+				'basePath': require('./package.json').name,
+				'bundle': 'default', 
+				'appendTo': config.appendTo
+			};
+		}
+		else {
+			manifest['terminal'] = {
+				'basePath': require('./package.json').name,
+				'bundle': config.bundleName, 
+				'appendTo': config.appendTo
+			};
+		}
+
 		var data = JSON.stringify(manifest);
 		fs.writeFile(manifestFile, data, (err) => {
 		  if (err) throw err;

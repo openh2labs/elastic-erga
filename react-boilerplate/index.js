@@ -24,9 +24,9 @@ ReactDOM.render(
 	<Provider store={store} >
 		<Router history={browserHistory}>
 			<Route path="/" component={App}>
-				<IndexRoute component={Index} />
+				<Route path="*" component={Index} />
 			</Route>
 		</Router>
 	</Provider>
-  , document.querySelector('.container')
+  , document.querySelector('.terminal')
 );

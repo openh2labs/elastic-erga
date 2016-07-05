@@ -443,14 +443,14 @@ footer {
   /* IE6-9 */ }
   footer input {
     padding: 2px;
-    font-size: 1.5rem;
+    font-size: 22px;
     width: 100%;
     margin-top: 3px;
     margin-left: 2px; }
   footer button {
     position: relative;
     top: -3px;
-    margin-right: 2px; }
+    margin-right: -1px; }
   footer .table-row {
     display: table-row-group; }
   footer .search-container {
@@ -490,3 +490,19 @@ footer {
     background: linear-gradient(to bottom, #dfdfdf 5%, #ededed 100%);
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#dfdfdf', endColorstr='#ededed',GradientType=0);
     background-color: #dfdfdf; }
+
+/* OVERRIDE STYLES SET OUTSIDE OF COMPONENT */
+@media (min-width: 768px) {
+  .container {
+    width: 100%; } }
+
+@media (min-width: 992px) {
+  .container {
+    width: 100%; } }
+
+@media (min-width: 1200px) {
+  .container {
+    width: 100%; } }
+
+.terminal input {
+  color: #000; }

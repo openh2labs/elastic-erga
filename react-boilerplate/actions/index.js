@@ -62,10 +62,10 @@ export function stopPollServer() {
 
 }
 
-export function init(storeDispatch, terminal_api_endpoint) {
+export function init(storeDispatch, endpoint) {
 
 	dispatch = storeDispatch;
-	terminal_api_endpoint = terminal_api_endpoint;
+	terminal_api_endpoint = endpoint;
 	startPollServer();
 
 }

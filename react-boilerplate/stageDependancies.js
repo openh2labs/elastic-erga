@@ -23,15 +23,15 @@ StageDependancies.prototype.apply = function(compiler) {
 		var manifest = require(manifestFile);
 
 		if (config.default) {
-			manifest['terminal'] = {
-				'basePath': require('./package.json').name,
+			manifest['terminalv2'] = {
+				'basePath': require('./package.json').name + '/',
 				'bundle': 'default', 
 				'appendTo': config.appendTo
 			};
 		}
 		else {
-			manifest['terminal'] = {
-				'basePath': require('./package.json').name,
+			manifest['terminalv2'] = {
+				'basePath': require('./package.json').name + '/',
 				'bundle': config.bundleName, 
 				'appendTo': config.appendTo
 			};

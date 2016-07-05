@@ -32,7 +32,7 @@ class Index extends Component {
 		update({terminalData});
 		this.forceUpdate();
 
-		if (searchPhrase && (event.keyCode == 13 || event.type == 'click')) {
+		if (event.keyCode == 13 || event.type == 'click') {
 			getTerminalData({q: searchPhrase});
 		}
 	}

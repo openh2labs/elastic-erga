@@ -67,39 +67,50 @@
 		}
 	}
 
+	function createBodyElement(component) {
+		if (!document.querySelector(component.appendTo)) {
+
+			var newElement = document.createElement('div');
+			var appendTo = component.bundle !== 'default' && typeof component.appendTo == 'undefined' ? undefined : component.appendTo.substring(0, 1);
+
+			switch(appendTo){
+				case '.':
+					newElement.className = component.appendTo.slice(1);
+					break;
+				case '#':
+					newElement.id = component.appendTo.slice(1);
+					break;
+			}
+			
+			if(appendTo){
+				document.getElementsByTagName('body')[0].appendChild(newElement);
+			}
+			else{
+				console.warn('**** component at basePath', component.basePath, 'is missing associated appendTo property in manifest.json. ****')
+			}
+		}
+	}
+
 	function resolveComponents(json){
 		manifest = json;
 		var obj = manifest[location.pathname.substring(1)];
-		if (typeof obj != 'undefined') {
+		if (typeof obj != 'undefined' && obj instanceof Array) {
 
 			obj.forEach(function(component) {
 				
-				if (!document.querySelector(component.appendTo)) {
-
-					var newElement = document.createElement('div');
-					var appendTo = component.bundle !== 'default' && typeof component.appendTo == 'undefined' ? undefined : component.appendTo.substring(0, 1);
-
-					switch(appendTo){
-						case '.':
-							newElement.className = component.appendTo.slice(1);
-							break;
-						case '#':
-							newElement.id = component.appendTo.slice(1);
-							break;
-					}
-					
-					if(appendTo){
-						document.getElementsByTagName('body')[0].appendChild(newElement);
-					}
-					else{
-						console.warn('**** component at basePath', component.basePath, 'is missing associated appendTo property in manifest.json. ****')
-					}
-				}
+				createBodyElement(component);
 
 				var jsPath = component.bundle === 'default' ? [component.basePath, 'bundle.js'].join('') : [component.basePath, component.bundle].join('');
 				loadScript(jsPath);
 				loadCSS(component);
 			});
+		}
+		else if (typeof obj == 'object') {
+			createBodyElement(obj);
+
+			var jsPath = obj.bundle === 'default' ? [obj.basePath, 'bundle.js'].join('') : [obj.basePath, obj.bundle].join('');
+			loadScript(jsPath);
+			loadCSS(obj);
 		}
 	}
 

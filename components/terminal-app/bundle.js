@@ -65,7 +65,7 @@
 /******/ 	}
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "6183b4c32f260d333eab"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "2963a21707975d72eecf"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -17584,7 +17584,9 @@
 		return f;
 	}));
 
-	(0, _actions.init)(store.dispatch);
+	var TERMINAL_URL = 'http://localhost:10080/api/v1/terminal';
+
+	(0, _actions.init)(store.dispatch, TERMINAL_URL);
 	(0, _actions.getTerminalData)();
 
 	_reactDom2.default.render(_react2.default.createElement(
@@ -17599,11 +17601,11 @@
 				_reactRouter.Route,
 				{ path: '/', component: _app2.default, __self: undefined
 				},
-				_react2.default.createElement(_reactRouter.IndexRoute, { component: _index2.default, __self: undefined
+				_react2.default.createElement(_reactRouter.Route, { path: '*', component: _index2.default, __self: undefined
 				})
 			)
 		)
-	), document.querySelector('.container'));
+	), document.querySelector('.terminal'));
 	;
 
 	(function () {
@@ -17612,6 +17614,8 @@
 		}
 
 		__REACT_HOT_LOADER__.register(store, 'store', '/Users/vaughnangoy/quidco/elastic-erga/react-boilerplate/index.js');
+
+		__REACT_HOT_LOADER__.register(TERMINAL_URL, 'TERMINAL_URL', '/Users/vaughnangoy/quidco/elastic-erga/react-boilerplate/index.js');
 	})();
 
 	;
@@ -40824,14 +40828,13 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var TERMINAL_URL = 'http://localhost:10080/api/v1/terminal'; /*
-	                                                             *	This file is to store in one plce all definitive shared actions across the appliction.
-	                                                             *	Generally actions should be defined here. http://redux.js.org/docs/basics/Actions.html
-	                                                             */
-
 	var pollId = void 0,
 	    lastParams = void 0,
-	    dispatch = void 0;
+	    dispatch = void 0,
+	    terminal_api_endpoint = void 0; /*
+	                                    *	This file is to store in one plce all definitive shared actions across the appliction.
+	                                    *	Generally actions should be defined here. http://redux.js.org/docs/basics/Actions.html
+	                                    */
 
 	function action(actionType, payload) {
 
@@ -40848,7 +40851,7 @@
 		lastParams = params;
 		var query = _underscore2.default.isEmpty(params) ? params : { params: params };
 
-		_axios2.default.get(TERMINAL_URL, query).then(function (response) {
+		_axios2.default.get(terminal_api_endpoint, query).then(function (response) {
 
 			dispatch(action(_types.LOAD_DATA, response.data));
 		}).catch(function (error) {
@@ -40876,9 +40879,10 @@
 		}
 	}
 
-	function init(storeDispatch) {
+	function init(storeDispatch, endpoint) {
 
 		dispatch = storeDispatch;
+		terminal_api_endpoint = endpoint;
 		startPollServer();
 	}
 	;
@@ -40888,13 +40892,13 @@
 			return;
 		}
 
-		__REACT_HOT_LOADER__.register(TERMINAL_URL, 'TERMINAL_URL', '/Users/vaughnangoy/quidco/elastic-erga/react-boilerplate/actions/index.js');
-
 		__REACT_HOT_LOADER__.register(pollId, 'pollId', '/Users/vaughnangoy/quidco/elastic-erga/react-boilerplate/actions/index.js');
 
 		__REACT_HOT_LOADER__.register(lastParams, 'lastParams', '/Users/vaughnangoy/quidco/elastic-erga/react-boilerplate/actions/index.js');
 
 		__REACT_HOT_LOADER__.register(dispatch, 'dispatch', '/Users/vaughnangoy/quidco/elastic-erga/react-boilerplate/actions/index.js');
+
+		__REACT_HOT_LOADER__.register(terminal_api_endpoint, 'terminal_api_endpoint', '/Users/vaughnangoy/quidco/elastic-erga/react-boilerplate/actions/index.js');
 
 		__REACT_HOT_LOADER__.register(action, 'action', '/Users/vaughnangoy/quidco/elastic-erga/react-boilerplate/actions/index.js');
 
@@ -43780,7 +43784,7 @@
 				update({ terminalData: terminalData });
 				this.forceUpdate();
 
-				if (searchPhrase && (event.keyCode == 13 || event.type == 'click')) {
+				if (event.keyCode == 13 || event.type == 'click') {
 					(0, _actions.getTerminalData)({ q: searchPhrase });
 				}
 			}

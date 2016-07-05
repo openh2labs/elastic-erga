@@ -12,7 +12,7 @@ var config = {
   output: {
     filename: 'bundle.js',
     publicPath: '/build',
-    path: '../components/terminal',
+    path: ['../components/',require('./package.json').name].join(''),
   },
   module: {
     loaders: [
@@ -43,7 +43,7 @@ var config = {
       allChunks: true,
     }),
     new webpack.HotModuleReplacementPlugin(),
-    new StageDependancies({test:'vaughn123', another:'Angoy'})
+    new StageDependancies({appendTo:'.terminal', default: true})
   ],
   resolve: {
     extensions: [

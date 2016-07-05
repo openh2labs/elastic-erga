@@ -13,6 +13,7 @@ let pollId,
 		dispatch,
 		terminal_api_endpoint;
 
+//generic action creator for redux
 function action(actionType, payload) {
 
 	return {
@@ -22,6 +23,7 @@ function action(actionType, payload) {
 
 }
 
+//responsible for retrieving terminal data
 export function getTerminalData(params = {}) {
 
 	lastParams = params;
@@ -29,7 +31,7 @@ export function getTerminalData(params = {}) {
 
 	axios.get(terminal_api_endpoint, query)
 		.then(response => {
-
+			//sends data to redux store
 			dispatch(action(LOAD_DATA, response.data));
 
 		})
@@ -41,6 +43,7 @@ export function getTerminalData(params = {}) {
 
 }
 
+//polls server at set intervals
 export function startPollServer() {
 
 	if (typeof pollId == 'undefined') {
@@ -51,6 +54,7 @@ export function startPollServer() {
 
 }
 
+//stops polling the server
 export function stopPollServer() {
 
 	if (typeof pollId != 'undefined') {
@@ -62,6 +66,7 @@ export function stopPollServer() {
 
 }
 
+//setup of action dependency and endpoint
 export function init(storeDispatch, endpoint) {
 
 	dispatch = storeDispatch;

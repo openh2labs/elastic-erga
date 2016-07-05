@@ -1,6 +1,7 @@
 var webpack = require('webpack');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var StageDependancies = require('./stageDependancies');
+var buildPath = ['../htdocs/public/build/', require('./package.json').name].join('');
 
 var config = {
   entry: [
@@ -12,7 +13,7 @@ var config = {
   output: {
     filename: 'bundle.js',
     publicPath: '/build',
-    path: ['../components/',require('./package.json').name].join(''),
+    path: buildPath,
   },
   module: {
     loaders: [
@@ -43,7 +44,7 @@ var config = {
       allChunks: true,
     }),
     new webpack.HotModuleReplacementPlugin(),
-    new StageDependancies({appendTo:'.terminal', default: true})
+    new StageDependancies( {appendTo:'.terminal', default: true, manifestFile: [buildPath, 'manifest.json'].join('/') })
   ],
   resolve: {
     extensions: [

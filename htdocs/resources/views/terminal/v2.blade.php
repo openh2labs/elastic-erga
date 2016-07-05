@@ -10,7 +10,7 @@
 
 @section('script_data')
 <script>
-var MAIFEST_FILE_PATH = 'build/js/components/manifest.json';
+var MAIFEST_FILE_PATH = 'build/terminal-app/manifest.json';
 </script>
-<script src="build/js/components/bootstrap-components.js"></script>
+<script src="js/bootstrap-components.js"></script>
 @endsection

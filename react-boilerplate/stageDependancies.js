@@ -5,7 +5,7 @@ var defaults = {
 	appendTo : 'body',
 	css: 'styles.css'
 };
-var manifestFile = '../components/manifest.json';
+var manifest;
 
 function StageDependancies(config) {
 	this.config = config;
@@ -20,7 +20,16 @@ StageDependancies.prototype.apply = function(compiler) {
 	config.appendTo = config.appendTo || defaults.appendTo; 
 
 	compiler.plugin('done', function() {
-		var manifest = require(manifestFile);
+		if (typeof config.manifestFile == 'undefined') {
+			console.log('Error Missing Manifest: manifest file needs to be defined in webpack config!');
+			return;
+		}
+
+		try {
+			manifest = require(config.manifestFile);
+		}catch(e) {
+			manifest = {};
+		}
 
 		if (config.default) {
 			manifest['terminalv2'] = {
@@ -38,7 +47,7 @@ StageDependancies.prototype.apply = function(compiler) {
 		}
 
 		var data = JSON.stringify(manifest);
-		fs.writeFile(manifestFile, data, (err) => {
+		fs.writeFile(config.manifestFile, data, (err) => {
 		  if (err) throw err;
 		});
 	});

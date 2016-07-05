@@ -9,6 +9,7 @@
 namespace App\Http\Controllers;
 
 
+use App\Api\v1\Components\AlertMailer;
 use App\ElasticUtil;
 use Elasticsearch\ClientBuilder;
 use Illuminate\Foundation\Bus\DispatchesJobs;
@@ -363,14 +364,12 @@ class AlertController extends BaseController
 
     /**
      * sends an email notification for a particular alert
-     * @param $alert
+     * @param Alert $alert Alert model
+     * @param string $alert_description Description for email body
      */
     function sendMail($alert, $alert_description)
     {
-        Mail::send('email_alert', ['recipient' => $alert->alert_email_recipient, 'description' => $alert_description], function ($message) use ($alert) {
-            $message->from($alert->alert_email_sender, $alert->alert_email_sender);
-            $message->to($alert->alert_email_recipient, $alert->alert_email_recipient)->subject('elastic-erga alert:' . $alert->description);
-        });
+        (new AlertMailer())->sendAlertMail($alert, $alert_description);
     }
 
 

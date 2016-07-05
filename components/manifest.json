@@ -1,1 +1,0 @@
-{"terminalv2":{"basePath":"terminal-app/","bundle":"default","appendTo":".terminal"},"terminalv3":[{"bundle":"my-component-2/build/my-component-2.js","appendTo":".div3"}],"terminal":{"basePath":"terminal-app","bundle":"bundle.js","appendTo":".terminal"}}

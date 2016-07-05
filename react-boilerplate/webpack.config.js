@@ -1,5 +1,6 @@
 var webpack = require('webpack');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
+var StageDependancies = require('./stageDependancies');
 
 var config = {
   entry: [
@@ -11,7 +12,7 @@ var config = {
   output: {
     filename: 'bundle.js',
     publicPath: '/build',
-    path: './build',
+    path: '../components/terminal',
   },
   module: {
     loaders: [
@@ -42,6 +43,7 @@ var config = {
       allChunks: true,
     }),
     new webpack.HotModuleReplacementPlugin(),
+    new StageDependancies({test:'vaughn123', another:'Angoy'})
   ],
   resolve: {
     extensions: [
@@ -53,7 +55,7 @@ var config = {
   },
   devServer: {
     historyApiFallback: true,
-    contentBase: './',
+    contentBase: './server',
   },
 };
 

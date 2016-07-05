@@ -1,10 +1,1 @@
-{
-	"terminalv2" : [
-		{ "basePath": "my-component-1/build/", "bundle": "my-component-1.js", "css":"my-css-file.css", "appendTo": ".div1"},
-		{ "basePath": "my-component-2/build/", "bundle": "default", "appendTo": ".div2"},
-		{ "basePath": "my-component-3/build/", "bundle": "default", "css": ["my-css-file.css", "test.css"], "appendTo": ".div3"}
-	],
-	"terminalv3" : [
-		{ "bundle": "my-component-2/build/my-component-2.js", "appendTo": ".div3"}
-	]
-}
+{"terminalv2":[{"basePath":"my-component-1/build/","bundle":"my-component-1.js","css":"my-css-file.css","appendTo":".div1"},{"basePath":"my-component-2/build/","bundle":"default","appendTo":".div2"},{"basePath":"my-component-3/build/","bundle":"default","css":["my-css-file.css","test.css"],"appendTo":".div3"}],"terminalv3":[{"bundle":"my-component-2/build/my-component-2.js","appendTo":".div3"}],"terminal":{"bundle":"../components/bundle.js","appendTo":"body"}}

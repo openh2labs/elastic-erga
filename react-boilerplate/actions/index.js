@@ -7,10 +7,11 @@ import axios from 'axios';
 import _ from 'underscore';
 import { LOAD_DATA } from './types';
 
-const TERMINAL_URL = 'http://localhost:10080/api/v1/terminal';
+
 let pollId,
 		lastParams,
-		dispatch;
+		dispatch,
+		terminal_api_endpoint;
 
 function action(actionType, payload) {
 
@@ -26,7 +27,7 @@ export function getTerminalData(params = {}) {
 	lastParams = params;
 	const query = _.isEmpty(params) ? params : { params };
 
-	axios.get(TERMINAL_URL, query)
+	axios.get(terminal_api_endpoint, query)
 		.then(response => {
 
 			dispatch(action(LOAD_DATA, response.data));
@@ -61,9 +62,10 @@ export function stopPollServer() {
 
 }
 
-export function init(storeDispatch) {
+export function init(storeDispatch, terminal_api_endpoint) {
 
 	dispatch = storeDispatch;
+	terminal_api_endpoint = terminal_api_endpoint;
 	startPollServer();
 
 }

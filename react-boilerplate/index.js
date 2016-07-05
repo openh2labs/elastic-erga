@@ -15,7 +15,9 @@ const store = createStore(reducer, {},
 	compose(applyMiddleware(reduxThunk),
 	window.devToolsExtension ? window.devToolsExtension() : f => f));
 
-initActions(store.dispatch);
+const TERMINAL_URL = 'http://localhost:10080/api/v1/terminal';
+
+initActions(store.dispatch, TERMINAL_URL);
 getTerminalData();
 
 ReactDOM.render(

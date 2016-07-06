@@ -52,7 +52,7 @@ class Mock
      * @param string $q
      * @return mixed
      */
-    public function generateMockData($q)
+    public function generateMockData($q='')
     {
         $files = $this->getMockDataFileNames();
         $file = $files[array_rand($files)];

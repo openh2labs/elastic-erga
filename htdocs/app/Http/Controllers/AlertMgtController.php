@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\alerts;
+use App\Alert;
 use App\Librato;
 
 class AlertMgtController extends Controller
@@ -43,9 +43,9 @@ class AlertMgtController extends Controller
     public function store(Request $request)
     {
         if($request->input('id') == ""){
-            $alert = new alerts;
+            $alert = new Alert;
         }else{
-            $alert = alerts::find($request->input('id'));
+            $alert = Alert::find($request->input('id'));
         }
 
         $alert->description = $request->input('description');
@@ -107,7 +107,7 @@ class AlertMgtController extends Controller
         $data = array();
         $data['type'] = "edit";
        // $data['alert'] = alerts::find($id);
-        $alert = alerts::find($id);
+        $alert = Alert::find($id);
         if($alert == null){
             echo "something went wrong"; die;
         }

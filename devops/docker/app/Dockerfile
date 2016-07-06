@@ -40,14 +40,14 @@ RUN npm install --global gulp-cli
 
 # copy source code to container
 # on dev a volume is mounted on top of this, which means bootstrap needs to be run again
-COPY htdocs /var/www/elastic-erga
+COPY src /var/www/elastic-erga
 
 # give write access to webserver
-RUN chown -R www-data:www-data /var/www/elastic-erga/storage
-RUN chown -R www-data:www-data /var/www/elastic-erga/bootstrap/cache # why is this needed?
+RUN chown -R www-data:www-data /var/www/elastic-erga/laravel/storage
+RUN chown -R www-data:www-data /var/www/elastic-erga/laravel/bootstrap/cache # why is this needed?
 
 # set up project webroot
-RUN rmdir /var/www/html && ln -s /var/www/elastic-erga/public /var/www/html
+RUN rmdir /var/www/html && ln -s /var/www/elastic-erga/laravel/public /var/www/html
 
 # set up cron
 ADD devops/docker/app/crontab /etc/cron.d/elastic-erga-schedule

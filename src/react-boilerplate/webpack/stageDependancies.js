@@ -61,7 +61,7 @@ StageDependancies.prototype.apply = function(compiler) {
 	config.appendTo = config.appendTo || defaults.appendTo; 
 
 	compiler.plugin('done', function() {
-		var dest = '../htdocs/public/js';
+		var dest = '../laravel/public/js';
 
 		modifyManifest(config);
 		

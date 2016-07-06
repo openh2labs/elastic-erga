@@ -44,6 +44,22 @@ class AlertMailerSpec extends LaravelObjectBehavior
         $this->shouldNotHaveErrors();
     }
 
+    function it_reports_failures(Mailer $mailer)
+    {
+        $failEmail = ['i_fail@example.com'];
+        $mock = [[
+            'message' => 'Failed to deliver email',
+            'details' => $failEmail,
+        ],];
+        $mailer->send(Argument::type('string'), Argument::type('array'), Argument::type('Closure'))->willReturn();
+        $mailer->failures()->willReturn($failEmail);
+        $this->setMailer($mailer);
+
+        $this->sendAlertMail(new Alert, __METHOD__)->shouldBe(false);
+        $this->shouldHaveErrors();
+        $this->getErrors()->shouldReturn($mock);
+    }
+
     function it_throws_error_when_description_is_empty()
     {
         $this->shouldThrow('\InvalidArgumentException')->during('sendAlertMail', [new Alert, '']);

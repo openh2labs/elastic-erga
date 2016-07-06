@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "webpack-dev-server --hot --inline --history-api-fallback --port 3000",
-    "prestart": "NODE_ENV=dev && webpack",
-    "build": "export NODE_ENV=production && webpack",
+    "start": "webpack-dev-server --config ./webpack/webpack.config.js --hot --inline --history-api-fallback --port 3000",
+    "prestart": "webpack --config ./webpack/webpack.config.js",
+    "build": "webpack -p --config ./webpack/webpack.production.config.js",
     "save": "git add . && git commit -m \"Quick save\" && git push",
     "lint": "eslint components/* --ext .js --ext .jsx --cache --fix -f html -o test.html",
     "test": "jest --verbose --watch",
@@ -28,7 +28,7 @@
       "^[./a-zA-Z0-9$_-]+\\.scss$": "<rootDir>/SCSSStub.js"
     }
   },
-  "author": "Vaughn Angoy <vaughnydream@gmail.com> (http://www.vaughnangoy.com)",
+  "author": "Vaughn Angoy <v.angoy@quidco.com> (http://www.quidco.com)",
   "license": "ISC",
   "dependencies": {
     "axios": "^0.11.0",

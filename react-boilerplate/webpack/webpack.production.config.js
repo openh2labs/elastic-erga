@@ -1,15 +1,10 @@
 var webpack = require('webpack');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var StageDependancies = require('./stageDependancies');
-var buildPath = ['../htdocs/public/build/', require('./package.json').name].join('');
+var buildPath = ['../htdocs/public/build/', require('../package.json').name].join('');
 
 var config = {
-  entry: [
-    'webpack-dev-server/client?http://localhost:3000',
-    'webpack/hot/only-dev-server',
-    'react-hot-loader/patch',
-    './index.js',
-  ],
+  entry: [ './index.js' ],
   output: {
     filename: 'bundle.js',
     publicPath: '/build',
@@ -43,7 +38,16 @@ var config = {
     new ExtractTextPlugin('./styles.css', {
       allChunks: true,
     }),
-    new webpack.HotModuleReplacementPlugin(),
+    new webpack.DefinePlugin({
+      'process.env':{
+        'NODE_ENV': JSON.stringify('production')
+      }
+    }),
+    new webpack.optimize.UglifyJsPlugin({
+      compress:{
+        warnings: true
+      }
+    }),
     new StageDependancies( {appendTo:'.terminal', default: true, manifestFile: [buildPath, 'manifest.json'].join('/') })
   ],
   resolve: {
@@ -53,11 +57,7 @@ var config = {
       '.jsx',
       '.json',
     ],
-  },
-  devServer: {
-    historyApiFallback: true,
-    contentBase: './server',
-  },
+  }
 };
 
 module.exports = config;

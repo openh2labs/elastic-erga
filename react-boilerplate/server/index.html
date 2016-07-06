@@ -2,11 +2,14 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>App</title>
-	<link rel="stylesheet" href="/build/styles.css">
+	<title>Terminal App</title>
+	<link rel="stylesheet" href="/public/styles.css">
 </head>
 <body>
     <div class="terminal"></div>
-  	<script src="/build/bundle.js"></script>
+    <script>
+    var TERMINAL_URL = 'http://localhost:10080/api/v1/terminal';
+    </script>
+  	<script src="/public/bundle-dev.js"></script>
   </body>
 </html>

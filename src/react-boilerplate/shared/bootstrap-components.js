@@ -118,7 +118,7 @@
 		loadJSON(resolveComponents);	
 	}
 	catch(e){
-		console.error('manefist file may not exist. ', e);
+		console.error('manifest file may not exist. ', e);
 	}
 	
 })();

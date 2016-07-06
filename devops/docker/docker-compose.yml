@@ -10,7 +10,7 @@ services:
       - database
       - elasticsearch
     volumes:
-      - ../../htdocs:/var/www/elastic-erga
+      - ../../src:/var/www/elastic-erga
     environment:
       - APP_ENV=local
       - APP_DEBUG=true

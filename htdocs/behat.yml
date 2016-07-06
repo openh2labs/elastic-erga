@@ -1,4 +1,0 @@
-
-default:
-  autoload:
-    '': %paths.base%/tests/features/bootstrap

@@ -1,7 +1,7 @@
 var webpack = require('webpack');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var baseConfig = require('./webpack.base.config.js');
-var DeployToPublicWebFolder = require('./DeployToPublicWebFolder');
+var StageDependancies = require('./stageDependancies');
 var buildPath = ['../htdocs/public/build/', require('../package.json').name].join('');
 
 var config = {
@@ -22,12 +22,7 @@ var config = {
         warnings: true
       }
     }),
-    new DeployToPublicWebFolder({
-      appendTo:'.terminal', 
-      default: true, 
-      manifestFile: [buildPath, 'manifest.json'].join('/'),
-      urlMapping: 'terminal'
-    })
+    new StageDependancies( {appendTo:'.terminal', default: true, manifestFile: [buildPath, 'manifest.json'].join('/') })
   ]
 };
 

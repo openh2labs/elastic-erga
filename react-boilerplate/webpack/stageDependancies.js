@@ -33,14 +33,14 @@ function modifyManifest(config) {
 
 		if (config.default) {
 			manifest['terminalv2'] = {
-				'basePath': require('./package.json').name + '/',
+				'basePath': require('../package.json').name + '/',
 				'bundle': 'default', 
 				'appendTo': config.appendTo
 			};
 		}
 		else {
 			manifest['terminalv2'] = {
-				'basePath': require('./package.json').name + '/',
+				'basePath': require('../package.json').name + '/',
 				'bundle': config.bundleName, 
 				'appendTo': config.appendTo
 			};
@@ -61,7 +61,7 @@ StageDependancies.prototype.apply = function(compiler) {
 	config.appendTo = config.appendTo || defaults.appendTo; 
 
 	compiler.plugin('done', function() {
-		var dest = '../htdocs/public/js';
+		var dest = '../../htdocs/public/js';
 
 		modifyManifest(config);
 		

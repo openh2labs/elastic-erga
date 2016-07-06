@@ -1,8 +1,8 @@
 var webpack = require('webpack');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var baseConfig = require('./webpack.base.config.js');
-var StageDependancies = require('./stageDependancies');
-var buildPath = ['../htdocs/public/build/', require('../package.json').name].join('');
+var DeployToPublicWebFolder = require('./DeployToPublicWebFolder');
+var buildPath = ['../laravel/public/build/', require('../package.json').name].join('');
 
 var config = {
   entry: [ './index.js' ],
@@ -22,7 +22,12 @@ var config = {
         warnings: true
       }
     }),
-    new StageDependancies( {appendTo:'.terminal', default: true, manifestFile: [buildPath, 'manifest.json'].join('/') })
+    new DeployToPublicWebFolder({
+      appendTo:'.terminal', 
+      default: true, 
+      manifestFile: [buildPath, 'manifest.json'].join('/'),
+      urlMapping: 'terminal'
+    })
   ]
 };
 

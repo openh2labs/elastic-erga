@@ -15,7 +15,10 @@
 @section('script_data')
 <script>
 var MAIFEST_FILE_PATH = 'build/terminal-app/manifest.json';
-var TERMINAL_URL = 'http://localhost:10080/api/v1/terminal';
+
+// TODO: make a configurable parameter for api endpoint
+var TERMINAL_URL = '/api/v1/terminal';
+
 </script>
 <script src="js/bootstrap-components.js"></script>
 @endsection

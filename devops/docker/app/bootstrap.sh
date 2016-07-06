@@ -20,5 +20,7 @@ gulp
 
 cd /var/www/elastic-erga/react-boilerplate
 
+# TODO: possbile incomaptibility here between dev and container
 npm install
+#npm rebuild node-sass
 npm run build

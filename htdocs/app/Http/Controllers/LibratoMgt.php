@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\alerts;
+use App\Alert;
 use App\Librato;
 
 class LibratoMgt extends Controller
@@ -28,7 +28,7 @@ class LibratoMgt extends Controller
      */
     public function create($id)
     {
-        $alert = alerts::find($id);
+        $alert = Alert::find($id);
         $data = array();
         $data['type'] = "create";
         return view ("librato_form", $data)->with('alert', $alert);
@@ -42,7 +42,7 @@ class LibratoMgt extends Controller
      */
     public function store($id, Request $request)
     {
-        $alert = alerts::find($id);
+        $alert = Alert::find($id);
 
         if($request->input('id') == ""){
           //  $alert = new alerts;
@@ -92,7 +92,7 @@ class LibratoMgt extends Controller
         $data = array();
         $data['type'] = "edit";
         // $data['alert'] = alerts::find($id);
-        $alert = alerts::find($id);
+        $alert = Alert::find($id);
         if($alert == null){
             echo "something went wrong"; die;
         }

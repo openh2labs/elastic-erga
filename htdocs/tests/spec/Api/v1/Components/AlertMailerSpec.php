@@ -40,7 +40,7 @@ class AlertMailerSpec extends LaravelObjectBehavior
         $alert->alert_email_recipient = 'to_one@example.com,to_two@example.com';
         $alert->alert_email_sender = 'from@example.com';
         $alert->description = __METHOD__;
-        $this->sendAlertMail($alert, __METHOD__)->shouldBeArray();
+        $this->sendAlertMail($alert, __METHOD__)->shouldBe(true);
         $this->shouldNotHaveErrors();
     }
 

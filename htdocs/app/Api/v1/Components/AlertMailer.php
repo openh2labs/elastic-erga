@@ -27,7 +27,7 @@ class AlertMailer implements AlertMailerInterface
     /**
      * @param Alert $alert
      * @param string $description
-     * @return array
+     * @return bool True on success, false on failure
      */
     public function sendAlertMail(Alert $alert, $description)
     {
@@ -70,8 +70,18 @@ class AlertMailer implements AlertMailerInterface
             'recipient' => $to,
             'description' => $description, // email template variable
         ], $closure);
-        
-        return $mailer->failures();
+
+        /**
+         * @param array $failure List of failed email addresses, when sending in sync mode
+         */
+        $failures = $mailer->failures();
+
+        // return value
+        $ret = empty($failures);
+        if (! $ret) {
+            $this->addError('Failed to deliver email', $failures);
+        }
+        return $ret;
     }
 
     /**
@@ -136,6 +146,19 @@ class AlertMailer implements AlertMailerInterface
     public function getErrors()
     {
         return $this->errors;
+    }
+
+    /**
+     * Tracks internal error
+     * @param string $message
+     * @param array $details
+     */
+    protected function addError(string $message, array $details)
+    {
+        $this->errors[] = [
+            'message' => $message,
+            'details' => $details,
+        ];
     }
 
     /**

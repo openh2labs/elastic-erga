@@ -44,7 +44,8 @@ COPY src /var/www/elastic-erga
 
 # give write access to webserver
 RUN chown -R www-data:www-data /var/www/elastic-erga/laravel/storage
-RUN chown -R www-data:www-data /var/www/elastic-erga/laravel/bootstrap/cache # why is this needed?
+# php artisan clear-compiled writes to services.php in bootstrap/cache
+RUN chown -R www-data:www-data /var/www/elastic-erga/laravel/bootstrap/cache
 
 # set up project webroot
 RUN rmdir /var/www/html && ln -s /var/www/elastic-erga/laravel/public /var/www/html

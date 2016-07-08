@@ -16,6 +16,8 @@ class ApiV1Controller extends Controller
      */
     public function terminalGet(Request $request, $q='')
     {
+        // allow cross domain requests to api endpoint
+        header("Access-Control-Allow-Origin: *");
         return (new Terminal)->get($request, $q);
     }
 }

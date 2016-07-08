@@ -50,13 +50,13 @@ class Terminal extends BaseEndpoint
             // TODO: write an adapter for different data types
             if (! isset($source['syslog_message'])) {
                 // filter out everything non syslog
-                // TODO: move pre-feiltering to elastic query
+                // TODO: move pre-filtering to elastic query
                 continue;
             }
 
-            $syslogMessage = json_decode($source['syslog_message']);
+            $syslogMessage = $source['syslog_message']);
             if ($syslogMessage === null) {
-                // TODO: handle decodibng failure
+                // TODO: handle decoding failure
                 continue;
             }
 

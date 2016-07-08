@@ -54,7 +54,7 @@ class Terminal extends BaseEndpoint
                 continue;
             }
 
-            $syslogMessage = $source['syslog_message']);
+            $syslogMessage = $source['syslog_message'];
             if ($syslogMessage === null) {
                 // TODO: handle decoding failure
                 continue;

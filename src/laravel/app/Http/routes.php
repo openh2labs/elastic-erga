@@ -84,3 +84,7 @@ Route::get('/search', 'SearchController@elastic');
  * Api routes
  */
 Route::get('/api/v1/terminal', 'ApiV1Controller@terminalGet');
+
+// ad-hoc testing/prototyping
+Route::get('/test', 'TestController@test');
+

@@ -1,0 +1,79 @@
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,700);
+
+h1 {
+  margin: 30px 0 50px;
+}
+
+.row {
+  margin-bottom: .5em;
+}
+
+.submit {
+  margin: 20px 0;
+}
+
+form {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 400;
+  letter-spacing: .02em;
+
+  input, textarea {
+    border: 1px solid @form-input-border;
+    padding: 0.2em;
+
+  }
+
+  .description {
+    margin-bottom: 50px;
+
+    input {
+      font-size: 1.7em;
+      padding: .5em;
+      width: 100%;
+      font-weight: 700;
+    }
+
+    .round {
+      border-radius: 40px 40px 40px 40px;
+      -moz-border-radius: 40px 40px 40px 40px;
+      -webkit-border-radius: 40px 40px 40px 40px;
+      background: #eee;
+      padding: .5em 1em;
+
+      input{
+        border: none;
+        background: transparent;
+        outline : none;
+
+        &::-webkit-input-placeholder, &:-moz-placeholder, &::-moz-placeholder, &::-moz-placeholder, &:-ms-input-placeholder{
+          color: #fff;
+        }
+
+      }
+
+    }
+  }
+
+  .tab-content {
+    background: @pattern-diagonal;
+    padding: .5em;
+  }
+
+  [role="presentation"] a {
+    background: #eee;
+    color: #ccc;
+    font-weight:700;
+    font-size: 1.4em;
+
+    &:hover {
+      color: #999
+    }
+
+  }
+
+  [role="presentation"].active a {
+    background: @pattern-diagonal;
+    font-weight:700;
+    font-size: 1.4em;
+  }
+}

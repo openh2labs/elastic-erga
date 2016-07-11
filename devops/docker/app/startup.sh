@@ -10,7 +10,7 @@ if [ "${APP_ENV}" == "local" ]; then
     /usr/local/bin/bootstrap.sh
 fi
 
-cd /var/www/elastic-erga/
+cd /var/www/elastic-erga/laravel
 
 # Update database schema
 php artisan migrate

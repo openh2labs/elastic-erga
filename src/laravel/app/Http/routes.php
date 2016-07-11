@@ -26,6 +26,8 @@ Route::get('alertrun/systemlog', 'SystemLogController@home');
 
 Route::get('terminal', 'TerminalController@index');
 
+Route::get('terminalv2', 'TerminalV2Controller@index');
+
 Route::get('terminal/show', 'TerminalController@show');
 
 
@@ -82,3 +84,7 @@ Route::get('/search', 'SearchController@elastic');
  * Api routes
  */
 Route::get('/api/v1/terminal', 'ApiV1Controller@terminalGet');
+
+// ad-hoc testing/prototyping
+Route::get('/test', 'TestController@test');
+

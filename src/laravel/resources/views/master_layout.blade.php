@@ -46,6 +46,10 @@ $server_host = $_SERVER['HTTP_HOST'];
 
 
 <!-- Load All JS from a single concatenated file, see gulpfile.js and resources/assets/js/app.js -->
+<script src="{{ elixir("js/app.js") }}"></script>
+<!-- end elixir -->
+@yield('script_data');
+
 <script>
     @yield('js')
 </script>

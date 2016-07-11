@@ -42,6 +42,10 @@ $server_host = $_SERVER['HTTP_HOST'];
 <div class="container">
     <p>Powered by <a href="https://github.com/openh2labs/elastic-erga/wiki">elastic-erga</a>. Created by Mav Peri with contributions from the <a href="https://github.com/openh2labs/elastic-erga">Openh2labs</a> team and others.</p>
 </div>
+
+<!-- Load All JS from a single concatenated file, see gulpfile.js and resources/assets/js/app.js -->
+<!--<script src="{{ elixir("js/app.js") }}"></script> -->
+<!-- end elixir -->
 @yield('script_data');
 <script>
     @yield('js')

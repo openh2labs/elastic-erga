@@ -1,0 +1,160 @@
+.relative {
+  position: relative;
+}
+
+.bc {
+  left: 50%;
+  position: absolute;
+
+  > * {
+    left: -50%;
+    position: relative;
+  }
+}
+
+.badge {
+  font-size: .8em;
+  padding: 5px 7px 3px;
+}
+
+.center {
+  text-align: center;
+}
+
+.left {
+  text-align: left;
+}
+
+.row {
+  padding-top:4px;
+  border-radius: 50px;
+
+  .fa {
+    font-size: 1.65em;
+  }
+
+  > div {
+    text-align: center;
+
+    .left {
+      text-align: left;
+    }
+  }
+}
+
+.list {
+  &:nth-child(even) {
+    background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAMAAAADCAYAAABWKLW/AAAAHUlEQVQIW2O0tPzvc/w44xYGBgYGRhABEwBzYAAAzl0IBJNXB3sAAAAASUVORK5CYII=);
+  }
+  &:nth-child(odd) {
+    background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAMAAAADCAYAAABWKLW/AAAAHUlEQVQIW2MMCQn3WbNm5RYGBgYGRhABEwBzYAAAys0IBAExc7wAAAAASUVORK5CYII=);
+  }
+}
+
+.fa-exclamation-circle {
+  color: red;
+}
+
+.fa-check-circle {
+  color: green;
+}
+
+.fa-circle {
+  color: grey;
+}
+
+.grey {
+  background: green;
+}
+
+.red {
+  background: red;
+}
+
+.green {
+  background: green;
+}
+
+dl {
+  padding: 0.5em;
+}
+
+dt {
+  float: left;
+  clear: left;
+  width: 50px;
+  text-align: right;
+  font-weight: bold;
+  color: #000;
+  padding: 0;
+  margin-bottom: 3px;
+}
+
+dt:after {
+  content: ":";
+}
+
+dd {
+  float: left;
+  padding: 0;
+  margin-left: 10px;
+  margin-bottom: 3px;
+}
+
+.dashboard {
+  clear: both;
+  margin-top: 50px;
+}
+
+@media (max-width: 768px) {
+  .hide-in-mobile {
+    display: none;
+  }
+
+  .dashboard {
+    font-size: .8em;
+  }
+
+  .col-xs-1, .col-sm-1, .col-md-1, .col-lg-1, .col-xs-2, .col-sm-2, .col-md-2, .col-lg-2, .col-xs-3, .col-sm-3, .col-md-3, .col-lg-3, .col-xs-4, .col-sm-4, .col-md-4, .col-lg-4, .col-xs-5, .col-sm-5, .col-md-5, .col-lg-5, .col-xs-6, .col-sm-6, .col-md-6, .col-lg-6, .col-xs-7, .col-sm-7, .col-md-7, .col-lg-7, .col-xs-8, .col-sm-8, .col-md-8, .col-lg-8, .col-xs-9, .col-sm-9, .col-md-9, .col-lg-9, .col-xs-10, .col-sm-10, .col-md-10, .col-lg-10, .col-xs-11, .col-sm-11, .col-md-11, .col-lg-11, .col-xs-12, .col-sm-12, .col-md-12, .col-lg-12 {
+    padding: 0 5px;
+    text-align: center;
+  }
+
+  .desc {
+    padding-left: 2.8em;
+  }
+
+  .head .number {
+    margin-left: 2em;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 992px) {
+
+  .hide-in-handheld {
+    display: none;
+  }
+
+  .head i.fa {
+    display: none;
+  }
+
+  .head {
+    font-weight: bold;
+  }
+}
+
+@media (min-width: 992px) {
+
+  .hide-in-desktop {
+    display: none;
+  }
+
+  .head i.fa {
+    display: none;
+  }
+
+  .head {
+    font-weight: bold;
+  }
+}

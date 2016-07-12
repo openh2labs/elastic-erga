@@ -1,6 +1,5 @@
 var webpack = require('webpack');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
-var StageDependancies = require('./stageDependancies');
 
 var config = {
   entry: [ './index.js' ],

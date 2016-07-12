@@ -25,7 +25,7 @@
                     </ul>
                 </li>
 
-                <li @yield('active_tab_terminal')><a href="/terminalv2">Terminal</a></li>
+                <li @yield('active_tab_terminal')><a href="/terminal">Terminal</a></li>
 
 
                 <li @yield('active_tab_system_log')><a href="/alertrun/systemlog">System log</a></li>

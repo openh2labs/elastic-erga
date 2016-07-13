@@ -42,7 +42,9 @@ a breakdown of what should go where is as follows
 
 Once you create your base component the reference to this needs to be added to the react-router in `elastic-erga/react-boilerplate/index.js` file. Append a new route to  the `<Route path="/" component={App}></Route>` node. Make sure you map it to your imported component.
 
-_Reasoning on this approach:_ Its assumed that the component will be loaded to a known url. The identifier for this is the url. Which when initiated by the user from the external menu or directly interacting with the address bar etc, the url is mapped to the component by react-router to then initiate the component state. References to where this is loaded to is done via a manifest file explained in the next section.
+
+> _Reasoning on this approach:_ Its assumed that the component will be loaded to a known url. The identifier for this is the url. Which when initiated by the user from the external menu or directly interacting with the address bar etc, the url is mapped to the component by react-router to then initiate the component state. References to where this is loaded to is done via a manifest file explained in the next section.
+
 
 ### Deployment
 The management of loading the component onto the page is done through the bootstrap-component.js file. This file (upon running the deploy command) is copied to the Larvrel framework public folder and is present on every page. bootstrap-component.js does the following:

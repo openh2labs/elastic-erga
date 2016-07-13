@@ -10,7 +10,7 @@ This is the folder where all development is initiated for React based components
 * node cli installed on machine (version 6+)
 
 ### Setup
-to get going after satisfying the prerequisites, navigate to `elastic-erga/react-boilerplate/` directory and run `npm i` from the command line. This will install all the dependencies for your version of node to `elastic-erga/react-boilerplate/node_modules`.
+to get going after satisfying the prerequisites, navigate to `elastic-erga/src/react-boilerplate/` directory and run `npm i` from the command line. This will install all the dependencies for your version of node to `elastic-erga/src/react-boilerplate/node_modules`.
 
 ### Tech stack
 React (UI)
@@ -21,7 +21,7 @@ Redux (internal data management)
 Whilst developing the environment has been configured to support all ECMAScript 2015 features & SASS all preprocessed by Webpack. To add newer ECMAScript support run `npm i` + (name of babel plugin or preset), then add these references to the `.babelrc` file. please see [https://babeljs.io/docs/plugins/](https://babeljs.io/docs/plugins/) for more details.
 
 ### Component Development
-Each component should have its own base folder that holds its own assets. The folder should be created in `elastic-erga/react-boilerplate/components`. Assets should include SASS & JS.
+Each component should have its own base folder that holds its own assets. The folder should be created in `elastic-erga/src/react-boilerplate/components`. Assets should include SASS & JS.
 
 
 > Note: images have not yet been used on the project. Therefore implementation of images would require an additional config step added in the webpack config.
@@ -40,7 +40,7 @@ a breakdown of what should go where is as follows
 | Server | used by Webpack Dev Server |
 | Webpack | preprocessor configurations |
 
-Once you create your base component the reference to this needs to be added to the react-router in `elastic-erga/react-boilerplate/index.js` file. Append a new route to  the `<Route path="/" component={App}></Route>` node. Make sure you map it to your imported component.
+Once you create your base component the reference to this needs to be added to the react-router in `elastic-erga/src/react-boilerplate/index.js` file. Append a new route to  the `<Route path="/" component={App}></Route>` node. Make sure you map it to your imported component.
 
 
 > _Reasoning on this approach:_ Its assumed that the component will be loaded to a known url. The identifier for this is the url. Which when initiated by the user from the external menu or directly interacting with the address bar etc, the url is mapped to the component by react-router to then initiate the component state. References to where this is loaded to is done via a manifest file explained in the next section.

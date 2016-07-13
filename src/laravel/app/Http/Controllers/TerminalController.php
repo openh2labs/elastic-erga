@@ -19,7 +19,7 @@ class TerminalController extends Controller
     {
         $e = new ElasticUtil;
         $data['hosts'] = $e->getESHosts();
-        return view('terminal.index', $data);
+        return view('terminal.v2', $data);
     }
 
     /**

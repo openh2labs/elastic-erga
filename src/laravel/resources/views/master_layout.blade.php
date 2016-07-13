@@ -13,6 +13,8 @@ $server_host = $_SERVER['HTTP_HOST'];
     <title>@yield('title')</title>
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    @yield('css')
+
     <!-- Load All CSS from a single concatenated file. See resources/assests/less/app.less  -->
     <link rel="stylesheet" href="{{ elixir("css/app.css") }}" />
 
@@ -39,7 +41,7 @@ $server_host = $_SERVER['HTTP_HOST'];
     </div>
 
 </div><!-- /.container -->
-<div class="container">
+<div class="container credit">
     <p>Powered by <a href="https://github.com/openh2labs/elastic-erga/wiki">elastic-erga</a>. Created by Mav Peri with contributions from the <a href="https://github.com/openh2labs/elastic-erga">Openh2labs</a> team and others.</p>
 </div>
 

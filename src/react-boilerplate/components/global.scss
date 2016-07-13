@@ -16,11 +16,12 @@ $black				:	#000;
 $red				:	#990000;
 $blue-dark			:	#0789f4;
 $blue-light			:	#d5ebfb;
-
+$dark-grey			:	#333;
 
 body {
 	//font-family: $font-paragraph;
 	margin: 0;
+	background: $dark-grey;
 
 	h1, h2 {
 		//font-family: $font-headers;

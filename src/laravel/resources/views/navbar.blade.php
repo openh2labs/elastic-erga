@@ -1,5 +1,5 @@
 <nav class="navbar navbar-inverse navbar-fixed-top">
-    <div class="container">
+    <div class="top-level container">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
                 <span class="sr-only">Toggle navigation</span>
@@ -25,7 +25,7 @@
                     </ul>
                 </li>
 
-                <li @yield('active_tab_terminal')><a href="/terminalv2">Terminal</a></li>
+                <li @yield('active_tab_terminal')><a href="/terminal">Terminal</a></li>
 
 
                 <li @yield('active_tab_system_log')><a href="/alertrun/systemlog">System log</a></li>

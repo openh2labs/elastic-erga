@@ -14,7 +14,6 @@ section {
 	right: 0;
 	top: $menu-height;
 	bottom: $menu-height;
-	background: $black;
 	padding: 0 $padding-unit;
 	
 	.section {
@@ -113,6 +112,10 @@ footer {
 }
 
 /* OVERRIDE STYLES SET OUTSIDE OF COMPONENT */
+
+.top-level.container {
+	max-width: 970px;
+}
 
 @media (min-width: 768px) {
   .container {

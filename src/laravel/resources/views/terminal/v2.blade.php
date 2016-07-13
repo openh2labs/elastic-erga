@@ -4,6 +4,11 @@
 
 @section('css')
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/4.2.0/normalize.min.css" />
+    <style>
+        .container.credit {
+            display: none;
+        }
+    </style>
 @endsection
 
 @section('main')

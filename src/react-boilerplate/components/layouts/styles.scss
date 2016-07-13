@@ -113,6 +113,10 @@ footer {
 
 /* OVERRIDE STYLES SET OUTSIDE OF COMPONENT */
 
+.top-level.container {
+	max-width: 970px;
+}
+
 @media (min-width: 768px) {
   .container {
     width: 100%;

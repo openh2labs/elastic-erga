@@ -64,7 +64,7 @@ After creating your component, the `webpack/webpack.production.config.js` file n
 | urlMapping | the url fragment that the component should load to | string e.g. 'terminal' | yes |
 | css | the name of the css output after webpack compilation | e.g. 'styles.css' | required if default = false |
 | bundleName | the name of the js bundled file after webpack compilation | e.g. 'bundle.js' | required if default = false |
-| destination | the path in Laravel where to add the bootstrap-components.js file | e.g. '../laravel/public/js' |
+| destination | the path in Laravel where to add the bootstrap-components.js file | e.g. '../laravel/public/js' | optional |
 
 
 once updated run from the command line `npm run build`. Webpack will then take over, preprocess all the SASS & JS for each component, create/amend the manifest.json file(s), and deploy the bootstrap-component.js, & all the components to Laravel public folder.

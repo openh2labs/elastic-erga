@@ -22,7 +22,8 @@
 var MAIFEST_FILE_PATH = 'build/terminal-app/manifest.json';
 
 // TODO: make a configurable parameter for api endpoint
-var TERMINAL_URL = '/api/v1/terminal';
+var TERMINAL_URL = 'http://erga.syrupme.net/api/v1/terminal';
+var ATTACH_COMPONENT_TO;
 
 </script>
 <script src="js/bootstrap-components.js"></script>

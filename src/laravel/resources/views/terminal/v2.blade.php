@@ -19,11 +19,20 @@
 
 @section('script_data')
 <script>
-var MAIFEST_FILE_PATH = 'build/terminal-app/manifest.json';
 
-// TODO: make a configurable parameter for api endpoint
-var TERMINAL_URL = 'http://erga.syrupme.net/api/v1/terminal';
-var ATTACH_COMPONENT_TO;
+    /**
+     * Configuration container for componenets
+     * Each component will have it's own key and a configuration object as value
+     * @type Object
+     */
+    // TODO: fetch configuration from environment variables
+    var componentConfig = {
+        terminal: {
+            TERMINAL_URL: '/api/v1/terminal',
+            MANIFEST_FILE_PATH: 'build/terminal-app/manifest.json',
+            ATTACH_COMPONENT_TO: '.terminal',
+        }
+    };
 
 </script>
 <script src="js/bootstrap-components.js"></script>

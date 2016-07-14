@@ -1,8 +1,8 @@
-*Terminal Component*
+#Terminal Component
 
-***The purpose of this component is to fetch and display log entries from and endpoint. 
+###The purpose of this component is to fetch and display log entries from and endpoint. 
 
-_Current features:_
+**Current features:**
 * fetch logs from api endpoint
 * list entries to screen
 * keyword filtering on ENTER or search button

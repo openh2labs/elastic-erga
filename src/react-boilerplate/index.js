@@ -9,7 +9,7 @@ import reducer from './reducers';
 import { init as initActions, getTerminalData } from './actions';
 
 import App from './components/app';
-import Index from './components/layouts/index';
+import Index from './components/terminal/index';
 
 const store = createStore(reducer, {},
 	compose(applyMiddleware(reduxThunk),

@@ -26,7 +26,7 @@
 	file;
 	
 	try {
-		file = MAIFEST_FILE_PATH || undefined,
+		file = componentConfig.terminal.MANIFEST_FILE_PATH || undefined;
 	}catch(e){
 		console.error(e);
 		console.error('Warning: componentConfig.terminal.MAIFEST_FILE_PATH not set. Please ensure PHP is serving the config correctly.');

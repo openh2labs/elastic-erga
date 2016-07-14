@@ -1,4 +1,4 @@
-Terminal Component
+***Terminal Component
 
 The purpose of this component is to fetch and display log entries from and endpoint. 
 

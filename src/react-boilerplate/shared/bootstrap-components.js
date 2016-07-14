@@ -94,6 +94,8 @@
 	function resolveComponents(json){
 		manifest = json;
 		var obj = manifest[location.pathname.substring(1)];
+		ATTACH_COMPONENT_TO = obj.appendTo;
+		
 		if (typeof obj != 'undefined' && obj instanceof Array) {
 
 			obj.forEach(function(component) {

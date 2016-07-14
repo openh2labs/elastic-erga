@@ -26,5 +26,5 @@ ReactDOM.render(
 			</Route>
 		</Router>
 	</Provider>
-  , document.querySelector('.terminal')
+  , document.querySelector(ATTACH_COMPONENT_TO)
 );

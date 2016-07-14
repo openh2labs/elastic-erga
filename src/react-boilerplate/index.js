@@ -31,7 +31,7 @@ try {
     console.error('Warning: componentConfig.terminal.ATTACH_COMPONENT_TO not set. Please ensure PHP is serving the config correctly.');
 }
 
-initActions(store.dispatch, TERMINAL_URL);
+initActions(store.dispatch, terminalURL);
 getTerminalData();
 
 ReactDOM.render(

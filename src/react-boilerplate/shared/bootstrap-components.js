@@ -101,7 +101,10 @@
 	function resolveComponents(json){
 		manifest = json;
 		var obj = manifest[location.pathname.substring(1)];
-		componentConfig.terminal.ATTACH_COMPONENT_TO = obj.appendTo;
+
+		if (componentConfig.terminal.ATTACH_COMPONENT_TO !== '') {
+			componentConfig.terminal.ATTACH_COMPONENT_TO = obj.appendTo;
+		}
 		
 		if (typeof obj != 'undefined' && obj instanceof Array) {
 

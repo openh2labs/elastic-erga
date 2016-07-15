@@ -30,7 +30,7 @@
         terminal: {
             TERMINAL_URL: '/api/v1/terminal',
             MANIFEST_FILE_PATH: 'build/terminal-app/manifest.json',
-            ATTACH_COMPONENT_TO: '.terminal',
+            ATTACH_COMPONENT_TO: ''
         }
     };
 

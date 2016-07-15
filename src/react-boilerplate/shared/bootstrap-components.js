@@ -20,10 +20,17 @@
 
 (function(){
 
-	var manefest = {}, 
-	file = MAIFEST_FILE_PATH || undefined,
+	var manefest = {},
 	selectors = ['.','#'],
-	basePath = 'build/';
+	basePath = 'build/', 
+	file;
+	
+	try {
+		file = componentConfig.terminal.MANIFEST_FILE_PATH || undefined;
+	}catch(e){
+		console.error(e);
+		console.error('Warning: componentConfig.terminal.MAIFEST_FILE_PATH not set. Please ensure PHP is serving the config correctly.');
+	}
 
 	function loadJSON(callback) {   
 
@@ -94,6 +101,11 @@
 	function resolveComponents(json){
 		manifest = json;
 		var obj = manifest[location.pathname.substring(1)];
+
+		if (componentConfig.terminal.ATTACH_COMPONENT_TO !== '') {
+			componentConfig.terminal.ATTACH_COMPONENT_TO = obj.appendTo;
+		}
+		
 		if (typeof obj != 'undefined' && obj instanceof Array) {
 
 			obj.forEach(function(component) {
